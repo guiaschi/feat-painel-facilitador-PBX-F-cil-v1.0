@@ -1,0 +1,2237 @@
+[
+  {
+    "name": "action",
+    "id": "action",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "edit"
+  },
+  {
+    "name": "extdisplay",
+    "id": "extdisplay",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "5000"
+  },
+  {
+    "name": "action",
+    "id": "action",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "edit"
+  },
+  {
+    "name": "extdisplay",
+    "id": "extdisplay",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "5000"
+  },
+  {
+    "name": "tech",
+    "id": "tech",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "pjsip"
+  },
+  {
+    "name": "hardware",
+    "id": "hardware",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": ""
+  },
+  {
+    "name": "name",
+    "id": "name",
+    "type": "text",
+    "label": "Display Name",
+    "value": "Modelo Softphone"
+  },
+  {
+    "name": "outboundcid",
+    "id": "outboundcid",
+    "type": "text",
+    "label": "Outbound CID",
+    "value": ""
+  },
+  {
+    "name": "emergency_cid",
+    "id": "emergency_cid",
+    "type": "text",
+    "label": "Emergency CID",
+    "value": ""
+  },
+  {
+    "name": "devinfo_secret",
+    "id": "devinfo_secret",
+    "type": "text",
+    "label": "Secret",
+    "value": "123123123123a"
+  },
+  {
+    "name": "langcode",
+    "id": "langcode",
+    "type": "select",
+    "label": "Language Code",
+    "value": ""
+  },
+  {
+    "name": "userman_directory",
+    "id": "userman_directory",
+    "type": "select",
+    "label": "Select User Directory:",
+    "value": "1"
+  },
+  {
+    "name": "userman_assign",
+    "id": "userman_assign",
+    "type": "select",
+    "label": "Link to a Default User",
+    "value": "none"
+  },
+  {
+    "name": "userman_username",
+    "id": "userman_username",
+    "type": "text",
+    "label": "Username",
+    "value": ""
+  },
+  {
+    "name": "userman_username_cb",
+    "id": "userman_username_cb",
+    "type": "checkbox",
+    "label": "Use Custom Username",
+    "checked": false,
+    "value": "checked"
+  },
+  {
+    "name": "userman_password",
+    "id": "userman_password",
+    "type": "text",
+    "label": "Password For New User",
+    "value": "2ea3a10ac85dbdaa4cae2f529065ab51"
+  },
+  {
+    "name": "userman_group[]",
+    "id": "userman_group",
+    "type": "select",
+    "label": "Groups",
+    "value": ""
+  },
+  {
+    "name": "N/A",
+    "id": "N/A",
+    "type": "text",
+    "label": "Groups",
+    "value": "Select Some Options"
+  },
+  {
+    "name": "vm",
+    "id": "vm0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "vm",
+    "id": "vm1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "vmpwd",
+    "id": "vmpwd",
+    "type": "text",
+    "label": "Voicemail Password",
+    "value": ""
+  },
+  {
+    "name": "passlogin",
+    "id": "passlogin0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "passlogin=yes"
+  },
+  {
+    "name": "passlogin",
+    "id": "passlogin1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "passlogin=no"
+  },
+  {
+    "name": "novmstar",
+    "id": "novmstar0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "novmstar=yes"
+  },
+  {
+    "name": "novmstar",
+    "id": "novmstar1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "novmstar=no"
+  },
+  {
+    "name": "email",
+    "id": "email",
+    "type": "text",
+    "label": "Email Address",
+    "value": ""
+  },
+  {
+    "name": "pager",
+    "id": "pager",
+    "type": "text",
+    "label": "Pager Email Address",
+    "value": ""
+  },
+  {
+    "name": "attach",
+    "id": "attach0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "attach=yes"
+  },
+  {
+    "name": "attach",
+    "id": "attach1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "attach=no"
+  },
+  {
+    "name": "saycid",
+    "id": "saycid0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "saycid=yes"
+  },
+  {
+    "name": "saycid",
+    "id": "saycid1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "saycid=no"
+  },
+  {
+    "name": "envelope",
+    "id": "envelope0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "envelope=yes"
+  },
+  {
+    "name": "envelope",
+    "id": "envelope1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "envelope=no"
+  },
+  {
+    "name": "vmdelete",
+    "id": "vmdelete0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "vmdelete=yes"
+  },
+  {
+    "name": "vmdelete",
+    "id": "vmdelete1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "vmdelete=no"
+  },
+  {
+    "name": "options",
+    "id": "options",
+    "type": "text",
+    "label": "VM Options",
+    "value": ""
+  },
+  {
+    "name": "vmcontext",
+    "id": "vmcontext",
+    "type": "text",
+    "label": "VM Context",
+    "value": "default"
+  },
+  {
+    "name": "vmx_state",
+    "id": "vmx_state0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "vmx_state",
+    "id": "vmx_state1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "vmx_unavail_enabled",
+    "id": "vmx_use_when0",
+    "type": "checkbox",
+    "label": "Unavailable",
+    "checked": false,
+    "value": "checked"
+  },
+  {
+    "name": "vmx_busy_enabled",
+    "id": "vmx_use_when1",
+    "type": "checkbox",
+    "label": "Busy",
+    "checked": false,
+    "value": "checked"
+  },
+  {
+    "name": "vmx_play_instructions",
+    "id": "vmx_play_instructions0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "vmx_play_instructions",
+    "id": "vmx_play_instructions1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "vmx_option_0_number",
+    "id": "vmx_option_0_number",
+    "type": "text",
+    "label": "Press 0:",
+    "value": ""
+  },
+  {
+    "name": "vmx_option_0_system_default",
+    "id": "vmx_option_0_system_default",
+    "type": "checkbox",
+    "label": "Go To Operator",
+    "checked": true,
+    "value": "checked"
+  },
+  {
+    "name": "vmx_option_1_number",
+    "id": "vmx_option_1_number",
+    "type": "text",
+    "label": "Press 1:",
+    "value": ""
+  },
+  {
+    "name": "vmx_option_1_system_default",
+    "id": "vmx_option_1_system_default",
+    "type": "checkbox",
+    "label": "Send to Follow-Me",
+    "checked": true,
+    "value": "checked"
+  },
+  {
+    "name": "vmx_option_2_number",
+    "id": "vmx_option_2_number",
+    "type": "text",
+    "label": "Press 2:",
+    "value": ""
+  },
+  {
+    "name": "fmfm_ddial",
+    "id": "fmfm_ddial0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "fmfm_ddial",
+    "id": "fmfm_ddial1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "fmfm_calendar_enable",
+    "id": "fmfm_calendar_enable0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "1"
+  },
+  {
+    "name": "fmfm_calendar_enable",
+    "id": "fmfm_calendar_enable1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "0"
+  },
+  {
+    "name": "fmfm_calendar_id",
+    "id": "fmfm_calendar_id",
+    "type": "select",
+    "label": "Calendar",
+    "value": ""
+  },
+  {
+    "name": "fmfm_calendar_group_id",
+    "id": "fmfm_calendar_group_id",
+    "type": "select",
+    "label": "Calendar Group",
+    "value": ""
+  },
+  {
+    "name": "fmfm_calendar_match",
+    "id": "fmfm_calendar_match0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "fmfm_calendar_match",
+    "id": "fmfm_calendar_match1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "fmfm_pre_ring",
+    "id": "fmfm_pre_ring",
+    "type": "select",
+    "label": "Initial Ring Time",
+    "value": "7"
+  },
+  {
+    "name": "fmfm_strategy",
+    "id": "fmfm_strategy",
+    "type": "select",
+    "label": "Ring Strategy",
+    "value": "ringallv2-prim"
+  },
+  {
+    "name": "fmfm_grptime",
+    "id": "fmfm_grptime",
+    "type": "select",
+    "label": "Ring Time",
+    "value": "20"
+  },
+  {
+    "name": "fmfm_grplist",
+    "id": "fmfm_grplist",
+    "type": "text",
+    "label": "Follow-Me List",
+    "value": "5000"
+  },
+  {
+    "name": "N/A",
+    "id": "fmfm_grplist_select",
+    "type": "select",
+    "label": "Follow-Me List",
+    "value": ""
+  },
+  {
+    "name": "fmfm_annmsg_id",
+    "id": "fmfm_annmsg_id",
+    "type": "select",
+    "label": "Announcement",
+    "value": ""
+  },
+  {
+    "name": "fmfm_ringing",
+    "id": "fmfm_ringing",
+    "type": "select",
+    "label": "Play Music On Hold",
+    "value": "Ring"
+  },
+  {
+    "name": "fmfm_grppre",
+    "id": "fmfm_grppre",
+    "type": "text",
+    "label": "CID Name Prefix",
+    "value": ""
+  },
+  {
+    "name": "fmfm_dring",
+    "id": "fmfm_dring",
+    "type": "select",
+    "label": "Alert Info",
+    "value": ""
+  },
+  {
+    "name": "fmfm_rvolume",
+    "id": "fmfm_rvolume",
+    "type": "select",
+    "label": "Ringer Volume Override",
+    "value": ""
+  },
+  {
+    "name": "fmfm_needsconf",
+    "id": "fmfm_needsconf0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "fmfm_needsconf",
+    "id": "fmfm_needsconf1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "fmfm_remotealert_id",
+    "id": "fmfm_remotealert_id",
+    "type": "select",
+    "label": "Remote Announce",
+    "value": ""
+  },
+  {
+    "name": "fmfm_toolate_id",
+    "id": "fmfm_toolate_id",
+    "type": "select",
+    "label": "Too-Late Announce",
+    "value": ""
+  },
+  {
+    "name": "fmfm_changecid",
+    "id": "fmfm_changecid",
+    "type": "select",
+    "label": "Mode",
+    "value": "default"
+  },
+  {
+    "name": "fmfm_fixedcid",
+    "id": "fmfm_fixedcid",
+    "type": "text",
+    "label": "Fixed CID Value",
+    "value": ""
+  },
+  {
+    "name": "gotofmfm",
+    "id": "gotofmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "Follow_Me"
+  },
+  {
+    "name": "Announcementsfmfm",
+    "id": "Announcementsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "app-announcement-2,s,1"
+  },
+  {
+    "name": "Call_Flow_Controlfmfm",
+    "id": "Call_Flow_Controlfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Call_Recordingfmfm",
+    "id": "Call_Recordingfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Callbackfmfm",
+    "id": "Callbackfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "callback,1,1"
+  },
+  {
+    "name": "Conferencesfmfm",
+    "id": "Conferencesfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-meetme,2663,1"
+  },
+  {
+    "name": "Custom_Destinationsfmfm",
+    "id": "Custom_Destinationsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ari-bridge,UraPrincipalPABX,1"
+  },
+  {
+    "name": "DISAfmfm",
+    "id": "DISAfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Directoryfmfm",
+    "id": "Directoryfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Extensionsfmfm",
+    "id": "Extensionsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "from-did-direct,2001,1"
+  },
+  {
+    "name": "Fax_Recipientfmfm",
+    "id": "Fax_Recipientfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-fax,10,1"
+  },
+  {
+    "name": "Feature_Code_Adminfmfm",
+    "id": "Feature_Code_Adminfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-featurecodes,7777,1"
+  },
+  {
+    "name": "Follow_Mefmfm",
+    "id": "Follow_Mefmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-local,5000,dest"
+  },
+  {
+    "name": "IVRfmfm",
+    "id": "IVRfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ivr-2,s,1"
+  },
+  {
+    "name": "Inbound_Routesfmfm",
+    "id": "Inbound_Routesfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "from-trunk,08000424207,1"
+  },
+  {
+    "name": "Languagesfmfm",
+    "id": "Languagesfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Misc_Destinationsfmfm",
+    "id": "Misc_Destinationsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Play_Recordingfmfm",
+    "id": "Play_Recordingfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "play-system-recording,13,1"
+  },
+  {
+    "name": "Queue_Prioritiesfmfm",
+    "id": "Queue_Prioritiesfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Queuesfmfm",
+    "id": "Queuesfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-queues,100,1"
+  },
+  {
+    "name": "Ring_Groupsfmfm",
+    "id": "Ring_Groupsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Terminate_Callfmfm",
+    "id": "Terminate_Callfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "app-blackhole,hangup,1"
+  },
+  {
+    "name": "Text_To_Speechfmfm",
+    "id": "Text_To_Speechfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Time_Conditionsfmfm",
+    "id": "Time_Conditionsfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "timeconditions,1,1"
+  },
+  {
+    "name": "Trunksfmfm",
+    "id": "Trunksfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-trunk,1,1"
+  },
+  {
+    "name": "Voicemail_Blastingfmfm",
+    "id": "Voicemail_Blastingfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "fmfm_goto",
+    "id": "fmfm_goto",
+    "type": "hidden",
+    "label": "No Answer",
+    "value": "gotofmfm"
+  },
+  {
+    "name": "newdid_name",
+    "id": "newdid_name",
+    "type": "text",
+    "label": "DID Description",
+    "value": ""
+  },
+  {
+    "name": "newdid",
+    "id": "newdid",
+    "type": "text",
+    "label": "Add Inbound DID",
+    "value": ""
+  },
+  {
+    "name": "newdidcid",
+    "id": "newdidcid",
+    "type": "text",
+    "label": "Add Inbound CID",
+    "value": ""
+  },
+  {
+    "name": "devinfo_dtmfmode",
+    "id": "devinfo_dtmfmode",
+    "type": "select",
+    "label": "DTMF Signaling",
+    "value": "rfc4733"
+  },
+  {
+    "name": "devinfo_context",
+    "id": "devinfo_context",
+    "type": "text",
+    "label": "Context",
+    "value": "from-internal"
+  },
+  {
+    "name": "devinfo_defaultuser",
+    "id": "devinfo_defaultuser",
+    "type": "text",
+    "label": "Default User",
+    "value": ""
+  },
+  {
+    "name": "devinfo_trustrpid",
+    "id": "devinfo_trustrpid0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_trustrpid",
+    "id": "devinfo_trustrpid1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_user_eq_phone",
+    "id": "devinfo_user_eq_phone0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_user_eq_phone",
+    "id": "devinfo_user_eq_phone1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_sendrpid",
+    "id": "devinfo_sendrpid",
+    "type": "select",
+    "label": "Send RPID",
+    "value": "pai"
+  },
+  {
+    "name": "devinfo_qualifyfreq",
+    "id": "devinfo_qualifyfreq",
+    "type": "text",
+    "label": "Qualify Frequency",
+    "value": "10"
+  },
+  {
+    "name": "devinfo_transport",
+    "id": "devinfo_transport",
+    "type": "select",
+    "label": "Transport",
+    "value": "0.0.0.0-udp"
+  },
+  {
+    "name": "devinfo_avpf",
+    "id": "devinfo_avpf0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_avpf",
+    "id": "devinfo_avpf1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_icesupport",
+    "id": "devinfo_icesupport0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_icesupport",
+    "id": "devinfo_icesupport1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rtcp_mux",
+    "id": "devinfo_rtcp_mux0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rtcp_mux",
+    "id": "devinfo_rtcp_mux1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_namedcallgroup",
+    "id": "devinfo_namedcallgroup",
+    "type": "text",
+    "label": "Call Groups",
+    "value": ""
+  },
+  {
+    "name": "devinfo_namedpickupgroup",
+    "id": "devinfo_namedpickupgroup",
+    "type": "text",
+    "label": "Pickup Groups",
+    "value": ""
+  },
+  {
+    "name": "devinfo_disallow",
+    "id": "devinfo_disallow",
+    "type": "text",
+    "label": "Disallowed Codecs",
+    "value": ""
+  },
+  {
+    "name": "devinfo_allow",
+    "id": "devinfo_allow",
+    "type": "text",
+    "label": "Allowed Codecs",
+    "value": ""
+  },
+  {
+    "name": "devinfo_dial",
+    "id": "devinfo_dial",
+    "type": "text",
+    "label": "Dial",
+    "value": "PJSIP/5000"
+  },
+  {
+    "name": "devinfo_mailbox",
+    "id": "devinfo_mailbox",
+    "type": "text",
+    "label": "Mailbox",
+    "value": ""
+  },
+  {
+    "name": "devinfo_vmexten",
+    "id": "devinfo_vmexten",
+    "type": "text",
+    "label": "Voicemail Extension",
+    "value": ""
+  },
+  {
+    "name": "devinfo_accountcode",
+    "id": "devinfo_accountcode",
+    "type": "text",
+    "label": "Account Code",
+    "value": ""
+  },
+  {
+    "name": "devinfo_max_contacts",
+    "id": "devinfo_max_contacts",
+    "type": "text",
+    "label": "Max Contacts",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_remove_existing",
+    "id": "devinfo_remove_existing0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_remove_existing",
+    "id": "devinfo_remove_existing1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_media_use_received_transport",
+    "id": "devinfo_media_use_received_transport0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_media_use_received_transport",
+    "id": "devinfo_media_use_received_transport1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rtp_symmetric",
+    "id": "devinfo_rtp_symmetric0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rtp_symmetric",
+    "id": "devinfo_rtp_symmetric1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rewrite_contact",
+    "id": "devinfo_rewrite_contact0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rewrite_contact",
+    "id": "devinfo_rewrite_contact1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_force_rport",
+    "id": "devinfo_force_rport0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_force_rport",
+    "id": "devinfo_force_rport1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription0",
+    "type": "radio",
+    "label": "Auto",
+    "checked": true,
+    "value": "auto"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription1",
+    "type": "radio",
+    "label": "Unsolicited",
+    "checked": false,
+    "value": "unsolicited"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription2",
+    "type": "radio",
+    "label": "Solicited",
+    "checked": false,
+    "value": "solicited"
+  },
+  {
+    "name": "devinfo_aggregate_mwi",
+    "id": "devinfo_aggregate_mwi0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_aggregate_mwi",
+    "id": "devinfo_aggregate_mwi1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_bundle",
+    "id": "devinfo_bundle0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_bundle",
+    "id": "devinfo_bundle1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_max_audio_streams",
+    "id": "devinfo_max_audio_streams",
+    "type": "text",
+    "label": "Max audio streams",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_max_video_streams",
+    "id": "devinfo_max_video_streams",
+    "type": "text",
+    "label": "Max video streams",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_media_encryption",
+    "id": "devinfo_media_encryption",
+    "type": "select",
+    "label": "Media Encryption",
+    "value": "no"
+  },
+  {
+    "name": "devinfo_timers",
+    "id": "devinfo_timers",
+    "type": "select",
+    "label": "Session Timers",
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_timers_min_se",
+    "id": "devinfo_timers_min_se",
+    "type": "text",
+    "label": "Timer Expiration Period",
+    "value": "90"
+  },
+  {
+    "name": "devinfo_direct_media",
+    "id": "devinfo_direct_media0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_direct_media",
+    "id": "devinfo_direct_media1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_media_encryption_optimistic",
+    "id": "devinfo_media_encryption_optimistic0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_media_encryption_optimistic",
+    "id": "devinfo_media_encryption_optimistic1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_refer_blind_progress",
+    "id": "devinfo_refer_blind_progress0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_refer_blind_progress",
+    "id": "devinfo_refer_blind_progress1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_device_state_busy_at",
+    "id": "devinfo_device_state_busy_at",
+    "type": "text",
+    "label": "Device State Busy at",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_match",
+    "id": "devinfo_match",
+    "type": "text",
+    "label": "Match (Permit)",
+    "value": ""
+  },
+  {
+    "name": "devinfo_maximum_expiration",
+    "id": "devinfo_maximum_expiration",
+    "type": "text",
+    "label": "Maximum Expiration",
+    "value": "7200"
+  },
+  {
+    "name": "devinfo_minimum_expiration",
+    "id": "devinfo_minimum_expiration",
+    "type": "text",
+    "label": "Minimum Expiration",
+    "value": "60"
+  },
+  {
+    "name": "devinfo_rtp_timeout",
+    "id": "devinfo_rtp_timeout",
+    "type": "text",
+    "label": "RTP Timeout",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_rtp_timeout_hold",
+    "id": "devinfo_rtp_timeout_hold",
+    "type": "text",
+    "label": "RTP Hold Timeout",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_outbound_proxy",
+    "id": "devinfo_outbound_proxy",
+    "type": "text",
+    "label": "Outbound Proxy",
+    "value": ""
+  },
+  {
+    "name": "devinfo_outbound_auth",
+    "id": "devinfo_outbound_auth0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_outbound_auth",
+    "id": "devinfo_outbound_auth1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_message_context",
+    "id": "devinfo_message_context",
+    "type": "text",
+    "label": "Messages Context",
+    "value": ""
+  },
+  {
+    "name": "cid_masquerade",
+    "id": "cid_masquerade",
+    "type": "text",
+    "label": "CID Num Alias",
+    "value": ""
+  },
+  {
+    "name": "sipname",
+    "id": "sipname",
+    "type": "text",
+    "label": "SIP Alias",
+    "value": ""
+  },
+  {
+    "name": "dialopts",
+    "id": "dialopts",
+    "type": "text",
+    "label": "Asterisk Dial Options",
+    "value": "HhTtr"
+  },
+  {
+    "name": "dialopts_cb",
+    "id": "dialopts_cb",
+    "type": "checkbox",
+    "label": "Override",
+    "checked": false,
+    "value": "checked"
+  },
+  {
+    "name": "ringtimer",
+    "id": "ringtimer",
+    "type": "select",
+    "label": "Ring Time",
+    "value": "0"
+  },
+  {
+    "name": "rvolume",
+    "id": "rvolume",
+    "type": "select",
+    "label": "Ringer Volume Override",
+    "value": ""
+  },
+  {
+    "name": "cfringtimer",
+    "id": "cfringtimer",
+    "type": "select",
+    "label": "Call Forward Ring Time",
+    "value": "0"
+  },
+  {
+    "name": "concurrency_limit",
+    "id": "concurrency_limit",
+    "type": "select",
+    "label": "Outbound Concurrency Limit",
+    "value": "3"
+  },
+  {
+    "name": "callwaiting",
+    "id": "callwaiting0",
+    "type": "radio",
+    "label": "Enable",
+    "checked": true,
+    "value": "enabled"
+  },
+  {
+    "name": "callwaiting",
+    "id": "callwaiting1",
+    "type": "radio",
+    "label": "Disable",
+    "checked": false,
+    "value": "disabled"
+  },
+  {
+    "name": "cwtone",
+    "id": "cwtone0",
+    "type": "radio",
+    "label": "Enable",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "cwtone",
+    "id": "cwtone1",
+    "type": "radio",
+    "label": "Disable",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "call_screen",
+    "id": "call_screen",
+    "type": "select",
+    "label": "Call Screening",
+    "value": "0"
+  },
+  {
+    "name": "qnostate",
+    "id": "qnostate",
+    "type": "select",
+    "label": "Queue State Detection",
+    "value": "usestate"
+  },
+  {
+    "name": "recording_in_external",
+    "id": "recording_in_external0",
+    "type": "radio",
+    "label": "Force",
+    "checked": false,
+    "value": "recording_in_external=force"
+  },
+  {
+    "name": "recording_in_external",
+    "id": "recording_in_external1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "recording_in_external=yes"
+  },
+  {
+    "name": "recording_in_external",
+    "id": "recording_in_external2",
+    "type": "radio",
+    "label": "Don't Care",
+    "checked": false,
+    "value": "recording_in_external=dontcare"
+  },
+  {
+    "name": "recording_in_external",
+    "id": "recording_in_external3",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "recording_in_external=no"
+  },
+  {
+    "name": "recording_in_external",
+    "id": "recording_in_external4",
+    "type": "radio",
+    "label": "Never",
+    "checked": false,
+    "value": "recording_in_external=never"
+  },
+  {
+    "name": "recording_out_external",
+    "id": "recording_out_external0",
+    "type": "radio",
+    "label": "Force",
+    "checked": false,
+    "value": "recording_out_external=force"
+  },
+  {
+    "name": "recording_out_external",
+    "id": "recording_out_external1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "recording_out_external=yes"
+  },
+  {
+    "name": "recording_out_external",
+    "id": "recording_out_external2",
+    "type": "radio",
+    "label": "Don't Care",
+    "checked": false,
+    "value": "recording_out_external=dontcare"
+  },
+  {
+    "name": "recording_out_external",
+    "id": "recording_out_external3",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "recording_out_external=no"
+  },
+  {
+    "name": "recording_out_external",
+    "id": "recording_out_external4",
+    "type": "radio",
+    "label": "Never",
+    "checked": false,
+    "value": "recording_out_external=never"
+  },
+  {
+    "name": "recording_in_internal",
+    "id": "recording_in_internal0",
+    "type": "radio",
+    "label": "Force",
+    "checked": false,
+    "value": "recording_in_internal=force"
+  },
+  {
+    "name": "recording_in_internal",
+    "id": "recording_in_internal1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "recording_in_internal=yes"
+  },
+  {
+    "name": "recording_in_internal",
+    "id": "recording_in_internal2",
+    "type": "radio",
+    "label": "Don't Care",
+    "checked": false,
+    "value": "recording_in_internal=dontcare"
+  },
+  {
+    "name": "recording_in_internal",
+    "id": "recording_in_internal3",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "recording_in_internal=no"
+  },
+  {
+    "name": "recording_in_internal",
+    "id": "recording_in_internal4",
+    "type": "radio",
+    "label": "Never",
+    "checked": false,
+    "value": "recording_in_internal=never"
+  },
+  {
+    "name": "recording_out_internal",
+    "id": "recording_out_internal0",
+    "type": "radio",
+    "label": "Force",
+    "checked": false,
+    "value": "recording_out_internal=force"
+  },
+  {
+    "name": "recording_out_internal",
+    "id": "recording_out_internal1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "recording_out_internal=yes"
+  },
+  {
+    "name": "recording_out_internal",
+    "id": "recording_out_internal2",
+    "type": "radio",
+    "label": "Don't Care",
+    "checked": false,
+    "value": "recording_out_internal=dontcare"
+  },
+  {
+    "name": "recording_out_internal",
+    "id": "recording_out_internal3",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "recording_out_internal=no"
+  },
+  {
+    "name": "recording_out_internal",
+    "id": "recording_out_internal4",
+    "type": "radio",
+    "label": "Never",
+    "checked": false,
+    "value": "recording_out_internal=never"
+  },
+  {
+    "name": "recording_ondemand",
+    "id": "recording_ondemand0",
+    "type": "radio",
+    "label": "Disable",
+    "checked": true,
+    "value": "recording_ondemand=disabled"
+  },
+  {
+    "name": "recording_ondemand",
+    "id": "recording_ondemand1",
+    "type": "radio",
+    "label": "Enable",
+    "checked": false,
+    "value": "recording_ondemand=enabled"
+  },
+  {
+    "name": "recording_ondemand",
+    "id": "recording_ondemand2",
+    "type": "radio",
+    "label": "Override",
+    "checked": false,
+    "value": "recording_ondemand=override"
+  },
+  {
+    "name": "recording_priority",
+    "id": "recording_priority",
+    "type": "select",
+    "label": "Record Priority Policy",
+    "value": "10"
+  },
+  {
+    "name": "dictenabled",
+    "id": "dictenabled",
+    "type": "select",
+    "label": "Dictation Service",
+    "value": "disabled"
+  },
+  {
+    "name": "dictformat",
+    "id": "dictformat",
+    "type": "select",
+    "label": "Dictation Format",
+    "value": "ogg"
+  },
+  {
+    "name": "dictemail",
+    "id": "dictemail",
+    "type": "text",
+    "label": "Email Address",
+    "value": ""
+  },
+  {
+    "name": "dictfrom",
+    "id": "dictfrom",
+    "type": "text",
+    "label": "From Address",
+    "value": "dictate@freepbx.org"
+  },
+  {
+    "name": "in_default_directory",
+    "id": "in_default_directory",
+    "type": "select",
+    "label": "Default Directory",
+    "value": "0"
+  },
+  {
+    "name": "dtls_enable",
+    "id": "dtls_enable0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "dtls_enable",
+    "id": "dtls_enable1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "dtls_auto_generate_cert",
+    "id": "dtls_auto_generate_cert0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "0"
+  },
+  {
+    "name": "dtls_auto_generate_cert",
+    "id": "dtls_auto_generate_cert1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "1"
+  },
+  {
+    "name": "dtls_certificate",
+    "id": "dtls_certificate",
+    "type": "select",
+    "label": "Use Certificate",
+    "value": "1"
+  },
+  {
+    "name": "dtls_verify",
+    "id": "dtls_verify",
+    "type": "select",
+    "label": "DTLS Verify",
+    "value": "fingerprint"
+  },
+  {
+    "name": "dtls_setup",
+    "id": "dtls_setup",
+    "type": "select",
+    "label": "DTLS Setup",
+    "value": "actpass"
+  },
+  {
+    "name": "dtls_rekey",
+    "id": "dtls_rekey",
+    "type": "text",
+    "label": "DTLS Rekey Interval",
+    "value": "0"
+  },
+  {
+    "name": "goto0",
+    "id": "goto0",
+    "type": "select",
+    "label": "No Answer",
+    "value": ""
+  },
+  {
+    "name": "Announcements0",
+    "id": "Announcements0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "app-announcement-2,s,1"
+  },
+  {
+    "name": "Call_Flow_Control0",
+    "id": "Call_Flow_Control0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Call_Recording0",
+    "id": "Call_Recording0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Callback0",
+    "id": "Callback0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "callback,1,1"
+  },
+  {
+    "name": "Conferences0",
+    "id": "Conferences0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-meetme,2663,1"
+  },
+  {
+    "name": "Custom_Destinations0",
+    "id": "Custom_Destinations0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ari-bridge,UraPrincipalPABX,1"
+  },
+  {
+    "name": "DISA0",
+    "id": "DISA0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Directory0",
+    "id": "Directory0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Extensions0",
+    "id": "Extensions0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "from-did-direct,2001,1"
+  },
+  {
+    "name": "Fax_Recipient0",
+    "id": "Fax_Recipient0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-fax,10,1"
+  },
+  {
+    "name": "Feature_Code_Admin0",
+    "id": "Feature_Code_Admin0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-featurecodes,7777,1"
+  },
+  {
+    "name": "Follow_Me0",
+    "id": "Follow_Me0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-findmefollow,FM5000,1"
+  },
+  {
+    "name": "IVR0",
+    "id": "IVR0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ivr-2,s,1"
+  },
+  {
+    "name": "Inbound_Routes0",
+    "id": "Inbound_Routes0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "from-trunk,08000424207,1"
+  },
+  {
+    "name": "Languages0",
+    "id": "Languages0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Misc_Destinations0",
+    "id": "Misc_Destinations0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Play_Recording0",
+    "id": "Play_Recording0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "play-system-recording,13,1"
+  },
+  {
+    "name": "Queue_Priorities0",
+    "id": "Queue_Priorities0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Queues0",
+    "id": "Queues0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-queues,100,1"
+  },
+  {
+    "name": "Ring_Groups0",
+    "id": "Ring_Groups0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Terminate_Call0",
+    "id": "Terminate_Call0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "app-blackhole,hangup,1"
+  },
+  {
+    "name": "Text_To_Speech0",
+    "id": "Text_To_Speech0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Time_Conditions0",
+    "id": "Time_Conditions0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "timeconditions,1,1"
+  },
+  {
+    "name": "Trunks0",
+    "id": "Trunks0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "ext-trunk,1,1"
+  },
+  {
+    "name": "Voicemail_Blasting0",
+    "id": "Voicemail_Blasting0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "noanswer_dest",
+    "id": "noanswer_dest",
+    "type": "hidden",
+    "label": "No Answer",
+    "value": "goto0"
+  },
+  {
+    "name": "noanswer_cid",
+    "id": "noanswer_cid",
+    "type": "text",
+    "label": "CID Prefix",
+    "value": ""
+  },
+  {
+    "name": "goto1",
+    "id": "goto1",
+    "type": "select",
+    "label": "Busy",
+    "value": ""
+  },
+  {
+    "name": "Announcements1",
+    "id": "Announcements1",
+    "type": "select",
+    "label": "Busy",
+    "value": "app-announcement-2,s,1"
+  },
+  {
+    "name": "Call_Flow_Control1",
+    "id": "Call_Flow_Control1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Call_Recording1",
+    "id": "Call_Recording1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Callback1",
+    "id": "Callback1",
+    "type": "select",
+    "label": "Busy",
+    "value": "callback,1,1"
+  },
+  {
+    "name": "Conferences1",
+    "id": "Conferences1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-meetme,2663,1"
+  },
+  {
+    "name": "Custom_Destinations1",
+    "id": "Custom_Destinations1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ari-bridge,UraPrincipalPABX,1"
+  },
+  {
+    "name": "DISA1",
+    "id": "DISA1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Directory1",
+    "id": "Directory1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Extensions1",
+    "id": "Extensions1",
+    "type": "select",
+    "label": "Busy",
+    "value": "from-did-direct,2001,1"
+  },
+  {
+    "name": "Fax_Recipient1",
+    "id": "Fax_Recipient1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-fax,10,1"
+  },
+  {
+    "name": "Feature_Code_Admin1",
+    "id": "Feature_Code_Admin1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-featurecodes,7777,1"
+  },
+  {
+    "name": "Follow_Me1",
+    "id": "Follow_Me1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-findmefollow,FM5000,1"
+  },
+  {
+    "name": "IVR1",
+    "id": "IVR1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ivr-2,s,1"
+  },
+  {
+    "name": "Inbound_Routes1",
+    "id": "Inbound_Routes1",
+    "type": "select",
+    "label": "Busy",
+    "value": "from-trunk,08000424207,1"
+  },
+  {
+    "name": "Languages1",
+    "id": "Languages1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Misc_Destinations1",
+    "id": "Misc_Destinations1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Play_Recording1",
+    "id": "Play_Recording1",
+    "type": "select",
+    "label": "Busy",
+    "value": "play-system-recording,13,1"
+  },
+  {
+    "name": "Queue_Priorities1",
+    "id": "Queue_Priorities1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Queues1",
+    "id": "Queues1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-queues,100,1"
+  },
+  {
+    "name": "Ring_Groups1",
+    "id": "Ring_Groups1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Terminate_Call1",
+    "id": "Terminate_Call1",
+    "type": "select",
+    "label": "Busy",
+    "value": "app-blackhole,hangup,1"
+  },
+  {
+    "name": "Text_To_Speech1",
+    "id": "Text_To_Speech1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Time_Conditions1",
+    "id": "Time_Conditions1",
+    "type": "select",
+    "label": "Busy",
+    "value": "timeconditions,1,1"
+  },
+  {
+    "name": "Trunks1",
+    "id": "Trunks1",
+    "type": "select",
+    "label": "Busy",
+    "value": "ext-trunk,1,1"
+  },
+  {
+    "name": "Voicemail_Blasting1",
+    "id": "Voicemail_Blasting1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "busy_dest",
+    "id": "busy_dest",
+    "type": "hidden",
+    "label": "Busy",
+    "value": "goto1"
+  },
+  {
+    "name": "busy_cid",
+    "id": "busy_cid",
+    "type": "text",
+    "label": "CID Prefix",
+    "value": ""
+  },
+  {
+    "name": "goto2",
+    "id": "goto2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": ""
+  },
+  {
+    "name": "Announcements2",
+    "id": "Announcements2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "app-announcement-2,s,1"
+  },
+  {
+    "name": "Call_Flow_Control2",
+    "id": "Call_Flow_Control2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Call_Recording2",
+    "id": "Call_Recording2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Callback2",
+    "id": "Callback2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "callback,1,1"
+  },
+  {
+    "name": "Conferences2",
+    "id": "Conferences2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-meetme,2663,1"
+  },
+  {
+    "name": "Custom_Destinations2",
+    "id": "Custom_Destinations2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ari-bridge,UraPrincipalPABX,1"
+  },
+  {
+    "name": "DISA2",
+    "id": "DISA2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Directory2",
+    "id": "Directory2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Extensions2",
+    "id": "Extensions2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "from-did-direct,2001,1"
+  },
+  {
+    "name": "Fax_Recipient2",
+    "id": "Fax_Recipient2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-fax,10,1"
+  },
+  {
+    "name": "Feature_Code_Admin2",
+    "id": "Feature_Code_Admin2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-featurecodes,7777,1"
+  },
+  {
+    "name": "Follow_Me2",
+    "id": "Follow_Me2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-findmefollow,FM5000,1"
+  },
+  {
+    "name": "IVR2",
+    "id": "IVR2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ivr-2,s,1"
+  },
+  {
+    "name": "Inbound_Routes2",
+    "id": "Inbound_Routes2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "from-trunk,08000424207,1"
+  },
+  {
+    "name": "Languages2",
+    "id": "Languages2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Misc_Destinations2",
+    "id": "Misc_Destinations2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Play_Recording2",
+    "id": "Play_Recording2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "play-system-recording,13,1"
+  },
+  {
+    "name": "Queue_Priorities2",
+    "id": "Queue_Priorities2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Queues2",
+    "id": "Queues2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-queues,100,1"
+  },
+  {
+    "name": "Ring_Groups2",
+    "id": "Ring_Groups2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Terminate_Call2",
+    "id": "Terminate_Call2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "app-blackhole,hangup,1"
+  },
+  {
+    "name": "Text_To_Speech2",
+    "id": "Text_To_Speech2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "Time_Conditions2",
+    "id": "Time_Conditions2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "timeconditions,1,1"
+  },
+  {
+    "name": "Trunks2",
+    "id": "Trunks2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "ext-trunk,1,1"
+  },
+  {
+    "name": "Voicemail_Blasting2",
+    "id": "Voicemail_Blasting2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "chanunavail_dest",
+    "id": "chanunavail_dest",
+    "type": "hidden",
+    "label": "Not Reachable",
+    "value": "goto2"
+  },
+  {
+    "name": "chanunavail_cid",
+    "id": "chanunavail_cid",
+    "type": "text",
+    "label": "CID Prefix",
+    "value": ""
+  },
+  {
+    "name": "pinless",
+    "id": "pinless0",
+    "type": "radio",
+    "label": "Disable",
+    "checked": true,
+    "value": "disabled"
+  },
+  {
+    "name": "pinless",
+    "id": "pinless1",
+    "type": "radio",
+    "label": "Enable",
+    "checked": false,
+    "value": "enabled"
+  },
+  {
+    "name": "extension",
+    "id": "extension",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "5000"
+  },
+  {
+    "name": "devinfo_secret_origional",
+    "id": "devinfo_secret_origional",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "123123123123a"
+  },
+  {
+    "name": "devinfo_sipdriver",
+    "id": "devinfo_sipdriver",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "chan_pjsip"
+  }
+]

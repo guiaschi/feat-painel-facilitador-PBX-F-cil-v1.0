@@ -1,0 +1,75 @@
+# ============================================
+# Node.js / NPM
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ============================================
+# Build output
+# ============================================
+frontend/dist/
+frontend/build/
+backend/dist/
+
+# ============================================
+# Environment / Secrets (NEVER commit these!)
+# ============================================
+.env
+.env.local
+.env.production
+.env.*.local
+backend/.env
+
+# ============================================
+# Runtime data / Cache
+# ============================================
+*.pid
+*.seed
+*.pid.lock
+extension_metadata.json
+
+# ============================================
+# Puppeteer / Chrome cache
+# ============================================
+backend/.cache/
+.local-chromium/
+
+# ============================================
+# Debug / Temp files
+# ============================================
+debug-*.js
+debug-*.mjs
+inspect-*.js
+test-selector.js
+cookies.json
+*.html.bak
+
+# ============================================
+# Screenshot / error captures (debug only)
+# ============================================
+*.png
+*.html
+error_*.html
+error_*.png
+extensions_debug.png
+login_error.*
+interactive_state.png
+
+# ============================================
+# Editor / OS files
+# ============================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log

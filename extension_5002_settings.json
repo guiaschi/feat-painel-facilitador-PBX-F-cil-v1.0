@@ -1,0 +1,587 @@
+[
+  {
+    "name": "devinfo_secret",
+    "id": "devinfo_secret",
+    "type": "text",
+    "label": "Secret",
+    "value": "123456123456"
+  },
+  {
+    "name": "Voicemail_Blastingfmfm",
+    "id": "Voicemail_Blastingfmfm",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "devinfo_dtmfmode",
+    "id": "devinfo_dtmfmode",
+    "type": "select",
+    "label": "DTMF Signaling",
+    "value": "rfc4733"
+  },
+  {
+    "name": "devinfo_context",
+    "id": "devinfo_context",
+    "type": "text",
+    "label": "Context",
+    "value": "from-internal"
+  },
+  {
+    "name": "devinfo_defaultuser",
+    "id": "devinfo_defaultuser",
+    "type": "text",
+    "label": "Default User",
+    "value": ""
+  },
+  {
+    "name": "devinfo_trustrpid",
+    "id": "devinfo_trustrpid0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_trustrpid",
+    "id": "devinfo_trustrpid1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_user_eq_phone",
+    "id": "devinfo_user_eq_phone0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_user_eq_phone",
+    "id": "devinfo_user_eq_phone1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_sendrpid",
+    "id": "devinfo_sendrpid",
+    "type": "select",
+    "label": "Send RPID",
+    "value": "pai"
+  },
+  {
+    "name": "devinfo_qualifyfreq",
+    "id": "devinfo_qualifyfreq",
+    "type": "text",
+    "label": "Qualify Frequency",
+    "value": "5"
+  },
+  {
+    "name": "devinfo_transport",
+    "id": "devinfo_transport",
+    "type": "select",
+    "label": "Transport",
+    "value": "0.0.0.0-wss"
+  },
+  {
+    "name": "devinfo_avpf",
+    "id": "devinfo_avpf0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_avpf",
+    "id": "devinfo_avpf1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_icesupport",
+    "id": "devinfo_icesupport0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_icesupport",
+    "id": "devinfo_icesupport1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rtcp_mux",
+    "id": "devinfo_rtcp_mux0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rtcp_mux",
+    "id": "devinfo_rtcp_mux1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_namedcallgroup",
+    "id": "devinfo_namedcallgroup",
+    "type": "text",
+    "label": "Call Groups",
+    "value": ""
+  },
+  {
+    "name": "devinfo_namedpickupgroup",
+    "id": "devinfo_namedpickupgroup",
+    "type": "text",
+    "label": "Pickup Groups",
+    "value": ""
+  },
+  {
+    "name": "devinfo_disallow",
+    "id": "devinfo_disallow",
+    "type": "text",
+    "label": "Disallowed Codecs",
+    "value": ""
+  },
+  {
+    "name": "devinfo_allow",
+    "id": "devinfo_allow",
+    "type": "text",
+    "label": "Allowed Codecs",
+    "value": ""
+  },
+  {
+    "name": "devinfo_dial",
+    "id": "devinfo_dial",
+    "type": "text",
+    "label": "Dial",
+    "value": "PJSIP/5002"
+  },
+  {
+    "name": "devinfo_mailbox",
+    "id": "devinfo_mailbox",
+    "type": "text",
+    "label": "Mailbox",
+    "value": ""
+  },
+  {
+    "name": "devinfo_vmexten",
+    "id": "devinfo_vmexten",
+    "type": "text",
+    "label": "Voicemail Extension",
+    "value": ""
+  },
+  {
+    "name": "devinfo_accountcode",
+    "id": "devinfo_accountcode",
+    "type": "text",
+    "label": "Account Code",
+    "value": ""
+  },
+  {
+    "name": "devinfo_max_contacts",
+    "id": "devinfo_max_contacts",
+    "type": "text",
+    "label": "Max Contacts",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_remove_existing",
+    "id": "devinfo_remove_existing0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_remove_existing",
+    "id": "devinfo_remove_existing1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_media_use_received_transport",
+    "id": "devinfo_media_use_received_transport0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_media_use_received_transport",
+    "id": "devinfo_media_use_received_transport1",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rtp_symmetric",
+    "id": "devinfo_rtp_symmetric0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rtp_symmetric",
+    "id": "devinfo_rtp_symmetric1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_rewrite_contact",
+    "id": "devinfo_rewrite_contact0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_rewrite_contact",
+    "id": "devinfo_rewrite_contact1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_force_rport",
+    "id": "devinfo_force_rport0",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_force_rport",
+    "id": "devinfo_force_rport1",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription0",
+    "type": "radio",
+    "label": "Auto",
+    "checked": true,
+    "value": "auto"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription1",
+    "type": "radio",
+    "label": "Unsolicited",
+    "checked": false,
+    "value": "unsolicited"
+  },
+  {
+    "name": "devinfo_mwi_subscription",
+    "id": "devinfo_mwi_subscription2",
+    "type": "radio",
+    "label": "Solicited",
+    "checked": false,
+    "value": "solicited"
+  },
+  {
+    "name": "devinfo_aggregate_mwi",
+    "id": "devinfo_aggregate_mwi0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_aggregate_mwi",
+    "id": "devinfo_aggregate_mwi1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_bundle",
+    "id": "devinfo_bundle0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_bundle",
+    "id": "devinfo_bundle1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_max_audio_streams",
+    "id": "devinfo_max_audio_streams",
+    "type": "text",
+    "label": "Max audio streams",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_max_video_streams",
+    "id": "devinfo_max_video_streams",
+    "type": "text",
+    "label": "Max video streams",
+    "value": "1"
+  },
+  {
+    "name": "devinfo_media_encryption",
+    "id": "devinfo_media_encryption",
+    "type": "select",
+    "label": "Media Encryption",
+    "value": "dtls"
+  },
+  {
+    "name": "devinfo_timers",
+    "id": "devinfo_timers",
+    "type": "select",
+    "label": "Session Timers",
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_timers_min_se",
+    "id": "devinfo_timers_min_se",
+    "type": "text",
+    "label": "Timer Expiration Period",
+    "value": "90"
+  },
+  {
+    "name": "devinfo_direct_media",
+    "id": "devinfo_direct_media0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_direct_media",
+    "id": "devinfo_direct_media1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_media_encryption_optimistic",
+    "id": "devinfo_media_encryption_optimistic0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_media_encryption_optimistic",
+    "id": "devinfo_media_encryption_optimistic1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_refer_blind_progress",
+    "id": "devinfo_refer_blind_progress0",
+    "type": "radio",
+    "label": "No",
+    "checked": true,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_refer_blind_progress",
+    "id": "devinfo_refer_blind_progress1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": false,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_device_state_busy_at",
+    "id": "devinfo_device_state_busy_at",
+    "type": "text",
+    "label": "Device State Busy at",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_match",
+    "id": "devinfo_match",
+    "type": "text",
+    "label": "Match (Permit)",
+    "value": ""
+  },
+  {
+    "name": "devinfo_maximum_expiration",
+    "id": "devinfo_maximum_expiration",
+    "type": "text",
+    "label": "Maximum Expiration",
+    "value": "7200"
+  },
+  {
+    "name": "devinfo_minimum_expiration",
+    "id": "devinfo_minimum_expiration",
+    "type": "text",
+    "label": "Minimum Expiration",
+    "value": "60"
+  },
+  {
+    "name": "devinfo_rtp_timeout",
+    "id": "devinfo_rtp_timeout",
+    "type": "text",
+    "label": "RTP Timeout",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_rtp_timeout_hold",
+    "id": "devinfo_rtp_timeout_hold",
+    "type": "text",
+    "label": "RTP Hold Timeout",
+    "value": "0"
+  },
+  {
+    "name": "devinfo_outbound_proxy",
+    "id": "devinfo_outbound_proxy",
+    "type": "text",
+    "label": "Outbound Proxy",
+    "value": ""
+  },
+  {
+    "name": "devinfo_outbound_auth",
+    "id": "devinfo_outbound_auth0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "devinfo_outbound_auth",
+    "id": "devinfo_outbound_auth1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "devinfo_message_context",
+    "id": "devinfo_message_context",
+    "type": "text",
+    "label": "Messages Context",
+    "value": ""
+  },
+  {
+    "name": "dtls_enable",
+    "id": "dtls_enable0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "no"
+  },
+  {
+    "name": "dtls_enable",
+    "id": "dtls_enable1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "yes"
+  },
+  {
+    "name": "dtls_auto_generate_cert",
+    "id": "dtls_auto_generate_cert0",
+    "type": "radio",
+    "label": "No",
+    "checked": false,
+    "value": "0"
+  },
+  {
+    "name": "dtls_auto_generate_cert",
+    "id": "dtls_auto_generate_cert1",
+    "type": "radio",
+    "label": "Yes",
+    "checked": true,
+    "value": "1"
+  },
+  {
+    "name": "dtls_certificate",
+    "id": "dtls_certificate",
+    "type": "select",
+    "label": "Use Certificate",
+    "value": "1"
+  },
+  {
+    "name": "dtls_verify",
+    "id": "dtls_verify",
+    "type": "select",
+    "label": "DTLS Verify",
+    "value": "fingerprint"
+  },
+  {
+    "name": "dtls_setup",
+    "id": "dtls_setup",
+    "type": "select",
+    "label": "DTLS Setup",
+    "value": "actpass"
+  },
+  {
+    "name": "dtls_rekey",
+    "id": "dtls_rekey",
+    "type": "text",
+    "label": "DTLS Rekey Interval",
+    "value": "0"
+  },
+  {
+    "name": "Voicemail_Blasting0",
+    "id": "Voicemail_Blasting0",
+    "type": "select",
+    "label": "No Answer",
+    "value": "popover"
+  },
+  {
+    "name": "Voicemail_Blasting1",
+    "id": "Voicemail_Blasting1",
+    "type": "select",
+    "label": "Busy",
+    "value": "popover"
+  },
+  {
+    "name": "Voicemail_Blasting2",
+    "id": "Voicemail_Blasting2",
+    "type": "select",
+    "label": "Not Reachable",
+    "value": "popover"
+  },
+  {
+    "name": "devinfo_secret_origional",
+    "id": "devinfo_secret_origional",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "123456123456"
+  },
+  {
+    "name": "devinfo_sipdriver",
+    "id": "devinfo_sipdriver",
+    "type": "hidden",
+    "label": "Display Name",
+    "value": "chan_pjsip"
+  }
+]
