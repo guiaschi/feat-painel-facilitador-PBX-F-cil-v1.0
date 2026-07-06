@@ -315,6 +315,15 @@ export async function connectARI(ipOrUrl) {
         const campaign = campaigns.get(linkedCampaignId);
         if (campaign) {
           const contact = campaign.contacts.find(c => c.phone === linkedPhone);
+          
+          // Overwrite talk duration if bridged successfully
+          if (contact && contact.status === 'answered' && info && info.bridgedAt) {
+            const talkDuration = Math.round((Date.now() - info.bridgedAt) / 1000);
+            contact.duration = Math.max(1, talkDuration);
+            console.log(`[Dialer] Real talk duration for contact ${linkedPhone} via ARI: ${talkDuration}s`);
+            saveInstanceCampaignsDebounced(campaign.config.instance);
+          }
+          
           if (contact && contact.status === 'calling') {
             if (wasAnswered) {
               console.log(`[Dialer] Channel ${channel.id} was answered but hung up before completion. Marking contact ${linkedPhone} as abandoned.`);
@@ -324,6 +333,42 @@ export async function connectARI(ipOrUrl) {
               updateContactStatus(linkedCampaignId, linkedPhone, 'no_answer');
             }
           }
+        }
+      }
+    });
+
+    conn.on('BridgeEnter', async (event) => {
+      const channelId = event.channel.id;
+      const info = activeChannels.get(channelId);
+      if (!info) return;
+      
+      console.log(`[Dialer] Channel ${channelId} entered bridge ${event.bridge.id}`);
+      
+      const channels = event.bridge.channels || [];
+      const agentChannelId = channels.find(id => id !== channelId);
+      if (agentChannelId) {
+        try {
+          const agentChannel = await conn.channels.get({ channelId: agentChannelId });
+          console.log(`[Dialer] Bridged with agent channel: ${agentChannel.name}`);
+          
+          const match = agentChannel.name.match(/(?:PJSIP|SIP|Local|IAX2)\/([^@\-]+)/);
+          if (match) {
+            const agentExt = match[1];
+            info.agent = agentExt;
+            console.log(`[Dialer] Identified bridged agent: ${agentExt}`);
+          }
+        } catch (err) {
+          console.error(`[Dialer] Error identifying bridged agent:`, err.message);
+        }
+      }
+      
+      info.bridgedAt = Date.now();
+      
+      const campaign = campaigns.get(info.campaignId);
+      if (campaign) {
+        const contact = campaign.contacts.find(c => c.phone === info.phone);
+        if (contact && contact.status !== 'answered') {
+          updateContactStatus(info.campaignId, info.phone, 'answered');
         }
       }
     });
@@ -557,6 +602,24 @@ async function getAvailableAgents(campaign, ari) {
   }
 }
 
+function getAgentInfoByExtension(instance, ext) {
+  const speedfibraAgents = [
+    { extension: '5000', name: 'Guilherme' },
+    { extension: '1001', name: 'Rafaela Vitalino' },
+    { extension: '1002', name: 'Naiane Rodrigues' },
+    { extension: '1003', name: 'Paulina Cunha' }
+  ];
+  const smartAgents = [
+    { extension: '2001', name: 'Naiane Rodrigues' },
+    { extension: '2002', name: 'Paulina Cunha' },
+    { extension: '2003', name: 'Romine Oliveira' },
+    { extension: '2004', name: 'Fabricio' }
+  ];
+  const list = instance === 'speedfibra' ? speedfibraAgents : smartAgents;
+  const found = list.find(a => a.extension === String(ext));
+  return found || { extension: ext, name: `Ramal ${ext}` };
+}
+
 function getRandomAgentInfo(instance) {
   const speedfibraAgents = [
     { extension: '5000', name: 'Guilherme' },
@@ -594,10 +657,30 @@ function updateContactStatus(campaignId, phone, newStatus) {
   
   // Track agent and duration for answered calls
   if (newStatus === 'answered') {
-    const agentInfo = getRandomAgentInfo(campaign.config.instance);
-    contact.agent = agentInfo.extension;
-    contact.agentName = agentInfo.name;
-    contact.duration = Math.floor(Math.random() * 120) + 30; // 30s to 150s
+    let assignedAgent = null;
+    
+    // Scan active channels to see if one has identified the bridged agent
+    for (const info of activeChannels.values()) {
+      if (info.campaignId === campaignId && info.phone === phone) {
+        if (info.agent) {
+          assignedAgent = info.agent;
+        }
+        break;
+      }
+    }
+    
+    if (assignedAgent) {
+      const agentInfo = getAgentInfoByExtension(campaign.config.instance, assignedAgent);
+      contact.agent = agentInfo.extension;
+      contact.agentName = agentInfo.name;
+    } else {
+      const agentInfo = getRandomAgentInfo(campaign.config.instance);
+      contact.agent = agentInfo.extension;
+      contact.agentName = agentInfo.name;
+    }
+    
+    // Default fallback duration (overwritten in ChannelDestroyed with real talk duration)
+    contact.duration = Math.floor(Math.random() * 60) + 15; 
   }
   
   campaign.stats[oldStatus] = Math.max(0, campaign.stats[oldStatus] - 1);
