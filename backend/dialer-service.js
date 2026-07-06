@@ -178,6 +178,9 @@ export async function connectARI(ipOrUrl) {
       logDebug(`[StasisStart] Channel ${channel.id} (${channel.name}) entered StasisApp. It was answered!`);
       
       const info = activeChannels.get(channel.id);
+      if (info) {
+        info.answered = true;
+      }
       logDebug(`[StasisStart] activeChannels lookup for ${channel.id}: ${JSON.stringify(info)}`);
       
       let linkedCampaignId = info ? info.campaignId : null;
@@ -294,6 +297,7 @@ export async function connectARI(ipOrUrl) {
       
       let linkedCampaignId = info ? info.campaignId : null;
       let linkedPhone = info ? info.phone : null;
+      let wasAnswered = info ? info.answered : false;
       
       if (info) {
         activeChannels.delete(channel.id);
@@ -312,7 +316,13 @@ export async function connectARI(ipOrUrl) {
         if (campaign) {
           const contact = campaign.contacts.find(c => c.phone === linkedPhone);
           if (contact && contact.status === 'calling') {
-            updateContactStatus(linkedCampaignId, linkedPhone, 'failed');
+            if (wasAnswered) {
+              console.log(`[Dialer] Channel ${channel.id} was answered. Marking contact ${linkedPhone} as answered.`);
+              updateContactStatus(linkedCampaignId, linkedPhone, 'answered');
+            } else {
+              console.log(`[Dialer] Channel ${channel.id} was NOT answered. Marking contact ${linkedPhone} as no_answer.`);
+              updateContactStatus(linkedCampaignId, linkedPhone, 'no_answer');
+            }
           }
         }
       }
@@ -473,8 +483,10 @@ export async function createCampaign(filePath, config) {
             pending: contacts.length,
             calling: 0,
             answered: 0,
-            failed: 0,
-            voicemail: 0
+            no_answer: 0,
+            abandoned: 0,
+            voicemail: 0,
+            failed: 0
           },
           intervalId: null
         };
@@ -822,6 +834,10 @@ export function loadAllCampaignsFromDisk() {
           
           if (c.status === 'running') {
             c.status = 'paused';
+          }
+          if (c.stats) {
+            if (c.stats.no_answer === undefined) c.stats.no_answer = 0;
+            if (c.stats.abandoned === undefined) c.stats.abandoned = 0;
           }
           campaigns.set(c.id, c);
           validCampaigns.push(c);

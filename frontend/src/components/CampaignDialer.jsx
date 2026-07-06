@@ -741,18 +741,26 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
               </div>
               <div className="dialer-stat-card calling">
                 <div className="dialer-stat-label">Em Ligação</div>
-                <div className="dialer-stat-value">{campaign.stats.calling}</div>
+                <div className="dialer-stat-value" style={{ color: 'var(--primary-purple)' }}>{campaign.stats.calling}</div>
               </div>
               <div className="dialer-stat-card answered">
                 <div className="dialer-stat-label">Atendidas</div>
                 <div className="dialer-stat-value" style={{ color: '#10b981' }}>{campaign.stats.answered}</div>
               </div>
+              <div className="dialer-stat-card no-answer" style={{ border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div className="dialer-stat-label">Não Atendidas</div>
+                <div className="dialer-stat-value" style={{ color: '#a3a3a3' }}>{campaign.stats.no_answer || 0}</div>
+              </div>
+              <div className="dialer-stat-card abandoned" style={{ border: '1px solid rgba(245, 158, 11, 0.15)', background: 'rgba(245, 158, 11, 0.01)' }}>
+                <div className="dialer-stat-label">Abandonadas</div>
+                <div className="dialer-stat-value" style={{ color: '#f59e0b' }}>{campaign.stats.abandoned || 0}</div>
+              </div>
               <div className="dialer-stat-card voicemail" style={{ background: 'rgba(234, 179, 8, 0.04)', borderColor: 'rgba(234, 179, 8, 0.15)' }}>
-                <div className="dialer-stat-label">Caixa Postal</div>
+                <div className="dialer-stat-label">Cx Postal</div>
                 <div className="dialer-stat-value" style={{ color: '#eab308' }}>{campaign.stats.voicemail || 0}</div>
               </div>
               <div className="dialer-stat-card failed">
-                <div className="dialer-stat-label">Outras Falhas</div>
+                <div className="dialer-stat-label">Falhas</div>
                 <div className="dialer-stat-value" style={{ color: '#ef4444' }}>{campaign.stats.failed}</div>
               </div>
             </div>
@@ -802,7 +810,9 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                       <option value="all">Todos os status</option>
                       <option value="pending">⏳ Pendentes</option>
                       <option value="calling">📞 Discando</option>
-                      <option value="answered">✅ Atendidos</option>
+                      <option value="answered">✅ Atendidas</option>
+                      <option value="no_answer">📭 Não Atendidas</option>
+                      <option value="abandoned">⚠️ Abandonadas</option>
                       <option value="voicemail">🛡️ Caixa Postal</option>
                       <option value="failed">❌ Falhas</option>
                     </select>
@@ -843,6 +853,8 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                                 {contact.status === 'pending' && '⏳ Pendente'}
                                 {contact.status === 'calling' && '📞 Discando...'}
                                 {contact.status === 'answered' && '✅ Atendido'}
+                                {contact.status === 'no_answer' && '📭 Não Atendido'}
+                                {contact.status === 'abandoned' && '⚠️ Abandonado'}
                                 {contact.status === 'voicemail' && '🛡️ Caixa Postal'}
                                 {contact.status === 'failed' && '❌ Falhou'}
                               </span>

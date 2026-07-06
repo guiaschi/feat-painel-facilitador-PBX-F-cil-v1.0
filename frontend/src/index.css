@@ -605,3 +605,320 @@ body::after {
     max-width: 100% !important;
   }
 }
+
+/* ========================================================
+   Campaign Dialer CSS styles
+   ======================================================== */
+
+.dialer-layout-container {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.dialer-sidebar-card {
+  width: 320px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-shrink: 0;
+  text-align: left;
+}
+
+.dialer-container {
+  flex-grow: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 600px;
+}
+
+.dialer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dialer-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.6rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dialer-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+/* File Upload styling */
+.dialer-file-input-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  border: 2px dashed rgba(255, 42, 133, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.01);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.dialer-file-input-wrapper:hover {
+  border-color: var(--primary-cyan);
+  background: rgba(255, 42, 133, 0.04);
+  box-shadow: 0 0 15px rgba(255, 42, 133, 0.1);
+}
+
+.dialer-file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dialer-file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.dialer-file-icon {
+  font-size: 2rem;
+}
+
+/* Form Grid */
+.dialer-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .dialer-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .dialer-layout-container {
+    flex-direction: column;
+  }
+  .dialer-sidebar-card {
+    width: 100%;
+  }
+}
+
+/* Queue preview and agents */
+.dialer-queue-preview {
+  margin-top: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dialer-queue-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: var(--font-title);
+  font-weight: 600;
+}
+
+.dialer-agents-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dialer-agent-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dialer-agent-badge.free {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+.dialer-agent-badge.busy {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.dialer-agent-badge.offline {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+}
+
+/* Stats Cards Grid */
+.dialer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+@media (max-width: 1400px) {
+  .dialer-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dialer-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.dialer-stat-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+
+.dialer-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dialer-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-title);
+  font-weight: 600;
+}
+
+.dialer-stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: var(--font-title);
+  color: #fff;
+}
+
+/* Stat card specific coloring */
+.dialer-stat-card.total {
+  border-color: rgba(0, 242, 254, 0.15);
+  background: rgba(0, 242, 254, 0.01);
+}
+.dialer-stat-card.total .dialer-stat-value {
+  color: var(--primary-cyan);
+  text-shadow: 0 0 10px rgba(255, 42, 133, 0.2);
+}
+
+.dialer-stat-card.pending .dialer-stat-value {
+  color: #9ca3af;
+}
+
+.dialer-stat-card.calling {
+  border-color: rgba(157, 78, 221, 0.15);
+  background: rgba(157, 78, 221, 0.01);
+}
+.dialer-stat-card.calling .dialer-stat-value {
+  color: var(--primary-purple);
+  text-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
+}
+
+.dialer-stat-card.answered {
+  border-color: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.01);
+}
+
+.dialer-stat-card.voicemail {
+  border-color: rgba(234, 179, 8, 0.15);
+  background: rgba(234, 179, 8, 0.01);
+}
+
+.dialer-stat-card.failed {
+  border-color: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.01);
+}
+
+/* Dialer Contacts List and Filters */
+.dialer-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dialer-list-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.dialer-list-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Campaign items scroll styled */
+.campaign-item-card {
+  border-left: 3px solid transparent !important;
+}
+
+.campaign-item-card:hover {
+  background: rgba(255, 42, 133, 0.03) !important;
+  border-color: rgba(255, 42, 133, 0.2) !important;
+}
+
+.campaign-item-card.running {
+  border-left-color: var(--primary-cyan) !important;
+}
+
+.campaign-item-card.completed {
+  border-left-color: var(--success-color) !important;
+}
+
+.campaign-item-card.paused {
+  border-left-color: #f39c12 !important;
+}
