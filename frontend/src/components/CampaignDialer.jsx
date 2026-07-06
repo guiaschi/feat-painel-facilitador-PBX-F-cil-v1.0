@@ -21,6 +21,7 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
   const [enableAmd, setEnableAmd] = useState(false);
   const [restoringBackup, setRestoringBackup] = useState(false);
   const [isIpAutofilled, setIsIpAutofilled] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   
   const statusInterval = useRef(null);
 
@@ -320,10 +321,8 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
     } catch (e) {}
   };
 
-  const handleDeleteCampaign = async (e, id) => {
-    e.stopPropagation(); // Evita selecionar a campanha ao clicar em excluir
-    if (!confirm('Deseja realmente excluir esta campanha permanentemente?')) return;
-    
+  const handleDeleteCampaign = async (id) => {
+    setDeletingId(null);
     try {
       const res = await fetch(`${API_URL}/api/campaigns/${id}`, {
         method: 'DELETE',
@@ -410,27 +409,75 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                       <span className={`dialer-status-badge ${c.status}`} style={{ fontSize: '8px', padding: '2px 6px' }}>
                         {c.status === 'running' ? 'Executando' : c.status === 'paused' ? 'Pausada' : c.status === 'completed' ? 'Concluída' : 'Parada'}
                       </span>
-                      <button
-                        onClick={(e) => handleDeleteCampaign(e, c.id)}
-                        className="table-delete-btn"
-                        style={{
-                          padding: '4px 8px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          background: 'rgba(239, 68, 68, 0.15)',
-                          border: '1px solid rgba(239, 68, 68, 0.3)',
-                          color: '#fca5a5',
-                          height: '24px',
-                          minWidth: '24px'
-                        }}
-                        title="Excluir campanha"
-                      >
-                        🗑️
-                      </button>
+                      {deletingId === c.id ? (
+                        <div style={{ display: 'flex', gap: '4px' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCampaign(c.id);
+                            }}
+                            style={{
+                              padding: '4px 8px',
+                              background: '#10b981',
+                              border: 'none',
+                              color: '#fff',
+                              borderRadius: '6px',
+                              fontSize: '10px',
+                              fontWeight: 'bold',
+                              cursor: 'pointer',
+                              height: '24px'
+                            }}
+                            title="Confirmar exclusão"
+                          >
+                            Sim
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeletingId(null);
+                            }}
+                            style={{
+                              padding: '4px 8px',
+                              background: '#ef4444',
+                              border: 'none',
+                              color: '#fff',
+                              borderRadius: '6px',
+                              fontSize: '10px',
+                              fontWeight: 'bold',
+                              cursor: 'pointer',
+                              height: '24px'
+                            }}
+                            title="Cancelar"
+                          >
+                            Não
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingId(c.id);
+                          }}
+                          className="table-delete-btn"
+                          style={{
+                            padding: '4px 8px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            background: 'rgba(239, 68, 68, 0.15)',
+                            border: '1px solid rgba(239, 68, 68, 0.3)',
+                            color: '#fca5a5',
+                            height: '24px',
+                            minWidth: '24px'
+                          }}
+                          title="Excluir campanha"
+                        >
+                          🗑️
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
