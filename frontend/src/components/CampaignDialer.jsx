@@ -412,15 +412,20 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                       </span>
                       <button
                         onClick={(e) => handleDeleteCampaign(e, c.id)}
+                        className="table-delete-btn"
                         style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#ef4444',
+                          padding: '4px 8px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: '6px',
                           cursor: 'pointer',
-                          fontSize: '11px',
-                          padding: '2px',
-                          display: 'flex',
-                          alignItems: 'center'
+                          fontSize: '12px',
+                          background: 'rgba(239, 68, 68, 0.15)',
+                          border: '1px solid rgba(239, 68, 68, 0.3)',
+                          color: '#fca5a5',
+                          height: '24px',
+                          minWidth: '24px'
                         }}
                         title="Excluir campanha"
                       >
