@@ -45,10 +45,12 @@ export default function Login({ onLoginSuccess }) {
     <div className="login-container">
       <div className="glass-panel pulse-glow login-card">
         <div style={{ textAlign: 'center' }}>
-          <div className="login-logo-container">
-            <span className="login-logo-up">up</span>
-            <span className="login-logo-chat">chat</span>
-            <span className="login-logo-sub">.pbx</span>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <img 
+              src="/upchat_logo.png" 
+              alt="Upchat Logo" 
+              style={{ height: '48px', objectFit: 'contain' }} 
+            />
           </div>
           <h1 className="login-title">Painel PBX Fácil</h1>
           <p className="login-subtitle">Gerencie ramais de forma simples e automatizada</p>
