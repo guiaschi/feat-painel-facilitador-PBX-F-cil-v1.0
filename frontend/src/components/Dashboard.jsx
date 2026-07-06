@@ -326,8 +326,9 @@ export default function Dashboard({
         </div>
 
         {/* Search & Actions Bar */}
-        <div className="actions-bar" style={styles.actionsBar}>
-          {activeTab !== 'realtime' && activeTab !== 'dialer' ? (
+        {activeTab !== 'dialer' && (
+          <div className="actions-bar" style={styles.actionsBar}>
+            {activeTab !== 'realtime' ? (
             <>
               <div style={styles.searchWrapper}>
                 <input
@@ -454,6 +455,7 @@ export default function Dashboard({
             </div>
           )}
         </div>
+        )}
 
         {/* Extensions, Queues or DIDs content */}
         {activeTab === 'dialer' ? (
