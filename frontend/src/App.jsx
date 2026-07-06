@@ -5,6 +5,7 @@ import ExtensionModal from './components/ExtensionModal';
 import QueueModal from './components/QueueModal';
 import CSVImportModal from './components/CSVImportModal';
 import { API_URL } from './config';
+import CustomDestModal from './components/CustomDestModal';
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem('pbx_token') || '');
@@ -13,10 +14,13 @@ export default function App() {
   const [extensions, setExtensions] = useState([]);
   const [queues, setQueues] = useState([]);
   const [dids, setDids] = useState([]);
+  const [customDestinations, setCustomDestinations] = useState([]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
   const [isCSVModalOpen, setIsCSVModalOpen] = useState(false);
+  const [isCustomDestModalOpen, setIsCustomDestModalOpen] = useState(false);
+  const [activeEditCustomDestData, setActiveEditCustomDestData] = useState(null);
   const [isOperationLoading, setIsOperationLoading] = useState(false);
   const [operationText, setOperationText] = useState('');
   const [error, setError] = useState('');
@@ -26,6 +30,7 @@ export default function App() {
       loadExtensions();
       loadQueues();
       loadDids();
+      loadCustomDestinations();
     }
   }, [token]);
 
@@ -99,6 +104,25 @@ export default function App() {
       console.error('Error loading DIDs:', err);
     }
   };
+  const loadCustomDestinations = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/custom-destinations`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setCustomDestinations(data.customDestinations || []);
+      }
+    } catch (err) {
+      console.error('Error loading custom destinations:', err);
+    }
+  };
+
 
   const handleLoginSuccess = (newToken, newUser, newInstance) => {
     localStorage.setItem('pbx_token', newToken);
@@ -427,8 +451,32 @@ export default function App() {
     }
   };
 
+  const handleDeleteCustomDest = async (targetId) => {
+    setIsOperationLoading(true);
+    setOperationText(`Removendo destino personalizado ${targetId}... Salvando no PBX.`);
+    try {
+      const response = await fetch(`${API_URL}/api/custom-destinations/${encodeURIComponent(targetId)}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erro ao excluir destino personalizado.');
+      }
+      await loadCustomDestinations();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Falha ao excluir destino personalizado do PBX.');
+    } finally {
+      setIsOperationLoading(false);
+      setOperationText('');
+    }
+  };
+
   const handleRefreshAll = async () => {
-    await Promise.all([loadExtensions(), loadQueues(), loadDids()]);
+    await Promise.all([loadExtensions(), loadQueues(), loadDids(), loadCustomDestinations()]);
   };
 
   if (!token) {
@@ -441,6 +489,7 @@ export default function App() {
         extensions={extensions}
         queues={queues}
         dids={dids}
+        customDestinations={customDestinations}
         instance={instance}
         user={user}
         onLogout={handleLogout}
@@ -454,6 +503,9 @@ export default function App() {
         onCreateDid={handleCreateDid}
         onEditDid={handleEditDid}
         onDeleteDid={handleDeleteDid}
+        onCreateCustomDest={() => { setActiveEditCustomDestData(null); setIsCustomDestModalOpen(true); }}
+        onEditCustomDest={(cd) => { setActiveEditCustomDestData(cd); setIsCustomDestModalOpen(true); }}
+        onDeleteCustomDest={handleDeleteCustomDest}
         isOperationLoading={isOperationLoading}
         currentOperationText={operationText}
         onRefresh={handleRefreshAll}
@@ -479,6 +531,13 @@ export default function App() {
         isOpen={isCSVModalOpen}
         onClose={() => setIsCSVModalOpen(false)}
         onImportStart={handleImportCSVStart}
+      />
+      <CustomDestModal
+        isOpen={isCustomDestModalOpen}
+        onClose={() => { setIsCustomDestModalOpen(false); setActiveEditCustomDestData(null); }}
+        onSave={loadCustomDestinations}
+        editData={activeEditCustomDestData}
+        token={token}
       />
     </>
   );

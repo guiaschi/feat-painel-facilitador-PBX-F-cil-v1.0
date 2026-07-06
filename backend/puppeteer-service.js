@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import dns from 'dns';
+import path from 'path';
 
 // Helper to launch browser with common arguments
 async function getBrowser() {
@@ -2403,30 +2404,15 @@ export async function getPBXExternalIP(instance, cookies) {
     const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=sipsettings`;
     console.log(`[Puppeteer] Navigating to sipsettings for IP: ${url}`);
     
-    // Resilient load
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 12000 });
+    // Resilient load (wait up to 30 seconds)
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     
-    // Wait for inputs
-    await page.waitForSelector('input', { timeout: 6000 }).catch(() => {});
+    // Wait for the specific input
+    await page.waitForSelector('input#externip', { timeout: 20000 });
     
-    // Evaluate external IP inputs
     const externalIP = await page.evaluate(() => {
-      const targets = [
-        document.querySelector('input#externip'),
-        document.querySelector('input[name="externip"]'),
-        document.querySelector('input[name*="externip"]'),
-        document.querySelector('input[id*="externip"]'),
-        document.querySelector('input#externip_val')
-      ];
-      
-      for (const el of targets) {
-        if (el && el.value && el.value.trim().length > 0) {
-          // Verify if it looks like an IP or hostname
-          const val = el.value.trim();
-          if (val.length > 0) return val;
-        }
-      }
-      return null;
+      const el = document.querySelector('input#externip');
+      return el && el.value ? el.value.trim() : null;
     });
 
     if (externalIP) {
@@ -2434,21 +2420,21 @@ export async function getPBXExternalIP(instance, cookies) {
       return externalIP;
     }
   } catch (err) {
-    console.warn(`[Puppeteer] Failed to scrape sipsettings for IP of ${instance}: ${err.message}`);
+    console.warn(`[Puppeteer] Failed to scrape NAT settings for IP of ${instance}: ${err.message}`);
   } finally {
     if (page) await page.close().catch(() => {});
     await browser.close().catch(() => {});
   }
 
-  // Fallback to DNS resolve
+  // Last-resort fallback to DNS if Puppeteer scraping fails
   try {
     const lookup = await dns.promises.lookup(`${instance}.pbxfacil.com.br`);
-    console.log(`[DNS] Fallback resolved PBX IP for ${instance}: ${lookup.address}`);
-    return lookup.address;
-  } catch (err) {
-    console.error(`[DNS] Failed fallback lookup for ${instance}:`, err.message);
-    return null;
-  }
+    if (lookup && lookup.address) {
+      return lookup.address;
+    }
+  } catch (e) {}
+
+  return null;
 }
 
 /**
@@ -2614,21 +2600,62 @@ export async function createInboundRoute(instance, cookies, routeData) {
       
       const gotoSelect = document.querySelector('select[name="goto0"]');
       if (gotoSelect) {
-        gotoSelect.value = type;
+        // Try finding option that matches Extension, Queue, or Custom Destination
+        const options = Array.from(gotoSelect.options);
+        let targetValue = type;
+        
+        if (type === 'Extensions') {
+          const opt = options.find(o => o.value === 'Extensions' || o.value === 'ext-local' || o.value === 'from-did-direct' || o.value.includes('local'));
+          if (opt) targetValue = opt.value;
+        } else if (type === 'Queues') {
+          const opt = options.find(o => o.value === 'Queues' || o.value === 'ext-queues' || o.value.toLowerCase().includes('queue'));
+          if (opt) targetValue = opt.value;
+        } else if (type === 'Custom_Destinations' || type === 'Custom' || type === 'CustomDestinations') {
+          const opt = options.find(o => o.value === 'Custom_Destinations' || o.value === 'customdestinations' || o.value === 'customdests' || o.value.toLowerCase().includes('custom'));
+          if (opt) targetValue = opt.value;
+        }
+        
+        gotoSelect.value = targetValue;
         gotoSelect.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }, did, description, destType, destValue);
 
     // Wait a brief moment for the secondary dropdown to be shown
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
     // Select the destination item value
     await page.evaluate((type, val) => {
-      const itemSelect = document.querySelector(`select[name="${type}0"]`) || 
-                         document.querySelector(`select[name*="${type}"]`);
-      if (itemSelect) {
-        itemSelect.value = val;
-        itemSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      const gotoSelect = document.querySelector('select[name="goto0"]');
+      const activeType = gotoSelect ? gotoSelect.value : type;
+      
+      const selectElement = document.querySelector(`select[name="${activeType}0"]`) || 
+                            document.querySelector(`select[name*="${activeType}"]`) ||
+                            document.querySelector(`select[name="${type}0"]`) || 
+                            document.querySelector(`select[name*="${type}"]`) ||
+                            document.querySelector('select[name="ext-local0"]') ||
+                            document.querySelector('select[name="ext-queues0"]') ||
+                            document.querySelector('select[name="customdestinations0"]') ||
+                            document.querySelector('select[name="customdests0"]');
+                            
+      if (selectElement) {
+        const options = Array.from(selectElement.options);
+        let opt = options.find(o => o.value === val);
+        
+        if (!opt) {
+          opt = options.find(o => {
+            const parts = o.value.split(',');
+            return parts.includes(val) || o.value.includes(`,${val},`) || o.value.endsWith(`,${val}`);
+          });
+        }
+        
+        if (!opt) {
+          opt = options.find(o => o.value.toLowerCase().includes(val.toLowerCase()) || o.innerText.toLowerCase().includes(val.toLowerCase()));
+        }
+        
+        if (opt) {
+          selectElement.value = opt.value;
+          selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
       }
     }, destType, destValue);
 
@@ -2665,7 +2692,7 @@ export async function editInboundRoute(instance, cookies, routeId, routeData) {
   let page;
   try {
     page = await createNewPage(browser, cookies);
-    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=did&extdisplay=${encodeURIComponent(routeId)}`;
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=did&view=form&extdisplay=${encodeURIComponent(routeId)}`;
     console.log(`[Puppeteer] Navigating to edit Inbound Route: ${url}`);
     
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -2681,21 +2708,62 @@ export async function editInboundRoute(instance, cookies, routeId, routeData) {
       
       const gotoSelect = document.querySelector('select[name="goto0"]');
       if (gotoSelect) {
-        gotoSelect.value = type;
+        // Try finding option that matches Extension, Queue, or Custom Destination
+        const options = Array.from(gotoSelect.options);
+        let targetValue = type;
+        
+        if (type === 'Extensions') {
+          const opt = options.find(o => o.value === 'Extensions' || o.value === 'ext-local' || o.value === 'from-did-direct' || o.value.includes('local'));
+          if (opt) targetValue = opt.value;
+        } else if (type === 'Queues') {
+          const opt = options.find(o => o.value === 'Queues' || o.value === 'ext-queues' || o.value.toLowerCase().includes('queue'));
+          if (opt) targetValue = opt.value;
+        } else if (type === 'Custom_Destinations' || type === 'Custom' || type === 'CustomDestinations') {
+          const opt = options.find(o => o.value === 'Custom_Destinations' || o.value === 'customdestinations' || o.value === 'customdests' || o.value.toLowerCase().includes('custom'));
+          if (opt) targetValue = opt.value;
+        }
+        
+        gotoSelect.value = targetValue;
         gotoSelect.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }, description, destType, destValue);
 
     // Wait a brief moment for the secondary dropdown to be shown
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
     // Select the destination item value
     await page.evaluate((type, val) => {
-      const itemSelect = document.querySelector(`select[name="${type}0"]`) || 
-                         document.querySelector(`select[name*="${type}"]`);
-      if (itemSelect) {
-        itemSelect.value = val;
-        itemSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      const gotoSelect = document.querySelector('select[name="goto0"]');
+      const activeType = gotoSelect ? gotoSelect.value : type;
+      
+      const selectElement = document.querySelector(`select[name="${activeType}0"]`) || 
+                            document.querySelector(`select[name*="${activeType}"]`) ||
+                            document.querySelector(`select[name="${type}0"]`) || 
+                            document.querySelector(`select[name*="${type}"]`) ||
+                            document.querySelector('select[name="ext-local0"]') ||
+                            document.querySelector('select[name="ext-queues0"]') ||
+                            document.querySelector('select[name="customdestinations0"]') ||
+                            document.querySelector('select[name="customdests0"]');
+                            
+      if (selectElement) {
+        const options = Array.from(selectElement.options);
+        let opt = options.find(o => o.value === val);
+        
+        if (!opt) {
+          opt = options.find(o => {
+            const parts = o.value.split(',');
+            return parts.includes(val) || o.value.includes(`,${val},`) || o.value.endsWith(`,${val}`);
+          });
+        }
+        
+        if (!opt) {
+          opt = options.find(o => o.value.toLowerCase().includes(val.toLowerCase()) || o.innerText.toLowerCase().includes(val.toLowerCase()));
+        }
+        
+        if (opt) {
+          selectElement.value = opt.value;
+          selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
       }
     }, destType, destValue);
 
@@ -2739,10 +2807,21 @@ export async function deleteInboundRoute(instance, cookies, routeId) {
       await dialog.accept();
     });
 
-    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=did&action=delete&extdisplay=${encodeURIComponent(routeId)}`;
-    console.log(`[Puppeteer] Deleting Inbound Route via direct URL: ${url}`);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=did&view=form&extdisplay=${encodeURIComponent(routeId)}`;
+    console.log(`[Puppeteer] Navigating to edit page to delete Inbound Route: ${url}`);
     
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    
+    // Wait for the delete button to appear
+    console.log('[Puppeteer] Looking for Delete button...');
+    const deleteBtnSelector = '#delbtn, [name="delete"], .btn-danger[value="Delete"], .btn-danger[value="Excluir"], [id*="delete"], [class*="delete"]';
+    await page.waitForSelector(deleteBtnSelector, { timeout: 10000 });
+    
+    console.log('[Puppeteer] Clicking delete button...');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {}),
+      page.click(deleteBtnSelector)
+    ]);
     
     // Apply changes
     console.log('[Puppeteer] Clicking Apply Config...');
@@ -2752,6 +2831,651 @@ export async function deleteInboundRoute(instance, cookies, routeId) {
   } catch (error) {
     console.error('[Puppeteer] Error deleting inbound route:', error.message);
     throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automatically creates and configures the 'disparoupchat' ARI user in FreePBX
+ */
+export async function setupARIUser(instance, cookies) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Usuário do ARI configurado com sucesso (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=arimanager&view=form`;
+    console.log(`[Puppeteer] Navigating to ARI Manager form: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    
+    // Wait for inputs
+    await page.waitForSelector('#name', { timeout: 10000 });
+    
+    const username = 'disparoupchat';
+    const password = 'disparou123';
+    
+    await page.evaluate((user, pass) => {
+      const nameInput = document.querySelector('#name');
+      const passInput = document.querySelector('#password');
+      
+      if (nameInput) nameInput.value = user;
+      if (passInput) passInput.value = pass;
+      
+      // Select Read Only: No
+      const readOnlyNoInput = document.querySelector('input[name="readonly"][value="no"]') || 
+                            document.querySelector('input[id*="readonly"][value="no"]');
+      if (readOnlyNoInput) {
+        readOnlyNoInput.checked = true;
+        readOnlyNoInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }, username, password);
+    
+    // Submit
+    console.log('[Puppeteer] Submitting ARI User form...');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }),
+      page.click('#submit')
+    ]);
+    
+    // Apply changes
+    console.log('[Puppeteer] Clicking Apply Config...');
+    await applyPBXConfiguration(page);
+    
+    return { success: true, message: 'Usuário do ARI configurado com sucesso no PBX!' };
+  } catch (error) {
+    console.error('[Puppeteer] Error setting up ARI user:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automatically edits extensions_custom.conf to add the [detect-amd] context in FreePBX
+ */
+export async function setupAMDDialplan(instance, cookies) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Dialplan AMD configurado com sucesso (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    
+    const listUrl = `https://${instance}.pbxfacil.com.br/admin/config.php?display=configedit`;
+    console.log(`[Puppeteer] Navigating to Config Edit: ${listUrl}`);
+    await page.goto(listUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    
+    // Wait for the tree layout to load
+    await page.waitForSelector('#jstree-proton-1', { timeout: 15000 });
+    
+    // Find and click extensions_custom.conf
+    console.log('[Puppeteer] Clicking on extensions_custom.conf in tree...');
+    const clicked = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('a'));
+      const targetLink = links.find(a => a.textContent.includes('extensions_custom.conf') || a.href.includes('extensions_custom.conf'));
+      if (targetLink) {
+        targetLink.click();
+        return true;
+      }
+      const li = document.querySelector('li[data-file="extensions_custom.conf"] a');
+      if (li) {
+        li.click();
+        return true;
+      }
+      return false;
+    });
+
+    if (!clicked) {
+      throw new Error('Não foi possível encontrar o arquivo extensions_custom.conf na árvore de arquivos.');
+    }
+    
+    // Wait for the file to load (when save button is enabled)
+    console.log('[Puppeteer] Waiting for file editor to load...');
+    await page.waitForFunction(() => {
+      const btn = document.querySelector('#save');
+      return btn && !btn.disabled;
+    }, { timeout: 15000 });
+    
+    // Extract current content (via CodeMirror if present)
+    const existingContent = await page.evaluate(() => {
+      const editorEl = document.querySelector('#editor');
+      if (editorEl && editorEl.CodeMirror) {
+        return editorEl.CodeMirror.getValue();
+      }
+      return editorEl ? editorEl.value : '';
+    });
+    
+    const hasAmd = existingContent.includes('[detect-amd]');
+    const hasAmdResult = existingContent.includes('AMD_STATUS_RESULT');
+
+    if (hasAmd && hasAmdResult) {
+      console.log('[Puppeteer] Updated detect-amd dialplan already exists. Bypassing append.');
+      return { success: true, message: 'O dialplan de detecção AMD já está configurado no PABX!' };
+    }
+
+    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,Wait(0.8)\nexten => s,n,AMD(3000,1500,800,5000,120,50,3,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
+
+    let finalContent = existingContent;
+    if (hasAmd && !hasAmdResult) {
+      console.log('[Puppeteer] Replacing old AMD dialplan with updated version...');
+      const idx = existingContent.indexOf('[detect-amd]');
+      finalContent = existingContent.substring(0, idx) + amdCode;
+    } else {
+      console.log('[Puppeteer] Appending new AMD dialplan...');
+      finalContent = existingContent + amdCode;
+    }
+
+    // Append content (via CodeMirror if present)
+    console.log('[Puppeteer] Appending AMD dialplan code to extensions_custom.conf...');
+    await page.evaluate((content) => {
+      const editorEl = document.querySelector('#editor');
+      const cmEl = document.querySelector('.CodeMirror');
+      let myCodeMirror = null;
+      if (editorEl && editorEl.CodeMirror) {
+        myCodeMirror = editorEl.CodeMirror;
+      } else if (cmEl && cmEl.CodeMirror) {
+        myCodeMirror = cmEl.CodeMirror;
+      }
+
+      if (myCodeMirror) {
+        myCodeMirror.setValue(content);
+        myCodeMirror.save(); // Crucial: sync CodeMirror back to textarea!
+      } else if (editorEl) {
+        editorEl.value = content;
+      }
+
+      if (editorEl) {
+        editorEl.dispatchEvent(new Event('input', { bubbles: true }));
+        editorEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }, finalContent);
+    
+    // Click save
+    console.log('[Puppeteer] Saving extensions_custom.conf...');
+    await page.click('#save');
+    
+    // Wait a brief moment for saving AJAX to complete
+    await new Promise(r => setTimeout(r, 3000));
+    
+    // Apply Config
+    console.log('[Puppeteer] Clicking Apply Config after dialplan update...');
+    await applyPBXConfiguration(page);
+    
+    return { success: true, message: 'Dialplan de detecção de Caixa Postal (AMD) configurado com sucesso no PABX!' };
+  } catch (error) {
+    console.error('[Puppeteer] Error setting up AMD dialplan:', error.message);
+    if (page) {
+      try {
+        const pageInfo = await page.evaluate(() => {
+          const elements = Array.from(document.querySelectorAll('input, button, a, textarea')).map(el => ({
+            tagName: el.tagName,
+            id: el.id,
+            name: el.name,
+            type: el.type,
+            className: el.className,
+            text: el.innerText || el.value || ''
+          }));
+          return { url: window.location.href, elements };
+        });
+        const html = await page.content();
+        fs.writeFileSync('configedit_debug.json', JSON.stringify(pageInfo, null, 2), 'utf8');
+        fs.writeFileSync('configedit_debug.html', html, 'utf8');
+        console.log('[Puppeteer] Wrote debug info to configedit_debug.json and configedit_debug.html');
+      } catch (err) {
+        console.error('[Puppeteer] Failed to write failure debug details:', err.message);
+      }
+    }
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Lists all Custom Destinations from FreePBX display=customdests
+ */
+export async function getCustomDestinations(instance, cookies) {
+  if (instance.toLowerCase() === 'mock') {
+    return [
+      { id: 'customdests,custom-upchat,1', name: 'Enviar para Upchat' }
+    ];
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const listUrl = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests`;
+    console.log(`[Puppeteer] Navigating to Custom Destinations list: ${listUrl}`);
+    
+    await page.goto(listUrl, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    // Save debug HTML
+    try {
+      const htmlContent = await page.content();
+      fs.writeFileSync('customdests_debug.html', htmlContent, 'utf8');
+      console.log('[Puppeteer] Saved debug HTML to customdests_debug.html');
+    } catch (e) {
+      console.error('[Puppeteer] Failed to save debug HTML:', e.message);
+    }
+    
+    // Wait for sidebar lists, bootstrap tables or normal tables
+    await page.waitForSelector('.rxt-list a, a.list-group-item, table, #table, .bootstrap-table table', { timeout: 10000 }).catch(() => {});
+    
+    // Wait for bootstrap-table AJAX rows to populate (spinner / loading is gone)
+    await page.waitForFunction(() => {
+      const table = document.querySelector('#destgrid') || 
+                    document.querySelector('.fixed-table-body table') || 
+                    document.querySelector('table[data-toggle="table"]') || 
+                    document.querySelector('#table') || 
+                    document.querySelector('table.table-striped') || 
+                    document.querySelector('table.table') || 
+                    document.querySelector('table');
+      if (!table) return true; // sidebar links strategy
+      const rows = Array.from(table.querySelectorAll('tr')).filter(tr => tr.querySelector('td'));
+      if (rows.length === 0) return true;
+      const text = rows[0].innerText.toLowerCase();
+      if (text.includes('loading') || text.includes('carregando') || text.includes('aguarde')) {
+        return false;
+      }
+      return true;
+    }, { timeout: 15005 }).catch(() => {});
+
+    // Scrape basic list info first (to get destid/id and descriptions)
+    const destinationsBasic = await page.evaluate(() => {
+      const results = [];
+      
+      // Strategy 1: Sidebar list (standard for FreePBX Custom Destinations side menus)
+      const sidebarLinks = Array.from(document.querySelectorAll('.rxt-list a, .right-sidebar a, #sub-navigation a, a.list-group-item'));
+      for (const link of sidebarLinks) {
+        const href = link.getAttribute('href') || '';
+        const match = href.match(/[?&](?:id|destid)=([^&]+)/);
+        if (match) {
+          const id = decodeURIComponent(match[1]);
+          const name = link.innerText.trim();
+          if (id && !results.some(r => r.destid === id)) {
+            results.push({ destid: id, description: name });
+          }
+        }
+      }
+      
+      // Strategy 2: Table layout (standard or bootstrap table)
+      const table = document.querySelector('#destgrid') || 
+                    document.querySelector('.fixed-table-body table') || 
+                    document.querySelector('table[data-toggle="table"]') || 
+                    document.querySelector('#table') || 
+                    document.querySelector('table.table-striped') || 
+                    document.querySelector('table.table') || 
+                    document.querySelector('table');
+      if (table) {
+        const headers = Array.from(table.querySelectorAll('thead th, tr th')).map(th => th.innerText.toLowerCase().trim());
+        let descIdx = headers.findIndex(h => h.includes('destination') || h.includes('descri') || h.includes('nome'));
+        
+        // Fallback
+        if (descIdx === -1) descIdx = 0;
+
+        // Extract all tr elements that contain td elements (filters out the header row)
+        const rows = Array.from(table.querySelectorAll('tr')).filter(tr => tr.querySelector('td'));
+
+        for (const row of rows) {
+          if (row.innerText.includes('No data') || row.innerText.includes('Nenhum registro') || row.querySelectorAll('td').length < 2) {
+            continue;
+          }
+          const cells = Array.from(row.querySelectorAll('td'));
+          const descCell = cells[descIdx];
+
+          // Check if there is an edit link to extract targetId safely
+          const link = row.querySelector('a[href*="id="]') || row.querySelector('a[href*="destid="]');
+          let destid = '';
+          if (link) {
+            const href = link.getAttribute('href');
+            const match = href.match(/[?&](?:id|destid)=([^&]+)/);
+            if (match) destid = decodeURIComponent(match[1]);
+          }
+
+          const description = descCell ? descCell.innerText.trim() : 'Destino';
+
+          if (destid && !results.some(r => r.destid === destid)) {
+            results.push({ destid, description });
+          }
+        }
+      }
+      return results;
+    });
+
+    console.log(`[Puppeteer] Found ${destinationsBasic.length} custom destinations in list. Scraping form details...`);
+
+    const finalDestinations = [];
+
+    // Visit each edit form to extract the actual dial string (target) and notes
+    for (const basic of destinationsBasic) {
+      try {
+        const editUrl = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests&view=form&id=${encodeURIComponent(basic.destid)}&destid=${encodeURIComponent(basic.destid)}`;
+        console.log(`[Puppeteer] Scraping target from edit page for ID ${basic.destid}: ${editUrl}`);
+        
+        await page.goto(editUrl, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        
+        // Wait for target field to be present
+        await page.waitForSelector('input[name="customdest"], input#target', { timeout: 8000 }).catch(() => {});
+
+        const details = await page.evaluate(() => {
+          const targetInput = document.querySelector('input#target') || 
+                              document.querySelector('input[name="customdest"]');
+          const descInput = document.querySelector('input#description') || 
+                            document.querySelector('input[name="description"]');
+          const notesInput = document.querySelector('textarea[name="notes"]') || 
+                             document.querySelector('textarea#notes');
+
+          return {
+            target: targetInput ? targetInput.value.trim() : '',
+            description: descInput ? descInput.value.trim() : '',
+            notes: notesInput ? notesInput.value.trim() : ''
+          };
+        });
+
+        const targetVal = details.target || basic.destid;
+        const descriptionVal = details.description || basic.description;
+
+        finalDestinations.push({
+          id: targetVal, // The actual dial string used by DID/Dialer
+          description: descriptionVal,
+          name: `${descriptionVal} (${targetVal})`,
+          destid: basic.destid,
+          notes: details.notes
+        });
+      } catch (err) {
+        console.error(`[Puppeteer] Failed to scrape details for custom destination ${basic.destid}:`, err.message);
+        finalDestinations.push({
+          id: basic.destid,
+          description: basic.description,
+          name: `${basic.description} (${basic.destid})`,
+          destid: basic.destid
+        });
+      }
+    }
+
+    console.log(`[Puppeteer] Extracted ${finalDestinations.length} custom destinations successfully.`);
+    return finalDestinations;
+  } catch (error) {
+    console.error('[Puppeteer] Error listing custom destinations:', error.message);
+    return [];
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automate Custom Destination Creation
+ */
+export async function createCustomDestination(instance, cookies, data) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Custom destination created successfully (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests&view=form`;
+    console.log(`[Puppeteer] Navigating to create Custom Destination: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="customdest"]', { timeout: 10000 });
+    
+    await page.type('input[name="customdest"]', data.id || data.customdest);
+    await page.type('input[name="description"]', data.description || data.name);
+    
+    if (data.notes) {
+      await page.type('textarea[name="notes"]', data.notes);
+    }
+    
+    const submitBtnSelector = 'input[type="submit"]#submit, input[type="submit"]#save, button#submit, #submit, input[type="submit"]';
+    await page.click(submitBtnSelector);
+    
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
+    
+    // Apply changes
+    await applyConfig(page);
+    
+    return { success: true, message: 'Destino personalizado criado com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error creating custom destination:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automate Custom Destination Inspection
+ */
+export async function inspectCustomDestination(instance, cookies, targetId) {
+  if (instance.toLowerCase() === 'mock') {
+    return { id: targetId, description: 'Mock Description', notes: 'Mock Notes' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests&view=form&id=${encodeURIComponent(targetId)}`;
+    console.log(`[Puppeteer] Inspecting Custom Destination: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="customdest"]', { timeout: 10000 });
+    
+    const data = await page.evaluate(() => {
+      const customdest = document.querySelector('input[name="customdest"]')?.value || '';
+      const description = document.querySelector('input[name="description"]')?.value || '';
+      const notes = document.querySelector('textarea[name="notes"]')?.value || '';
+      return { id: customdest, description, notes };
+    });
+    
+    return data;
+  } catch (error) {
+    console.error('[Puppeteer] Error inspecting custom destination:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automate Custom Destination Editing
+ */
+export async function editCustomDestination(instance, cookies, targetId, data) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Custom destination edited successfully (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests&view=form&id=${encodeURIComponent(targetId)}`;
+    console.log(`[Puppeteer] Navigating to edit Custom Destination: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="description"]', { timeout: 10000 });
+    
+    // Clear and type description
+    await page.$eval('input[name="description"]', el => el.value = '');
+    await page.type('input[name="description"]', data.description || data.name);
+    
+    if (data.notes !== undefined) {
+      await page.$eval('textarea[name="notes"]', el => el.value = '');
+      if (data.notes) {
+        await page.type('textarea[name="notes"]', data.notes);
+      }
+    }
+    
+    const submitBtnSelector = 'input[type="submit"]#submit, input[type="submit"]#save, button#submit, #submit, input[type="submit"]';
+    await page.click(submitBtnSelector);
+    
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
+    
+    // Apply changes
+    await applyConfig(page);
+    
+    return { success: true, message: 'Destino personalizado editado com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error editing custom destination:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+/**
+ * Automate Custom Destination Deletion
+ */
+export async function deleteCustomDestination(instance, cookies, targetId) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Custom destination deleted successfully (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests&view=form&id=${encodeURIComponent(targetId)}`;
+    console.log(`[Puppeteer] Navigating to delete Custom Destination: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    const deleteBtnSelector = 'input[type="submit"]#delete, input[type="button"]#delete, button#delete, #delbtn, #delete';
+    await page.waitForSelector(deleteBtnSelector, { timeout: 10000 });
+    
+    // Handle alert dialogs (confirm delete)
+    page.on('dialog', async (dialog) => {
+      console.log(`[Puppeteer] Dialog detected: ${dialog.message()}. Accepting.`);
+      await dialog.accept();
+    });
+    
+    await page.click(deleteBtnSelector);
+    
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
+    
+    // Apply changes
+    await applyConfig(page);
+    
+    return { success: true, message: 'Destino personalizado excluído com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error deleting custom destination:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function dumpCustomDestsHTML(instance, cookies) {
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    await page.goto(`https://${instance}.pbxfacil.com.br/admin/config.php?display=customdests`, { waitUntil: 'networkidle2' });
+    const html = await page.content();
+    fs.writeFileSync('customdests_debug.html', html, 'utf8');
+    return true;
+  } catch (err) {
+    console.error('Failed to dump HTML:', err.message);
+    return false;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function restoreOriginalDialplan(instance, cookies) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Dialplan restaurado com sucesso (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    const originalPath = path.resolve('extensions_custom_original.conf');
+    let content = fs.readFileSync(originalPath, 'utf8');
+    
+    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,Wait(0.8)\nexten => s,n,AMD(3000,1500,800,5000,120,50,3,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
+    
+    content = content + amdCode;
+
+    page = await createNewPage(browser, cookies);
+    await page.goto(`https://${instance}.pbxfacil.com.br/admin/config.php?display=configedit`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    
+    await page.waitForSelector('#jstree-proton-1', { timeout: 15000 });
+    
+    const clicked = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('a'));
+      const targetLink = links.find(a => a.textContent.includes('extensions_custom.conf') || a.href.includes('extensions_custom.conf'));
+      if (targetLink) {
+        targetLink.click();
+        return true;
+      }
+      const li = document.querySelector('li[data-file="extensions_custom.conf"] a');
+      if (li) {
+        li.click();
+        return true;
+      }
+      return false;
+    });
+
+    if (!clicked) {
+      throw new Error('Não foi possível encontrar o arquivo extensions_custom.conf na árvore de arquivos.');
+    }
+    
+    await page.waitForFunction(() => {
+      const btn = document.querySelector('#save');
+      return btn && !btn.disabled;
+    }, { timeout: 15000 });
+    
+    await page.evaluate((text) => {
+      const editorEl = document.querySelector('#editor');
+      const cmEl = document.querySelector('.CodeMirror');
+      let myCodeMirror = null;
+      if (editorEl && editorEl.CodeMirror) {
+        myCodeMirror = editorEl.CodeMirror;
+      } else if (cmEl && cmEl.CodeMirror) {
+        myCodeMirror = cmEl.CodeMirror;
+      }
+
+      if (myCodeMirror) {
+        myCodeMirror.setValue(text);
+        myCodeMirror.save();
+      } else if (editorEl) {
+        editorEl.value = text;
+      }
+
+      if (editorEl) {
+        editorEl.dispatchEvent(new Event('input', { bubbles: true }));
+        editorEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }, content);
+    
+    await page.click('#save');
+    await new Promise(r => setTimeout(r, 3000));
+    await applyPBXConfiguration(page);
+    
+    return { success: true, message: 'Conteúdo original restaurado e atualizado com sucesso no PABX!' };
   } finally {
     if (page) await page.close().catch(() => {});
     await browser.close();

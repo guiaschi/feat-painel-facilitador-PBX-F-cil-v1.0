@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DidModal from './DidModal';
+import CampaignDialer from './CampaignDialer';
 import { API_URL } from '../config';
 
 export default function Dashboard({ 
   extensions = [], 
   queues = [], 
   dids = [],
+  customDestinations = [],
   instance, 
   user, 
   onLogout, 
@@ -19,6 +21,9 @@ export default function Dashboard({
   onCreateDid,
   onEditDid,
   onDeleteDid,
+  onCreateCustomDest,
+  onEditCustomDest,
+  onDeleteCustomDest,
   isOperationLoading, 
   currentOperationText, 
   onRefresh 
@@ -27,6 +32,7 @@ export default function Dashboard({
   const [searchTerm, setSearchTerm] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [confirmDeleteQueueId, setConfirmDeleteQueueId] = useState(null);
+  const [confirmDeleteCustomDestId, setConfirmDeleteCustomDestId] = useState(null);
 
   // Real-time monitor states
   const [realtimeData, setRealtimeData] = useState({ extensions: [], queues: [], trunks: [], pbxIP: '' });
@@ -157,31 +163,44 @@ export default function Dashboard({
     );
   });
 
-  // Filter realtime elements
-  const filteredRealtimeExtensions = (realtimeData.extensions || []).filter(peer => {
-    if (!peer || !peer.extension) return false;
-    const term = realtimeSearch.toLowerCase();
-    const extName = (extensions.find(e => e.extension === peer.extension)?.name || '').toLowerCase();
-    const matchesSearch = (peer.extension || '').toLowerCase().includes(term) || extName.includes(term);
-
-    if (realtimeFilter === 'online') {
-      return matchesSearch && peer.status === 'online';
-    }
-    if (realtimeFilter === 'offline') {
-      return matchesSearch && peer.status === 'offline';
-    }
-    return matchesSearch;
+  const filteredCustomDests = (customDestinations || []).filter(cd => {
+    if (!cd) return false;
+    const term = searchTerm.toLowerCase();
+    return (
+      (cd.id || '').toLowerCase().includes(term) ||
+      (cd.description || '').toLowerCase().includes(term)
+    );
   });
 
-  const filteredRealtimeQueues = (realtimeData.queues || []).filter(q => {
-    if (!q || !q.id) return false;
-    const term = realtimeSearch.toLowerCase();
-    const configQueue = (queues || []).find(item => item.id === q.id);
-    const qName = q.name || '';
-    const displayName = qName.includes('Fila') && configQueue ? (configQueue.name || qName) : qName;
-    
-    return (q.id || '').toLowerCase().includes(term) || displayName.toLowerCase().includes(term);
-  });
+  // Filter and sort realtime elements
+  const filteredRealtimeExtensions = (realtimeData.extensions || [])
+    .filter(peer => {
+      if (!peer || !peer.extension) return false;
+      const term = realtimeSearch.toLowerCase();
+      const extName = (extensions.find(e => e.extension === peer.extension)?.name || '').toLowerCase();
+      const matchesSearch = (peer.extension || '').toLowerCase().includes(term) || extName.includes(term);
+
+      if (realtimeFilter === 'online') {
+        return matchesSearch && peer.status === 'online';
+      }
+      if (realtimeFilter === 'offline') {
+        return matchesSearch && peer.status === 'offline';
+      }
+      return matchesSearch;
+    })
+    .sort((a, b) => a.extension.localeCompare(b.extension, undefined, { numeric: true }));
+
+  const filteredRealtimeQueues = (realtimeData.queues || [])
+    .filter(q => {
+      if (!q || !q.id) return false;
+      const term = realtimeSearch.toLowerCase();
+      const configQueue = (queues || []).find(item => item.id === q.id);
+      const qName = q.name || '';
+      const displayName = qName.includes('Fila') && configQueue ? (configQueue.name || qName) : qName;
+      
+      return (q.id || '').toLowerCase().includes(term) || displayName.toLowerCase().includes(term);
+    })
+    .sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
 
   const handleDeleteClick = (id) => {
     setConfirmDeleteId(id);
@@ -226,7 +245,7 @@ export default function Dashboard({
         
         <div className="session-info-bar" style={styles.sessionInfo}>
           <div style={styles.statusContainer}>
-            <div style={styles.statusDot}></div>
+            <div className="status-dot-pulse"></div>
             <span style={styles.statusText}>
               Conectado: <strong>{instance}</strong>
               {realtimeData.pbxIP && (
@@ -287,6 +306,18 @@ export default function Dashboard({
             📞 Entrada de Ligações (DIDs) ({dids.length})
           </button>
           <button
+            className={`tab-btn ${activeTab === 'customdests' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('customdests'); setSearchTerm(''); }}
+          >
+            ⚙️ Destinos Custom ({customDestinations.length})
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'dialer' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('dialer'); setSearchTerm(''); }}
+          >
+            🚀 Disparador (Campanhas)
+          </button>
+          <button
             className={`tab-btn ${activeTab === 'realtime' ? 'active' : ''}`}
             onClick={() => { setActiveTab('realtime'); setRealtimeSearch(''); }}
           >
@@ -296,7 +327,7 @@ export default function Dashboard({
 
         {/* Search & Actions Bar */}
         <div className="actions-bar" style={styles.actionsBar}>
-          {activeTab !== 'realtime' ? (
+          {activeTab !== 'realtime' && activeTab !== 'dialer' ? (
             <>
               <div style={styles.searchWrapper}>
                 <input
@@ -307,7 +338,9 @@ export default function Dashboard({
                       ? 'Buscar ramal por número, nome ou tipo...' 
                       : activeTab === 'queues' 
                         ? 'Buscar fila por número ou nome...' 
-                        : 'Buscar DID por número, descrição ou destino...'
+                        : activeTab === 'dids'
+                          ? 'Buscar DID por número, descrição ou destino...'
+                          : 'Buscar destino por dial string ou descrição...'
                   }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -343,6 +376,11 @@ export default function Dashboard({
                 {activeTab === 'dids' && (
                   <button className="btn-neon-primary" onClick={() => { setEditDidData(null); setIsDidModalOpen(true); }} disabled={isOperationLoading}>
                     ➕ Nova Rota de Entrada
+                  </button>
+                )}
+                {activeTab === 'customdests' && (
+                  <button className="btn-neon-primary" onClick={onCreateCustomDest} disabled={isOperationLoading}>
+                    ➕ Novo Destino Custom
                   </button>
                 )}
               </div>
@@ -418,7 +456,16 @@ export default function Dashboard({
         </div>
 
         {/* Extensions, Queues or DIDs content */}
-        {activeTab !== 'realtime' ? (
+        {activeTab === 'dialer' ? (
+          <CampaignDialer 
+            queues={queues} 
+            realtimeQueues={realtimeData.queues || []} 
+            extensions={extensions}
+            customDestinations={customDestinations}
+            token={localStorage.getItem('pbx_token')} 
+            pbxIP={realtimeData.pbxIP} 
+          />
+        ) : activeTab !== 'realtime' ? (
           <div className="glass-panel" style={styles.tablePanel}>
             {activeTab === 'extensions' && (
               /* Extensions Table view */
@@ -630,6 +677,79 @@ export default function Dashboard({
                 </div>
               )
             )}
+
+            {activeTab === 'customdests' && (
+              filteredCustomDests.length === 0 ? (
+                <div style={styles.emptyState}>
+                  <span style={styles.emptyIcon}>⚙️</span>
+                  <h3>Nenhum destino personalizado encontrado</h3>
+                  <p>Crie um novo clicando em "Novo Destino Personalizado".</p>
+                </div>
+              ) : (
+                <div className="glass-table-container">
+                  <table className="glass-table">
+                    <thead>
+                      <tr>
+                        <th style={{ paddingLeft: '15px' }}>Destino (Dial String)</th>
+                        <th>Descrição</th>
+                        <th style={{ textAlign: 'right', paddingRight: '15px' }}>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredCustomDests.map((cd) => (
+                        <tr key={cd.id}>
+                          <td style={styles.extensionNumber}>
+                            <code style={{ background: 'rgba(0,0,0,0.3)', padding: '2px 6px', borderRadius: '4px', color: '#00f2fe', fontFamily: 'monospace', fontSize: '13px' }}>
+                              {cd.id}
+                            </code>
+                          </td>
+                          <td style={styles.extensionName}>{cd.description}</td>
+                          <td style={styles.actionsCol}>
+                            {confirmDeleteCustomDestId === cd.id ? (
+                              <div style={styles.confirmDeleteGroup}>
+                                <span style={styles.confirmText}>Excluir?</span>
+                                <button
+                                  style={{ ...styles.confirmYes, marginRight: '8px' }}
+                                  onClick={() => { onDeleteCustomDest(cd.id); setConfirmDeleteCustomDestId(null); }}
+                                  disabled={isOperationLoading}
+                                >
+                                  Sim
+                                </button>
+                                <button
+                                  style={styles.confirmNo}
+                                  onClick={() => setConfirmDeleteCustomDestId(null)}
+                                  disabled={isOperationLoading}
+                                >
+                                  Não
+                                </button>
+                              </div>
+                            ) : (
+                              <div style={styles.actionsGroup}>
+                                <button
+                                  className="table-edit-btn"
+                                  onClick={() => onEditCustomDest(cd)}
+                                  disabled={isOperationLoading}
+                                  style={{ marginRight: '8px' }}
+                                >
+                                  ✏️ Editar
+                                </button>
+                                <button
+                                  className="table-delete-btn"
+                                  onClick={() => setConfirmDeleteCustomDestId(cd.id)}
+                                  disabled={isOperationLoading}
+                                >
+                                  🗑️ Excluir
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )
+            )}
           </div>
         ) : (
           /* REALTIME MONITOR WALLBOARD */
@@ -675,7 +795,7 @@ export default function Dashboard({
                   {realtimeData.trunks.map(t => (
                     <div key={t.name} className="trunk-card" style={t.isOnline ? styles.trunkCardOnline : styles.trunkCardOffline}>
                       <div style={styles.trunkCardHeader}>
-                        <div style={t.isOnline ? styles.dotGreen : styles.dotRed}></div>
+                        <div className={t.isOnline ? "status-dot-pulse" : "status-dot-pulse offline"}></div>
                         <strong style={styles.trunkName}>{t.name}</strong>
                       </div>
                       <div style={styles.trunkMetaRow}>
@@ -718,7 +838,7 @@ export default function Dashboard({
                         <div key={peer.extension} style={styles.peerCard}>
                           <div style={styles.peerHeader}>
                             <div style={styles.peerStatusRow}>
-                              <div style={isOnline ? styles.dotGreen : styles.dotRed}></div>
+                              <div className={isOnline ? "status-dot-pulse" : "status-dot-pulse offline"}></div>
                               <span style={styles.peerNumber}>{peer.extension}</span>
                             </div>
                             {peer.latency && (
@@ -814,7 +934,7 @@ export default function Dashboard({
                               <span style={styles.noMembers}>Sem agentes logados nesta fila</span>
                             ) : (
                               <div style={styles.membersGrid}>
-                                {(q.members || []).map(member => {
+                                {(q.members || []).slice().sort((a, b) => a.extension.localeCompare(b.extension, undefined, { numeric: true })).map(member => {
                                   const statusColor = 
                                     member.statusRaw === 'Unavailable' ? '#ef4444' : 
                                     member.statusRaw === 'Not in use' ? '#10b981' : 
@@ -875,6 +995,7 @@ export default function Dashboard({
         editData={editDidData}
         extensions={extensions}
         queues={queues}
+        customDestinations={customDestinations}
       />
     </div>
   );
@@ -1311,6 +1432,7 @@ const styles = {
   autoRefreshContainer: {
     display: 'flex',
     alignItems: 'center',
+    minWidth: '160px',
   },
   switchLabel: {
     display: 'flex',
@@ -1334,6 +1456,10 @@ const styles = {
     padding: '0 16px',
     height: '40px',
     fontSize: '0.85rem',
+    minWidth: '160px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   realtimeGrid: {
     display: 'grid',

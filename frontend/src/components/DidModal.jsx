@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-export default function DidModal({ isOpen, onClose, onSave, isLoading, editData, extensions, queues }) {
+export default function DidModal({ isOpen, onClose, onSave, isLoading, editData, extensions, queues, customDestinations }) {
   const [did, setDid] = useState('');
   const [description, setDescription] = useState('');
-  const [destType, setDestType] = useState('Extensions'); // Extensions or Queues
+  const [destType, setDestType] = useState('Extensions'); // Extensions, Queues, Custom_Destinations
   const [destValue, setDestValue] = useState('');
   const [error, setError] = useState('');
 
@@ -20,9 +20,21 @@ export default function DidModal({ isOpen, onClose, onSave, isLoading, editData,
         const destStr = editData.destination || '';
         if (destStr.toLowerCase().includes('queue') || destStr.toLowerCase().includes('fila')) {
           setDestType('Queues');
-          // Extract the digits
           const match = destStr.match(/\d+/);
           setDestValue(match ? match[0] : '');
+        } else if (destStr.toLowerCase().includes('custom') || destStr.toLowerCase().includes('destino personalizado')) {
+          setDestType('Custom_Destinations');
+          const parts = destStr.split(':');
+          const descriptionPart = parts[1] ? parts[1].trim() : destStr.trim();
+          
+          // Find matching custom destination target by description or name
+          const matchedCD = (customDestinations || []).find(cd => {
+            return cd.name.toLowerCase().includes(descriptionPart.toLowerCase()) || 
+                   cd.id.toLowerCase().includes(descriptionPart.toLowerCase()) ||
+                   descriptionPart.toLowerCase().includes(cd.id.toLowerCase());
+          });
+          
+          setDestValue(matchedCD ? matchedCD.id : descriptionPart);
         } else {
           setDestType('Extensions');
           const match = destStr.match(/\d+/);
@@ -35,7 +47,7 @@ export default function DidModal({ isOpen, onClose, onSave, isLoading, editData,
         setDestValue('');
       }
     }
-  }, [isOpen, editData]);
+  }, [isOpen, editData, customDestinations]);
 
   // Handle destination type change
   useEffect(() => {
@@ -45,11 +57,13 @@ export default function DidModal({ isOpen, onClose, onSave, isLoading, editData,
         setDestValue(extensions[0].extension);
       } else if (destType === 'Queues' && queues && queues.length > 0) {
         setDestValue(queues[0].id);
+      } else if (destType === 'Custom_Destinations' && customDestinations && customDestinations.length > 0) {
+        setDestValue(customDestinations[0].id);
       } else {
         setDestValue('');
       }
     }
-  }, [destType, extensions, queues, isOpen, editData]);
+  }, [destType, extensions, queues, customDestinations, isOpen, editData]);
 
   if (!isOpen) return null;
 
@@ -139,32 +153,49 @@ export default function DidModal({ isOpen, onClose, onSave, isLoading, editData,
               >
                 <option value="Extensions">Ramal (Extension)</option>
                 <option value="Queues">Fila de Atendimento (Queue)</option>
+                <option value="Custom_Destinations">Destino Personalizado (Custom)</option>
               </select>
             </div>
 
             <div className="form-group">
               <label htmlFor="dest-value">Selecione o Destino</label>
-              <select
-                id="dest-value"
-                className="input-glass select-glass"
-                value={destValue}
-                onChange={(e) => setDestValue(e.target.value)}
-                disabled={isLoading}
-              >
-                <option value="">-- Selecione o destino --</option>
-                {destType === 'Extensions'
-                  ? (extensions || []).map((ext) => (
-                      <option key={ext.extension} value={ext.extension}>
-                        Ramal {ext.extension} - {ext.name}
-                      </option>
-                    ))
-                  : (queues || []).map((q) => (
-                      <option key={q.id} value={q.id}>
-                        Fila {q.id} - {q.name}
-                      </option>
-                    ))
-                }
-              </select>
+              {destType === 'Custom_Destinations' && (!customDestinations || customDestinations.length === 0) ? (
+                <input
+                  id="dest-value"
+                  type="text"
+                  className="input-glass"
+                  placeholder="Ex: customdests,custom-upchat,1"
+                  value={destValue}
+                  onChange={(e) => setDestValue(e.target.value)}
+                  disabled={isLoading}
+                  style={{ width: '100%', padding: '10px' }}
+                />
+              ) : (
+                <select
+                  id="dest-value"
+                  className="input-glass select-glass"
+                  value={destValue}
+                  onChange={(e) => setDestValue(e.target.value)}
+                  disabled={isLoading}
+                >
+                  <option value="">-- Selecione o destino --</option>
+                  {destType === 'Extensions' && (extensions || []).map((ext) => (
+                    <option key={ext.extension} value={ext.extension}>
+                      Ramal {ext.extension} - {ext.name}
+                    </option>
+                  ))}
+                  {destType === 'Queues' && (queues || []).map((q) => (
+                    <option key={q.id} value={q.id}>
+                      Fila {q.id} - {q.name}
+                    </option>
+                  ))}
+                  {destType === 'Custom_Destinations' && (customDestinations || []).map((cd) => (
+                    <option key={cd.id} value={cd.id}>
+                      {cd.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
 

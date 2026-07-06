@@ -1,0 +1,2781 @@
+{
+  "url": "https://speedfibra.pbxfacil.com.br/admin/config.php?display=configedit&file=extensions_custom.conf",
+  "elements": [
+    {
+      "tagName": "BUTTON",
+      "id": "",
+      "name": "",
+      "type": "button",
+      "className": "navbar-toggle navbar-left collapsed",
+      "text": "Toggle navigation"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "navbar-brand",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "dropdown-toggle",
+      "text": "Admin"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Administrators"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk CLI"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Modules"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Phonebook"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Backup & Restore"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Blacklist"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Bulk Handler"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "CID Superfecta"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "CallerID Lookup Sources"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Certificate Management"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " active",
+      "text": "Config Edit"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Custom Destinations"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Custom Extensions"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Feature Codes"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Incredible Support"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Module Admin"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Presence State"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Sound Languages"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "System Recordings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Updates"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "User Management"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "dropdown-toggle",
+      "text": "Applications"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "AMD Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Announcements"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Calendar"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Calendar Event Groups"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Call Flow Control"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Call Recording"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Callback"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Conferences"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "DISA"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Directory"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Extensions"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Follow Me"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "IVR"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Languages"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Misc Applications"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Misc Destinations"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Queue Priorities"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Queues"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Ring Groups"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Set CallerID"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Text To Speech"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Time Conditions"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Time Groups"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Voicemail Blasting"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Wake Up Calls"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "dropdown-toggle",
+      "text": "Connectivity"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "DAHDI Channel DIDs"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Inbound Routes"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Outbound Routes"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Trunks"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Dashboard"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "dropdown-toggle",
+      "text": "Reports"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Info"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Logfiles"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "CDR Reports"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Call Event Logging"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "PHP Info"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Print Extensions"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Weak Password Detection"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "dropdown-toggle",
+      "text": "Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Advanced Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk IAX Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Logfile Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk Manager Users"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk REST Interface Users"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Asterisk SIP Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Extension Settings"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Fax Configuration"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Filestore"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Music on Hold"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "PHPAGI Config"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "PIN Sets"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Route Congestion Messages"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Text To Speech Engines"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": " ",
+      "text": "Voicemail Admin"
+    },
+    {
+      "tagName": "A",
+      "id": "button_reload",
+      "name": "",
+      "type": "",
+      "className": "btn btn-danger nav-button reload-btn",
+      "text": "Apply Config"
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "",
+      "name": "",
+      "type": "submit",
+      "className": "btn dropdown-toggle nav-button",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "English (US)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Bulgarian (Bulgaria)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Czech"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "German (Germany)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "English (United Kingdom)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Spanish (Spain)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Persian (Iran)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "French (France)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Hebrew (Israel)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Hungarian (Hungary)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Italian (Italy)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Japanese (Japan)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Dutch (Netherlands)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Polish"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Portuguese (Brazil)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Portuguese (Portugal)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Romanian (Romania)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Russian (Russia)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Swedish (Sweden)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Ukrainian (Ukraine)"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Vietnamese"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Chinese (China)"
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "search-btn",
+      "name": "",
+      "type": "submit",
+      "className": "btn nav-button",
+      "text": ""
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "",
+      "name": "",
+      "type": "submit",
+      "className": "btn dropdown-toggle nav-button",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Hello, parceiro"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Keep Nav Bar Expanded"
+    },
+    {
+      "tagName": "A",
+      "id": "user_logout",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Logout"
+    },
+    {
+      "tagName": "INPUT",
+      "id": "",
+      "name": "",
+      "type": "text",
+      "className": "form-control typeahead tt-hint",
+      "text": ""
+    },
+    {
+      "tagName": "INPUT",
+      "id": "",
+      "name": "",
+      "type": "text",
+      "className": "form-control typeahead tt-input",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": ""
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "addfile",
+      "name": "",
+      "type": "submit",
+      "className": "btn",
+      "text": " Add New File"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_1_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor  jstree-clicked",
+      "text": "Asterisk Custom Configuration Files"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_2_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ari_additional_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_3_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ari_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_4_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ccss_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_5_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_6_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_sqlite3_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_7_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_8_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_9_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_10_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_odbc_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_11_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_sqlite3_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_12_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "confbridge_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_13_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_14_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_applicationmap_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_15_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_featuremap_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_16_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_17_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "freepbx_module_admin.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_18_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "globals_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_19_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "http_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_20_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_21_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_22_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_23_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_registrations_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_24_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "indications_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_25_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "indications_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_26_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "logger_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_27_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "logger_logfiles_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_28_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "manager_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_29_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "meetme_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_30_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "musiconhold_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_31_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.aor_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_32_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.aor_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_33_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.auth_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_34_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.auth_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_35_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.endpoint_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_36_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.endpoint_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_37_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.identify_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_38_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.identify_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_39_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.registration_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_40_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.registration_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_41_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.transports_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_42_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.transports_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_43_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_44_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_45_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_46_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues_custom_general.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_47_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues_post_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_48_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_fax_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_49_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_fax_digium_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_50_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_odbc__custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_51_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_odbc_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_52_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_odbc_custom.conf.old"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_53_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_parking_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_54_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "rpt_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_55_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "rtp_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_56_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_57_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_custom_post.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_58_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_general_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_59_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_notify_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_60_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_registrations_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_61_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "udptl_custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_62_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor  jstree-clicked",
+      "text": "Asterisk System Configuration Files"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_63_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "17"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_64_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "acl.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_65_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "adsi.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_66_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "agents.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_67_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "alarmreceiver.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_68_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "alsa.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_69_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "amd.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_70_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "amd.conf.backup"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_71_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "app_mysql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_72_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "app_picotts.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_73_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "app_skel.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_74_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ari_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_75_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ari.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_76_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ari_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_77_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ast_debug_tools.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_78_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "asterisk.adsi"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_79_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "asterisk.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_80_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "calendar.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_81_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ccss.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_82_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ccss_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_83_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_adaptive_odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_84_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_beanstalkd.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_85_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_86_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_manager.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_87_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_mysql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_88_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_89_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_pgsql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_90_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_syslog.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_91_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cdr_tds.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_92_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_beanstalkd.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_93_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_94_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_95_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_96_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_pgsql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_97_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cel_tds.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_98_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "chan_dahdi_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_99_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "chan_dahdi.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_100_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "chan_mobile.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_101_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cli_aliases.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_102_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cli.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_103_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "cli_permissions.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_104_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "codecs.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_105_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "confbridge_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_106_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "confbridge.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_107_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "config_test.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_108_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "console.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_109_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "dbsep.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_110_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "dnsmgr.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_111_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "dsp.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_112_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "dundi.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_113_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "enum.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_114_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extconfig.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_115_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_116_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions.ael"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_117_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_118_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions.lua"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_119_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions_minivm.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_120_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "extensions_override_freepbx.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_121_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_applicationmap_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_122_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_123_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_featuremap_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_124_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "features_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_125_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "festival.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_126_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "followme.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_127_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "func_odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_128_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "hep.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_129_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "http_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_130_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "http.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_131_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_132_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_133_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_134_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iaxprov.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_135_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "iax_registrations.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_136_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "indications_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_137_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "indications.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_138_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "indications_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_139_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "localprefixes.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_140_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "logger.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_141_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "logger_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_142_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "logger_logfiles_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_143_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "manager_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_144_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "manager.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_145_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "manager.conf.bak"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_146_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "meetme_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_147_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "meetme.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_148_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "meetme_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_149_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "mgcp.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_150_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "minivm.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_151_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "misdn.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_152_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "modules.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_153_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "motif.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_154_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "musiconhold_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_155_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "musiconhold.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_156_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "muted.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_157_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_158_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ooh323.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_159_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "osp.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_160_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "oss.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_161_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "phone.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_162_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "phoneprov.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_163_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "phpagi.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_164_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjproject.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_165_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.aor.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_166_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.auth.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_167_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_168_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.endpoint.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_169_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.identify.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_170_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip_notify.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_171_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.registration.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_172_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip.transports.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_173_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "pjsip_wizard.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_174_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "privacy.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_175_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queuerules.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_176_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_177_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_178_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "queues_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_179_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_config_mysql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_180_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_config_sqlite3.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_181_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_config_sqlite.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_182_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_corosync.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_183_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_curl.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_184_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_fax.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_185_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_fax_digium.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_186_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_ldap.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_187_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_odbc_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_188_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_odbc.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_189_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "resolver_unbound.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_190_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_parking_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_191_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_parking.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_192_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_pgsql.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_193_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_pktccops.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_194_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_snmp.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_195_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "res_stun_monitor.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_196_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "rtp_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_197_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "rtp.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_198_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "say.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_199_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_200_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_201_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_general_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_202_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_nat.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_203_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_notify_additional.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_204_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_notify.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_205_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sip_registrations.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_206_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "skinny.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_207_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sla.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_208_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "smdi.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_209_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "sorcery.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_210_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ss7.timers"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_211_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "stasis.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_212_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "statsd.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_213_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "stir_shaken.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_214_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "telcordia-1.adsi"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_215_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "test_sorcery.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_216_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "ucc_restrict.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_217_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "udptl.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_218_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "unistim.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_219_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "unused-custom.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_220_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "users.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_221_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "voicemail.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_222_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "voicemail.conf.template"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_223_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "vpb.conf"
+    },
+    {
+      "tagName": "A",
+      "id": "j1_224_anchor",
+      "name": "",
+      "type": "",
+      "className": "jstree-anchor",
+      "text": "xmpp.conf"
+    },
+    {
+      "tagName": "TEXTAREA",
+      "id": "editor",
+      "name": "",
+      "type": "textarea",
+      "className": "",
+      "text": "\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=${CAMPAIGN_PHONE})\nexten => s,n,AMD()\nexten => s,n,NoOp(Resultado AMD: \\${AMDSTATUS} - Causa: \\${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \\${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \\${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \\${AMDSTATUS})\nexten => s,n,GotoIf(\\$[\"\\${AMDSTATUS}\" = \"HUMAN\"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Desligando)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\\${TARGET_CONTEXT},\\${TARGET_EXTEN},\\${TARGET_PRIORITY})\n"
+    },
+    {
+      "tagName": "TEXTAREA",
+      "id": "",
+      "name": "",
+      "type": "textarea",
+      "className": "",
+      "text": ""
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "delete",
+      "name": "",
+      "type": "submit",
+      "className": "pull-right btn btn-danger",
+      "text": "Delete"
+    },
+    {
+      "tagName": "BUTTON",
+      "id": "save",
+      "name": "",
+      "type": "submit",
+      "className": "pull-right btn",
+      "text": "Save"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Click here"
+    },
+    {
+      "tagName": "A",
+      "id": "",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": ""
+    },
+    {
+      "tagName": "INPUT",
+      "id": "notie-input-field",
+      "name": "",
+      "type": "text",
+      "className": "",
+      "text": ""
+    },
+    {
+      "tagName": "A",
+      "id": "btnUpdateBrowser",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "Update my browser now"
+    },
+    {
+      "tagName": "A",
+      "id": "btnCloseUpdateBrowser",
+      "name": "",
+      "type": "",
+      "className": "",
+      "text": "×"
+    }
+  ]
+}

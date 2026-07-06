@@ -1,0 +1,14 @@
+{
+  "ignore": [
+    "data/**",
+    "data",
+    "data/*",
+    "**/*.log",
+    "**/*.html",
+    "**/*.json",
+    "debug.log",
+    "dialer.log",
+    "customdests_debug.html",
+    "extension_metadata.json"
+  ]
+}
