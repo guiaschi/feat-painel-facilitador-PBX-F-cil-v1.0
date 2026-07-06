@@ -704,7 +704,34 @@ export function getAllCampaigns(instance) {
 
 export function deleteCampaign(campaignId) {
   const campaign = campaigns.get(campaignId);
-  if (!campaign) throw new Error('Campaign not found');
+  
+  if (!campaign) {
+    console.log(`[Dialer] Campaign ${campaignId} not found in memory. Attempting disk fallback cleanup.`);
+    let deletedAny = false;
+    const dirPath = path.join(process.cwd(), 'data');
+    if (fs.existsSync(dirPath)) {
+      try {
+        const files = fs.readdirSync(dirPath);
+        for (const file of files) {
+          if (file.startsWith('campaigns_') && file.endsWith('.json')) {
+            const filePath = path.join(dirPath, file);
+            const content = fs.readFileSync(filePath, 'utf8');
+            let list = JSON.parse(content);
+            const initialLength = list.length;
+            list = list.filter(c => c.id !== campaignId);
+            if (list.length !== initialLength) {
+              fs.writeFileSync(filePath, JSON.stringify(list, null, 2), 'utf8');
+              deletedAny = true;
+              console.log(`[Dialer] Cleaned up campaign ${campaignId} from disk file: ${file}`);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('[Dialer] Failed to prune campaign from disk:', err.message);
+      }
+    }
+    return { success: true, message: 'Campaign not found in memory but cleaned from disk if existed.' };
+  }
   
   if (campaign.intervalId) {
     clearInterval(campaign.intervalId);
