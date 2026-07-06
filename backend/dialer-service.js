@@ -144,6 +144,48 @@ const campaigns = new Map();
 const ariConnections = new Map();
 const activeChannels = new Map();
 
+// Active channels monitoring interval
+let monitorInterval = null;
+
+function startActiveChannelsMonitor() {
+  if (monitorInterval) return;
+  
+  monitorInterval = setInterval(async () => {
+    if (activeChannels.size === 0) return;
+    
+    for (const [channelId, info] of activeChannels.entries()) {
+      if (info.bridgedAt) continue; // Already identified bridging agent
+      
+      const campaign = campaigns.get(info.campaignId);
+      if (!campaign) continue;
+      
+      const conn = await connectARI(campaign.config.instanceIP);
+      if (!conn) continue;
+      
+      try {
+        const channel = await conn.channels.get({ channelId });
+        if (channel && channel.connected) {
+          const connectedNum = channel.connected.number;
+          const isAgent = connectedNum && connectedNum !== info.phone && connectedNum.length <= 6;
+          
+          if (isAgent) {
+            console.log(`[Monitor] Channel ${channelId} bridged with agent ${connectedNum}.`);
+            info.agent = connectedNum;
+            info.bridgedAt = Date.now();
+            
+            const contact = campaign.contacts.find(c => c.phone === info.phone);
+            if (contact && contact.status !== 'answered') {
+              updateContactStatus(info.campaignId, info.phone, 'answered');
+            }
+          }
+        }
+      } catch (err) {
+        logDebug(`[Monitor] Error checking channel ${channelId}: ${err.message}`);
+      }
+    }
+  }, 1000);
+}
+
 const logFile = path.join(process.cwd(), 'dialer.log');
 function logDebug(msg) {
   try {
@@ -180,6 +222,7 @@ export async function connectARI(ipOrUrl) {
       const info = activeChannels.get(channel.id);
       if (info) {
         info.answered = true;
+        info.answeredAt = Date.now();
       }
       logDebug(`[StasisStart] activeChannels lookup for ${channel.id}: ${JSON.stringify(info)}`);
       
@@ -292,7 +335,7 @@ export async function connectARI(ipOrUrl) {
     });
 
     conn.on('ChannelDestroyed', async (event, channel) => {
-      console.log(`[Dialer] Channel ${channel.id} destroyed.`);
+      console.log(`[Dialer] Channel ${channel.id} destroyed. Connected info: ${JSON.stringify(channel.connected)}`);
       const info = activeChannels.get(channel.id);
       
       let linkedCampaignId = info ? info.campaignId : null;
@@ -315,22 +358,44 @@ export async function connectARI(ipOrUrl) {
         const campaign = campaigns.get(linkedCampaignId);
         if (campaign) {
           const contact = campaign.contacts.find(c => c.phone === linkedPhone);
-          
-          // Overwrite talk duration if bridged successfully
-          if (contact && contact.status === 'answered' && info && info.bridgedAt) {
-            const talkDuration = Math.round((Date.now() - info.bridgedAt) / 1000);
-            contact.duration = Math.max(1, talkDuration);
-            console.log(`[Dialer] Real talk duration for contact ${linkedPhone} via ARI: ${talkDuration}s`);
-            saveInstanceCampaignsDebounced(campaign.config.instance);
-          }
-          
-          if (contact && contact.status === 'calling') {
-            if (wasAnswered) {
-              console.log(`[Dialer] Channel ${channel.id} was answered but hung up before completion. Marking contact ${linkedPhone} as abandoned.`);
-              updateContactStatus(linkedCampaignId, linkedPhone, 'abandoned');
+          if (contact) {
+            // Check connected party to see if it was bridged to an agent
+            const connectedNum = channel.connected?.number;
+            const isAgent = connectedNum && connectedNum !== linkedPhone && connectedNum.length <= 6;
+            
+            if (isAgent) {
+              // The call connected to an agent successfully!
+              const agentInfo = getAgentInfoByExtension(campaign.config.instance, connectedNum);
+              contact.agent = agentInfo.extension;
+              contact.agentName = agentInfo.name;
+              
+              // Calculate talk duration (bridgedAt or answeredAt)
+              let talkDuration = 0;
+              if (info && info.bridgedAt) {
+                talkDuration = Math.round((Date.now() - info.bridgedAt) / 1000);
+              } else if (info && info.answeredAt) {
+                talkDuration = Math.round((Date.now() - info.answeredAt) / 1000);
+              }
+              contact.duration = Math.max(1, talkDuration);
+              
+              console.log(`[Dialer] Channel ${channel.id} connected to agent ${connectedNum} (${agentInfo.name}). Talk duration: ${talkDuration}s.`);
+              
+              if (contact.status !== 'answered') {
+                updateContactStatus(linkedCampaignId, linkedPhone, 'answered');
+              } else {
+                saveInstanceCampaignsDebounced(campaign.config.instance);
+              }
             } else {
-              console.log(`[Dialer] Channel ${channel.id} was NOT answered. Marking contact ${linkedPhone} as no_answer.`);
-              updateContactStatus(linkedCampaignId, linkedPhone, 'no_answer');
+              // Fallback logic for non-agent calls
+              if (contact.status === 'calling') {
+                if (wasAnswered) {
+                  console.log(`[Dialer] Channel ${channel.id} was answered but hung up before connecting to an agent. Marking contact ${linkedPhone} as abandoned.`);
+                  updateContactStatus(linkedCampaignId, linkedPhone, 'abandoned');
+                } else {
+                  console.log(`[Dialer] Channel ${channel.id} was NOT answered. Marking contact ${linkedPhone} as no_answer.`);
+                  updateContactStatus(linkedCampaignId, linkedPhone, 'no_answer');
+                }
+              }
             }
           }
         }
@@ -743,6 +808,7 @@ async function dialerLoop(campaignId) {
           });
           
           activeChannels.set(channel.id, { campaignId, phone: contact.phone });
+          startActiveChannelsMonitor();
           console.log(`[Dialer] Call to ${contact.phone} originated asynchronously (Channel ID: ${channel.id}).`);
         } catch (err) {
           console.error(`[Dialer] Originate failed or rejected for ${contact.phone}:`, err.message);
