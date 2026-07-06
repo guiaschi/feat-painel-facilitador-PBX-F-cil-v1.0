@@ -2955,17 +2955,11 @@ export async function setupAMDDialplan(instance, cookies) {
     });
     
     const hasAmd = existingContent.includes('[detect-amd]');
-    const hasAmdResult = existingContent.includes('AMD_STATUS_RESULT');
 
-    if (hasAmd && hasAmdResult) {
-      console.log('[Puppeteer] Updated detect-amd dialplan already exists. Bypassing append.');
-      return { success: true, message: 'O dialplan de detecção AMD já está configurado no PABX!' };
-    }
-
-    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,Wait(0.8)\nexten => s,n,AMD(3000,1500,800,5000,120,50,3,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
+    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,AMD(2500,2000,1000,5000,120,50,4,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
 
     let finalContent = existingContent;
-    if (hasAmd && !hasAmdResult) {
+    if (hasAmd) {
       console.log('[Puppeteer] Replacing old AMD dialplan with updated version...');
       const idx = existingContent.indexOf('[detect-amd]');
       finalContent = existingContent.substring(0, idx) + amdCode;
@@ -3415,7 +3409,7 @@ export async function restoreOriginalDialplan(instance, cookies) {
     const originalPath = path.resolve('extensions_custom_original.conf');
     let content = fs.readFileSync(originalPath, 'utf8');
     
-    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,Wait(0.8)\nexten => s,n,AMD(3000,1500,800,5000,120,50,3,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
+    const amdCode = `\n\n[detect-amd]\nexten => s,1,NoOp(--- Iniciando Detecção de Caixa Postal ---)\nexten => s,n,Set(TARGET_CAMPAIGN_ID=\${CAMPAIGN_ID})\nexten => s,n,Set(TARGET_CAMPAIGN_PHONE=\${CAMPAIGN_PHONE})\nexten => s,n,AMD(2500,2000,1000,5000,120,50,4,256)\nexten => s,n,NoOp(Resultado AMD: \${AMDSTATUS} - Causa: \${AMDCAUSE})\nexten => s,n,UserEvent(AMDResult, CAMPAIGN_ID: \${TARGET_CAMPAIGN_ID}, CAMPAIGN_PHONE: \${TARGET_CAMPAIGN_PHONE}, AMDSTATUS: \${AMDSTATUS})\nexten => s,n,GotoIf(\$["\${AMDSTATUS}" = "HUMAN"]?human:machine)\nexten => s,n(machine),NoOp(Caixa Postal Detectada - Retornando para Stasis)\nexten => s,n,Set(__AMD_STATUS_RESULT=\${AMDSTATUS})\nexten => s,n,Stasis(dialer_app)\nexten => s,n,Hangup()\nexten => s,n(human),NoOp(Humano Detectado - Direcionando)\nexten => s,n,Goto(\${TARGET_CONTEXT},\${TARGET_EXTEN},\${TARGET_PRIORITY})\n`;
     
     content = content + amdCode;
 
