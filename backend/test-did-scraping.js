@@ -1,5 +1,9 @@
 import puppeteer from 'puppeteer';
 
+const INSTANCE = process.env.PBX_INSTANCE || 'minhainstancia';
+const USERNAME = process.env.PBX_USER || 'admin';
+const PASSWORD = process.env.PBX_PASS || 'senha';
+
 async function run() {
   console.log('[DEBUG] Launching Puppeteer...');
   const browser = await puppeteer.launch({
@@ -8,7 +12,7 @@ async function run() {
   });
 
   const page = await browser.newPage();
-  
+
   // Inject mock jQuery cookie patch to prevent crashes
   await page.evaluateOnNewDocument(() => {
     let jq;
@@ -35,7 +39,7 @@ async function run() {
   page.on('pageerror', err => console.log('PAGE ERROR:', err.message));
 
   console.log('[DEBUG] Navigating to login...');
-  await page.goto('https://smart.pbxfacil.com.br/admin/config.php', { waitUntil: 'domcontentloaded' });
+  await page.goto(`https://${INSTANCE}.pbxfacil.com.br/admin/config.php`, { waitUntil: 'domcontentloaded' });
   await new Promise(resolve => setTimeout(resolve, 2000));
 
   const needLogin = await page.evaluate(() => {
@@ -44,15 +48,15 @@ async function run() {
 
   if (needLogin) {
     console.log('[DEBUG] Login required. Performing login...');
-    const hasAdminBtn = !!document.querySelector('#login_admin');
+    const hasAdminBtn = await page.evaluate(() => !!document.querySelector('#login_admin'));
     if (hasAdminBtn) {
       await page.click('#login_admin');
       await page.waitForSelector('input[name="username"]', { visible: true });
     }
 
-    await page.type('input[name="username"]', 'parceiro');
-    await page.type('input[name="password"]', 'L6asVa5$tVZTT87M');
-    
+    await page.type('input[name="username"]', USERNAME);
+    await page.type('input[name="password"]', PASSWORD);
+
     await Promise.all([
       page.waitForNavigation({ waitUntil: 'networkidle2' }),
       page.click('input[type="submit"], button[type="submit"], #loginform input[type="button"], #loginform input[type="submit"]')
@@ -63,9 +67,8 @@ async function run() {
   }
 
   console.log('[DEBUG] Navigating to Inbound Routes (display=did)...');
-  await page.goto('https://smart.pbxfacil.com.br/admin/config.php?display=did', { waitUntil: 'networkidle2' });
+  await page.goto(`https://${INSTANCE}.pbxfacil.com.br/admin/config.php?display=did`, { waitUntil: 'networkidle2' });
 
-  // Let's inspect the page content
   const pageDetails = await page.evaluate(() => {
     const tables = Array.from(document.querySelectorAll('table')).map(t => {
       return {
@@ -75,13 +78,12 @@ async function run() {
         rowsCount: t.querySelectorAll('tbody tr').length
       };
     });
-    
-    // Dump outerHTML of the first row of table if table exists
-    const mainTable = document.querySelector('#didtable') || 
-                      document.querySelector('#table') || 
-                      document.querySelector('.bootstrap-table table') || 
+
+    const mainTable = document.querySelector('#didtable') ||
+                      document.querySelector('#table') ||
+                      document.querySelector('.bootstrap-table table') ||
                       document.querySelector('table[data-toggle="table"]');
-    
+
     let firstRowHTML = 'No table found';
     if (mainTable) {
       const firstRow = mainTable.querySelector('tbody tr');

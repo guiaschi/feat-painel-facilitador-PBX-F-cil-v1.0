@@ -4,7 +4,7 @@ import dns from 'dns';
 import path from 'path';
 
 // Helper to launch browser with common arguments
-async function getBrowser() {
+export async function getBrowser() {
   return await puppeteer.launch({
     headless: true,
     args: [
@@ -18,7 +18,7 @@ async function getBrowser() {
 }
 
 // Helper to create page with jQuery cookie patch
-async function createNewPage(browser, cookies = null) {
+export async function createNewPage(browser, cookies = null) {
   const page = await browser.newPage();
   
   // Set standard desktop User-Agent to bypass security/headless filters
@@ -2838,7 +2838,7 @@ export async function deleteInboundRoute(instance, cookies, routeId) {
 }
 
 /**
- * Automatically creates and configures the 'disparoupchat' ARI user in FreePBX
+ * Automatically creates and configures the ARI user in FreePBX
  */
 export async function setupARIUser(instance, cookies) {
   if (instance.toLowerCase() === 'mock') {
@@ -2857,8 +2857,8 @@ export async function setupARIUser(instance, cookies) {
     // Wait for inputs
     await page.waitForSelector('#name', { timeout: 10000 });
     
-    const username = 'disparoupchat';
-    const password = 'disparou123';
+    const username = process.env.ARI_USER || 'ari_user';
+    const password = process.env.ARI_PASS || 'ari_pass';
     
     await page.evaluate((user, pass) => {
       const nameInput = document.querySelector('#name');
@@ -3041,7 +3041,7 @@ export async function setupAMDDialplan(instance, cookies) {
 export async function getCustomDestinations(instance, cookies) {
   if (instance.toLowerCase() === 'mock') {
     return [
-      { id: 'customdests,custom-upchat,1', name: 'Enviar para Upchat' }
+      { id: 'customdests,custom-default,1', name: 'Destino Exemplo' }
     ];
   }
 
@@ -3241,7 +3241,7 @@ export async function createCustomDestination(instance, cookies, data) {
     await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
     
     // Apply changes
-    await applyConfig(page);
+    await applyPBXConfiguration(page);
     
     return { success: true, message: 'Destino personalizado criado com sucesso.' };
   } catch (error) {
@@ -3325,7 +3325,7 @@ export async function editCustomDestination(instance, cookies, targetId, data) {
     await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
     
     // Apply changes
-    await applyConfig(page);
+    await applyPBXConfiguration(page);
     
     return { success: true, message: 'Destino personalizado editado com sucesso.' };
   } catch (error) {
@@ -3368,7 +3368,7 @@ export async function deleteCustomDestination(instance, cookies, targetId) {
     await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
     
     // Apply changes
-    await applyConfig(page);
+    await applyPBXConfiguration(page);
     
     return { success: true, message: 'Destino personalizado excluído com sucesso.' };
   } catch (error) {
@@ -3475,5 +3475,743 @@ export async function restoreOriginalDialplan(instance, cookies) {
     await browser.close();
   }
 }
+
+const CACHE_FILE = path.join(process.cwd(), 'trunks_cache.json');
+
+function readTrunksCache() {
+  try {
+    if (fs.existsSync(CACHE_FILE)) {
+      return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+    }
+  } catch (e) {
+    console.error('Error reading trunks cache:', e.message);
+  }
+  return {};
+}
+
+function writeTrunksCache(cache) {
+  try {
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Error writing trunks cache:', e.message);
+  }
+}
+
+async function inspectTrunksInBackground(instance, cookies, trunks) {
+  console.log(`[Background Worker] Starting inspection of ${trunks.length} trunks for ${instance}...`);
+  for (const trunk of trunks) {
+    try {
+      console.log(`[Background Worker] Inspecting trunk ${trunk.id} (${trunk.name})...`);
+      const details = await inspectTrunk(instance, cookies, trunk.id);
+      
+      const cache = readTrunksCache();
+      if (!cache[instance]) cache[instance] = {};
+      cache[instance][trunk.id] = {
+        name: trunk.name,
+        sip_server: details.sip_server || ''
+      };
+      writeTrunksCache(cache);
+      console.log(`[Background Worker] Cached trunk ${trunk.id} with sip_server: ${details.sip_server}`);
+    } catch (e) {
+      console.error(`[Background Worker] Error inspecting trunk ${trunk.id}:`, e.message);
+    }
+  }
+  console.log(`[Background Worker] Finished inspection for ${instance}.`);
+}
+
+export async function getTrunks(instance, cookies) {
+  if (instance.toLowerCase() === 'mock') {
+    return [
+      { id: 'OUT_1', name: 'Trunk_Vivo_SIP', tech: 'pjsip', callerid: '558539246886', disabled: false, sip_server: 'sip.vivo.com.br' },
+      { id: 'OUT_2', name: 'Trunk_Claro_PJSIP', tech: 'pjsip', callerid: '', disabled: false, sip_server: 'claro.com.br' },
+      { id: 'OUT_3', name: 'Trunk_Failover_Mock', tech: 'sip', callerid: '558539246882', disabled: true, sip_server: 'wa.meta.vc' }
+    ];
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=trunks`;
+    console.log(`[Puppeteer] Navigating to Trunks list: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    // Wait for the trunks bootstrap table or fallback table to load
+    await page.waitForSelector('#table-all, table[data-toggle="table"], table', { timeout: 10000 }).catch(() => {});
+    
+    // Try to increase bootstrapTable page size to 9999 to load all records at once
+    console.log('[Puppeteer] Setting trunks page size to 9999 via jQuery...');
+    await page.evaluate(() => {
+      try {
+        if (window.jQuery) {
+          let $table = window.jQuery('#table-all');
+          if ($table.length === 0) {
+            $table = window.jQuery('table[data-toggle="table"]');
+          }
+          if ($table && $table.bootstrapTable) {
+            $table.bootstrapTable('refreshOptions', { pageSize: 9999 });
+          }
+        }
+      } catch (e) {
+        console.error('Error setting pageSize to 9999:', e);
+      }
+    });
+
+    // Wait a brief moment for the table to reload/re-render
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    const trunks = await page.evaluate(() => {
+      const list = [];
+      const table = document.querySelector('#table-all') || 
+                    document.querySelector('table[data-toggle="table"]') ||
+                    document.querySelector('table');
+      if (!table) return [];
+      
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      for (const row of rows) {
+        if (row.innerText.includes('No data') || row.innerText.includes('Nenhum registro') || row.querySelectorAll('td').length < 4) {
+          continue;
+        }
+        
+        const cells = Array.from(row.querySelectorAll('td'));
+        const editLink = row.querySelector('a[href*="extdisplay="]');
+        if (!editLink) continue;
+        
+        const href = editLink.getAttribute('href') || '';
+        const match = href.match(/extdisplay=([^&]+)/);
+        const id = match ? decodeURIComponent(match[1]) : '';
+        
+        const name = cells[0] ? cells[0].innerText.trim() : '';
+        const tech = cells[1] ? cells[1].innerText.trim() : '';
+        const callerid = cells[2] ? cells[2].innerText.trim() : '';
+        const statusText = cells[3] ? cells[3].innerText.trim() : '';
+        const disabled = statusText.toLowerCase().includes('disabled');
+        
+        list.push({
+          id,
+          name,
+          tech,
+          callerid,
+          disabled
+        });
+      }
+      return list;
+    });
+
+    console.log(`[Puppeteer] Extracted ${trunks.length} trunks.`);
+
+    // Read cache and enrich trunks list
+    const cache = readTrunksCache();
+    const instanceCache = cache[instance] || {};
+    
+    const trunksToInspect = [];
+
+    const enrichedTrunks = trunks.map(t => {
+      const cached = instanceCache[t.id];
+      if (cached && cached.name === t.name) {
+        return {
+          ...t,
+          sip_server: cached.sip_server
+        };
+      } else {
+        // If not in cache or name changed, mark for background inspection
+        trunksToInspect.push(t);
+        return t;
+      }
+    });
+
+    // If there are trunks to inspect, do it in the background!
+    if (trunksToInspect.length > 0) {
+      console.log(`[Sync] Triggering background inspection for ${trunksToInspect.length} trunks...`);
+      inspectTrunksInBackground(instance, cookies, trunksToInspect).catch(err => {
+        console.error('[Sync] Background trunk inspection failed:', err.message);
+      });
+    }
+
+    return enrichedTrunks;
+  } catch (error) {
+    console.error('[Puppeteer] Error listing trunks:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function deleteTrunk(instance, cookies, id) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=trunks`;
+    console.log(`[Puppeteer] Navigating to Trunks list for deletion: ${url}`);
+    
+    page.on('dialog', async (dialog) => {
+      console.log(`[Puppeteer] Dialog detected: ${dialog.message()}. Accepting.`);
+      await dialog.accept();
+    });
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+
+    // Wait for the trunks bootstrap table or fallback table to load
+    await page.waitForSelector('#table-all, table[data-toggle="table"], table', { timeout: 10000 }).catch(() => {});
+    
+    // Try to increase bootstrapTable page size to 9999 to load all records at once
+    console.log('[Puppeteer] Setting trunks page size to 9999 via jQuery for deletion...');
+    await page.evaluate(() => {
+      try {
+        if (window.jQuery) {
+          let $table = window.jQuery('#table-all');
+          if ($table.length === 0) {
+            $table = window.jQuery('table[data-toggle="table"]');
+          }
+          if ($table && $table.bootstrapTable) {
+            $table.bootstrapTable('refreshOptions', { pageSize: 9999 });
+          }
+        }
+      } catch (e) {
+        console.error('Error setting pageSize to 9999:', e);
+      }
+    });
+
+    // Wait a brief moment for the table to reload/re-render
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Find the delete link in the DOM for this specific trunk ID
+    const deleteLinkSelector = `a.delAction[href*="extdisplay=${id}"]`;
+    const deleteLink = await page.$(deleteLinkSelector);
+    if (!deleteLink) {
+      throw new Error(`Link de exclusão para o tronco ${id} não foi encontrado na tabela.`);
+    }
+
+    console.log(`[Puppeteer] Clicking delete link for trunk: ${id}`);
+    await deleteLink.click();
+    
+    // Wait for navigation after deletion confirmation
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {});
+    
+    await applyPBXConfiguration(page);
+
+    // Remove from cache
+    try {
+      const cache = readTrunksCache();
+      if (cache[instance] && cache[instance][id]) {
+        delete cache[instance][id];
+        writeTrunksCache(cache);
+      }
+    } catch (e) {
+      console.error('Error removing trunk from cache:', e.message);
+    }
+    
+    return { success: true, message: 'Tronco excluído com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error deleting trunk:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function inspectTrunk(instance, cookies, id) {
+  if (instance.toLowerCase() === 'mock') {
+    return {
+      id,
+      name: 'Trunk_Vivo_SIP',
+      tech: 'pjsip',
+      callerid: '558539246886',
+      username: 'mockuser',
+      secret: 'mockpassword',
+      sip_server: 'sip.mockprovider.com',
+      sip_server_port: '5060',
+      maxchans: '30',
+      authentication: 'both',
+      registration: 'send',
+      transport: '0.0.0.0-udp',
+      identify_by: 'username',
+      media_encryption: 'no',
+      codecs: ['ulaw', 'alaw']
+    };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=trunks&extdisplay=${encodeURIComponent(id)}`;
+    console.log(`[Puppeteer] Inspecting Trunk: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="trunk_name"]', { timeout: 10000 });
+    
+    const generalData = await page.evaluate(() => {
+      const name = document.querySelector('input[name="trunk_name"]')?.value || '';
+      const callerid = document.querySelector('input[name="outcid"]')?.value || '';
+      const maxchans = document.querySelector('input[name="maxchans"]')?.value || '';
+      const techElement = document.querySelector('input[name="tech"]') || document.querySelector('#tech');
+      const tech = techElement?.value || 'pjsip';
+      return { name, callerid, maxchans, tech };
+    });
+
+    // Check if it's PJSIP
+    let techData = {};
+    if (generalData.tech.toLowerCase().includes('pjsip')) {
+      // Click pjsip Settings tab
+      const pjsipTab = await page.$('a[href="#ttech"]');
+      if (pjsipTab) {
+        await pjsipTab.click();
+        await new Promise(r => setTimeout(r, 600));
+        
+        // 1. General PJSIP sub-tab
+        const pjsGeneralTab = await page.$('a[href="#pjsgeneral"]');
+        if (pjsGeneralTab) await pjsGeneralTab.click();
+        await new Promise(r => setTimeout(r, 300));
+
+        const generalPjsipData = await page.evaluate(() => {
+          const username = document.querySelector('input[name="username"]')?.value || '';
+          const secret = document.querySelector('input[name="secret"]')?.value || '';
+          const sip_server = document.querySelector('input[name="sip_server"]')?.value || '';
+          const sip_server_port = document.querySelector('input[name="sip_server_port"]')?.value || '';
+          
+          const authRadio = document.querySelector('input[name="authentication"]:checked');
+          const authentication = authRadio ? authRadio.value : '';
+
+          const regRadio = document.querySelector('input[name="registration"]:checked');
+          const registration = regRadio ? regRadio.value : '';
+
+          const transport = document.querySelector('select[name="transport"]')?.value || '';
+          
+          return { username, secret, sip_server, sip_server_port, authentication, registration, transport };
+        });
+
+        // 2. Advanced PJSIP sub-tab
+        const pjsAdvancedTab = await page.$('a[href="#pjsadvanced"]');
+        let advancedPjsipData = {};
+        if (pjsAdvancedTab) {
+          await pjsAdvancedTab.click();
+          await new Promise(r => setTimeout(r, 600));
+          advancedPjsipData = await page.evaluate(() => {
+            const identify_by = document.querySelector('select[name="identify_by"]')?.value || '';
+            const media_encryption = document.querySelector('select[name="media_encryption"]')?.value || '';
+            return { identify_by, media_encryption };
+          });
+        }
+
+        // 3. Codecs PJSIP sub-tab
+        const pjscodecsTab = await page.$('a[href="#pjscodecs"]');
+        let codecsData = [];
+        if (pjscodecsTab) {
+          await pjscodecsTab.click();
+          await new Promise(r => setTimeout(r, 600));
+          codecsData = await page.evaluate(() => {
+            const checkedBoxes = Array.from(document.querySelectorAll('input[type="checkbox"][name^="codec["]:checked'));
+            return checkedBoxes.map(cb => cb.name.replace('codec[', '').replace(']', ''));
+          });
+        }
+
+        techData = {
+          ...generalPjsipData,
+          ...advancedPjsipData,
+          codecs: codecsData
+        };
+      }
+    }
+
+    return {
+      id,
+      name: generalData.name,
+      tech: generalData.tech,
+      callerid: generalData.callerid,
+      maxchans: generalData.maxchans,
+      ...techData
+    };
+  } catch (error) {
+    console.error('[Puppeteer] Error inspecting trunk:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function createTrunk(instance, cookies, data) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Tronco criado com sucesso (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const tech = data.tech || 'pjsip';
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=trunks&tech=${tech.toUpperCase()}&view=form`;
+    console.log(`[Puppeteer] Creating Trunk: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="trunk_name"]', { timeout: 10000 });
+    
+    // Fill General info
+    await page.$eval('input[name="trunk_name"]', el => el.value = '');
+    await page.type('input[name="trunk_name"]', data.name);
+    
+    if (data.callerid) {
+      await page.$eval('input[name="outcid"]', el => el.value = '');
+      await page.type('input[name="outcid"]', data.callerid);
+    }
+
+    if (data.maxchans !== undefined) {
+      await page.$eval('input[name="maxchans"]', el => el.value = '');
+      if (data.maxchans !== null && data.maxchans !== '') {
+        await page.type('input[name="maxchans"]', data.maxchans.toString());
+      }
+    }
+
+    // PJSIP specific settings
+    if (tech.toLowerCase() === 'pjsip') {
+      // Click pjsip Settings tab
+      console.log('[Puppeteer] Clicking pjsip Settings tab...');
+      await page.evaluate(() => document.querySelector('a[href="#ttech"]')?.click());
+      await new Promise(r => setTimeout(r, 600));
+      
+      // 1. General PJSIP sub-tab
+      console.log('[Puppeteer] Clicking pjsip General sub-tab...');
+      await page.evaluate(() => document.querySelector('a[href="#pjsgeneral"]')?.click());
+      await new Promise(r => setTimeout(r, 300));
+
+      // Fill PJSIP fields
+      if (data.username) {
+        await page.$eval('input[name="username"]', el => el.value = '');
+        await page.type('input[name="username"]', data.username);
+      }
+      if (data.secret) {
+        await page.$eval('input[name="secret"]', el => el.value = '');
+        await page.type('input[name="secret"]', data.secret);
+      }
+      if (data.sip_server) {
+        await page.$eval('input[name="sip_server"]', el => el.value = '');
+        await page.type('input[name="sip_server"]', data.sip_server);
+      }
+      
+      // Port - clear if zero/empty, otherwise type
+      await page.$eval('input[name="sip_server_port"]', el => el.value = '');
+      if (data.sip_server_port && data.sip_server_port !== '0' && data.sip_server_port !== 0) {
+        await page.type('input[name="sip_server_port"]', data.sip_server_port.toString());
+      }
+
+      // Set authentication
+      if (data.authentication !== undefined) {
+        console.log('[Puppeteer] Setting authentication...');
+        await page.evaluate((authVal) => {
+          const radio = document.querySelector(`input[name="authentication"][value="${authVal}"]`);
+          if (radio) radio.click();
+        }, data.authentication);
+      }
+
+      // Set registration
+      if (data.registration !== undefined) {
+        console.log('[Puppeteer] Setting registration...');
+        await page.evaluate((regVal) => {
+          const radio = document.querySelector(`input[name="registration"][value="${regVal}"]`);
+          if (radio) radio.click();
+        }, data.registration);
+      }
+
+      // Set transport
+      if (data.transport !== undefined) {
+        console.log('[Puppeteer] Setting transport...');
+        await page.evaluate((transportVal) => {
+          const select = document.querySelector('select[name="transport"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.value.includes(transportVal));
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.transport);
+      }
+
+      // 2. Advanced PJSIP sub-tab
+      console.log('[Puppeteer] Clicking pjsip Advanced sub-tab...');
+      await page.evaluate(() => document.querySelector('a[href="#pjsadvanced"]')?.click());
+      await new Promise(r => setTimeout(r, 600));
+
+      // Set identify_by
+      if (data.identify_by !== undefined) {
+        console.log('[Puppeteer] Setting identify_by...');
+        await page.evaluate((identifyVal) => {
+          const select = document.querySelector('select[name="identify_by"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.text.trim() === identifyVal || o.value === identifyVal);
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.identify_by);
+      }
+
+      // Set media_encryption
+      if (data.media_encryption !== undefined) {
+        console.log('[Puppeteer] Setting media_encryption...');
+        await page.evaluate((encVal) => {
+          const select = document.querySelector('select[name="media_encryption"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.text.includes(encVal) || o.value.includes(encVal) || o.value === encVal);
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.media_encryption);
+      }
+
+      // 3. Codecs PJSIP sub-tab
+      if (data.codecs !== undefined && Array.isArray(data.codecs)) {
+        console.log('[Puppeteer] Clicking pjsip Codecs sub-tab...');
+        await page.evaluate(() => document.querySelector('a[href="#pjscodecs"]')?.click());
+        await new Promise(r => setTimeout(r, 600));
+
+        console.log('[Puppeteer] Setting codecs...');
+        await page.evaluate((codecsList) => {
+          const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][name^="codec["]'));
+          for (const cb of checkboxes) {
+            const codecName = cb.name.replace('codec[', '').replace(']', '');
+            const shouldBeChecked = codecsList.includes(codecName);
+            if (cb.checked !== shouldBeChecked) {
+              cb.click();
+            }
+          }
+        }, data.codecs);
+      }
+    }
+
+    // Submit
+    const submitBtnSelector = 'input[type="submit"]#submit, input[type="submit"]#save, button#submit, #submit, input[type="submit"]';
+    console.log('[Puppeteer] Clicking submit button...');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {}),
+      page.evaluate((selector) => {
+        const btn = document.querySelector(selector);
+        if (btn) btn.click();
+      }, submitBtnSelector)
+    ]);
+    
+    await applyPBXConfiguration(page);
+    
+    return { success: true, message: 'Tronco criado com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error creating trunk:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
+export async function editTrunk(instance, cookies, id, data) {
+  if (instance.toLowerCase() === 'mock') {
+    return { success: true, message: 'Tronco editado com sucesso (Mock).' };
+  }
+
+  const browser = await getBrowser();
+  let page;
+  try {
+    page = await createNewPage(browser, cookies);
+    const url = `https://${instance}.pbxfacil.com.br/admin/config.php?display=trunks&extdisplay=${encodeURIComponent(id)}`;
+    console.log(`[Puppeteer] Editing Trunk: ${url}`);
+    
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    
+    await page.waitForSelector('input[name="trunk_name"]', { timeout: 10000 });
+    
+    // Fill General info
+    await page.$eval('input[name="trunk_name"]', el => el.value = '');
+    await page.type('input[name="trunk_name"]', data.name);
+    
+    if (data.callerid !== undefined) {
+      await page.$eval('input[name="outcid"]', el => el.value = '');
+      if (data.callerid) {
+        await page.type('input[name="outcid"]', data.callerid);
+      }
+    }
+
+    if (data.maxchans !== undefined) {
+      await page.$eval('input[name="maxchans"]', el => el.value = '');
+      if (data.maxchans !== null && data.maxchans !== '') {
+        await page.type('input[name="maxchans"]', data.maxchans.toString());
+      }
+    }
+
+    const techElement = await page.$('input[name="tech"]');
+    const tech = techElement ? await page.evaluate(el => el.value, techElement) : 'pjsip';
+
+    // PJSIP specific settings
+    if (tech.toLowerCase() === 'pjsip') {
+      // Click pjsip Settings tab
+      console.log('[Puppeteer] Clicking pjsip Settings tab...');
+      await page.evaluate(() => document.querySelector('a[href="#ttech"]')?.click());
+      await new Promise(r => setTimeout(r, 600));
+      
+      // 1. General PJSIP sub-tab
+      console.log('[Puppeteer] Clicking pjsip General sub-tab...');
+      await page.evaluate(() => document.querySelector('a[href="#pjsgeneral"]')?.click());
+      await new Promise(r => setTimeout(r, 300));
+
+      // Fill PJSIP fields
+      if (data.username !== undefined) {
+        await page.$eval('input[name="username"]', el => el.value = '');
+        if (data.username) await page.type('input[name="username"]', data.username);
+      }
+      if (data.secret !== undefined) {
+        await page.$eval('input[name="secret"]', el => el.value = '');
+        if (data.secret) await page.type('input[name="secret"]', data.secret);
+      }
+      if (data.sip_server !== undefined) {
+        await page.$eval('input[name="sip_server"]', el => el.value = '');
+        if (data.sip_server) await page.type('input[name="sip_server"]', data.sip_server);
+      }
+      
+      // Port - clear if zero/empty, otherwise type
+      if (data.sip_server_port !== undefined) {
+        await page.$eval('input[name="sip_server_port"]', el => el.value = '');
+        if (data.sip_server_port && data.sip_server_port !== '0' && data.sip_server_port !== 0) {
+          await page.type('input[name="sip_server_port"]', data.sip_server_port.toString());
+        }
+      }
+
+      // Set authentication
+      if (data.authentication !== undefined) {
+        console.log('[Puppeteer] Setting authentication...');
+        await page.evaluate((authVal) => {
+          const radio = document.querySelector(`input[name="authentication"][value="${authVal}"]`);
+          if (radio) radio.click();
+        }, data.authentication);
+      }
+
+      // Set registration
+      if (data.registration !== undefined) {
+        console.log('[Puppeteer] Setting registration...');
+        await page.evaluate((regVal) => {
+          const radio = document.querySelector(`input[name="registration"][value="${regVal}"]`);
+          if (radio) radio.click();
+        }, data.registration);
+      }
+
+      // Set transport
+      if (data.transport !== undefined) {
+        console.log('[Puppeteer] Setting transport...');
+        await page.evaluate((transportVal) => {
+          const select = document.querySelector('select[name="transport"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.value.includes(transportVal));
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.transport);
+      }
+
+      // 2. Advanced PJSIP sub-tab
+      console.log('[Puppeteer] Clicking pjsip Advanced sub-tab...');
+      await page.evaluate(() => document.querySelector('a[href="#pjsadvanced"]')?.click());
+      await new Promise(r => setTimeout(r, 600));
+
+      // Set identify_by
+      if (data.identify_by !== undefined) {
+        console.log('[Puppeteer] Setting identify_by...');
+        await page.evaluate((identifyVal) => {
+          const select = document.querySelector('select[name="identify_by"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.text.trim() === identifyVal || o.value === identifyVal);
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.identify_by);
+      }
+
+      // Set media_encryption
+      if (data.media_encryption !== undefined) {
+        console.log('[Puppeteer] Setting media_encryption...');
+        await page.evaluate((encVal) => {
+          const select = document.querySelector('select[name="media_encryption"]');
+          if (select) {
+            const opt = Array.from(select.options).find(o => o.text.includes(encVal) || o.value.includes(encVal) || o.value === encVal);
+            if (opt) {
+              select.value = opt.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+        }, data.media_encryption);
+      }
+
+      // 3. Codecs PJSIP sub-tab
+      if (data.codecs !== undefined && Array.isArray(data.codecs)) {
+        console.log('[Puppeteer] Clicking pjsip Codecs sub-tab...');
+        await page.evaluate(() => document.querySelector('a[href="#pjscodecs"]')?.click());
+        await new Promise(r => setTimeout(r, 600));
+
+        console.log('[Puppeteer] Setting codecs...');
+        await page.evaluate((codecsList) => {
+          const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][name^="codec["]'));
+          for (const cb of checkboxes) {
+            const codecName = cb.name.replace('codec[', '').replace(']', '');
+            const shouldBeChecked = codecsList.includes(codecName);
+            if (cb.checked !== shouldBeChecked) {
+              cb.click();
+            }
+          }
+        }, data.codecs);
+      }
+    }
+
+    // Submit
+    const submitBtnSelector = 'input[type="submit"]#submit, input[type="submit"]#save, button#submit, #submit, input[type="submit"]';
+    console.log('[Puppeteer] Clicking submit button...');
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }).catch(() => {}),
+      page.evaluate((selector) => {
+        const btn = document.querySelector(selector);
+        if (btn) btn.click();
+      }, submitBtnSelector)
+    ]);
+    
+    await applyPBXConfiguration(page);
+
+    // Update cache
+    try {
+      if (data.sip_server !== undefined) {
+        const cache = readTrunksCache();
+        if (!cache[instance]) cache[instance] = {};
+        cache[instance][id] = {
+          name: data.name,
+          sip_server: data.sip_server
+        };
+        writeTrunksCache(cache);
+      }
+    } catch (e) {
+      console.error('Error updating cache on editTrunk:', e.message);
+    }
+    
+    return { success: true, message: 'Tronco editado com sucesso.' };
+  } catch (error) {
+    console.error('[Puppeteer] Error editing trunk:', error.message);
+    throw error;
+  } finally {
+    if (page) await page.close().catch(() => {});
+    await browser.close();
+  }
+}
+
 
 

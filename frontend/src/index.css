@@ -83,73 +83,42 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ========================================================
+   Light Mode Theme — Blue Primary
+   ======================================================== */
 :root {
-  --background: oklch(0.08 0.015 240);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.12 0.02 240);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.12 0.02 240);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.25 340); /* Upchat Pink */
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.18 0.02 240);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.18 0.02 240);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.18 0.02 240);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.65 0.25 340);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: oklch(0.06 0.02 245);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.08 0.025 245);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.08 0.025 245);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.62 0.28 348);       /* Upchat Neon Pink */
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.14 0.02 245);
+  --secondary-foreground: oklch(0.85 0 0);
+  --muted: oklch(0.14 0.02 245);
+  --muted-foreground: oklch(0.55 0.01 245);
+  --accent: oklch(0.62 0.28 348);        /* Upchat Neon Pink */
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.65 0.22 25);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.62 0.28 348);
+  --chart-1: oklch(0.62 0.28 348);
+  --chart-2: oklch(0.60 0.27 340);
+  --chart-3: oklch(0.65 0.18 200);
+  --chart-4: oklch(0.70 0.15 150);
+  --chart-5: oklch(0.68 0.2 30);
   --radius: 0.625rem;
-  --sidebar: oklch(0.12 0.02 240);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.18 0.02 240);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
-.dark {
-  --background: oklch(0.08 0.015 240);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.12 0.02 240);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.12 0.02 240);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.25 340);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.18 0.02 240);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.18 0.02 240);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.18 0.02 240);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.12 0.02 240);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.18 0.02 240);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.07 0.02 245);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.62 0.28 348);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.14 0.02 245);
+  --sidebar-accent-foreground: oklch(0.85 0 0);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.62 0.28 348);
 }
 
 @layer base {
@@ -165,71 +134,85 @@
 }
 
 /* ========================================================
-   Original UI Design Variables & Classes
+   Custom UI Design Variables & Classes — Upchat Neon Pink / Navy Blue Theme
    ======================================================== */
 :root {
-  --bg-color: #040814;
-  --panel-bg: rgba(8, 16, 32, 0.7);
-  --panel-border: rgba(255, 255, 255, 0.06);
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  
-  --primary-cyan: #ff2a85; /* Upchat Pink instead of Cyan */
-  --primary-purple: #9d4edd;
-  --primary-gradient: linear-gradient(135deg, #ff2a85 0%, #d81b60 50%, #9d4edd 100%);
-  --cyan-glow: 0 0 15px rgba(255, 42, 133, 0.4);
-  --purple-glow: 0 0 15px rgba(157, 78, 221, 0.4);
-  
+  --bg-color: #000720;
+  --panel-bg: rgba(0, 11, 41, 0.82);
+  --panel-border: rgba(255, 26, 117, 0.2);
+  --text-primary: #f0f4ff;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  --primary-blue: #ff1a75;
+  --primary-blue-light: #ff66a3;
+  --primary-blue-dark: #cc0052;
+  --primary-indigo: #6366f1;
+  --primary-purple: #818cf8;
+  --primary-cyan: #00f2fe;
+  --primary-pink: #ff1a75;
+  --primary-magenta: #c026d3;
+  --primary-gradient: linear-gradient(135deg, #ff1a75 0%, #ff4d94 100%);
+  --pink-gradient: linear-gradient(135deg, #ff1a75 0%, #ff4d94 100%);
+  --blue-glow: 0 0 20px rgba(255, 26, 117, 0.35);
+  --pink-glow: 0 0 25px rgba(255, 26, 117, 0.4);
+
   --danger-color: #ef4444;
   --danger-glow: 0 0 10px rgba(239, 68, 68, 0.4);
   --success-color: #10b981;
   --success-glow: 0 0 10px rgba(16, 185, 129, 0.4);
-  
+  --warning-color: #f59e0b;
+
   --font-title: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
-  
+
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Background animated elements for ambient glowing */
+/* Global body background — clean dark navy/black with bg image and gradient */
+body {
+  background-color: #000720 !important;
+  background-image: url('/bg_login.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Dark transparent overlay with deep navy tone to match client's site */
 body::before {
   content: '';
-  position: absolute;
-  top: -10%;
-  left: -10%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
-  z-index: -1;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 7, 32, 0.65);
+  z-index: 0;
   pointer-events: none;
 }
 
 body::after {
-  content: '';
-  position: absolute;
-  bottom: -10%;
-  right: -10%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(circle, rgba(157, 78, 221, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
-  z-index: -1;
-  pointer-events: none;
+  content: none;
 }
 
-/* Glassmorphism Panel styles */
+/* ========================================================
+   Glass Panel — Dark Navy
+   ======================================================== */
 .glass-panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  background: rgba(0, 10, 66, 0.72);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 1px rgba(59, 130, 246, 0.3);
 }
 
-/* Neon buttons */
+/* ========================================================
+   Buttons
+   ======================================================== */
 .btn-neon-primary {
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #0066ff 0%, #6366f1 60%, #fe398a 100%);
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -243,13 +226,13 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(93, 63, 211, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 102, 255, 0.35);
 }
 
 .btn-neon-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5), 0 0 10px rgba(157, 78, 221, 0.5);
-  filter: brightness(1.1);
+  box-shadow: 0 8px 28px rgba(254, 57, 138, 0.4), 0 0 20px rgba(0, 102, 255, 0.35);
+  filter: brightness(1.08);
 }
 
 .btn-neon-primary:active {
@@ -257,9 +240,9 @@ body::after {
 }
 
 .btn-neon-secondary {
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text-primary);
-  border: 1px solid var(--panel-border);
+  background: rgba(0, 102, 255, 0.1);
+  color: #f0f4ff;
+  border: 1px solid rgba(0, 102, 255, 0.25);
   padding: 12px 24px;
   font-family: var(--font-title);
   font-weight: 500;
@@ -274,50 +257,55 @@ body::after {
 }
 
 .btn-neon-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(0, 242, 254, 0.4);
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+  background: rgba(0, 102, 255, 0.2);
+  border-color: rgba(0, 102, 255, 0.45);
+  box-shadow: 0 0 16px rgba(0, 102, 255, 0.2);
 }
 
-/* Input Fields */
+/* ========================================================
+   Input Fields — Light
+   ======================================================== */
 .input-glass {
   width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(3, 7, 18, 0.7);
+  border: 1.5px solid rgba(0, 102, 255, 0.25);
   border-radius: 12px;
   padding: 14px 16px;
   font-family: var(--font-body);
-  color: var(--text-primary);
+  color: #f0f4ff;
   font-size: 0.95rem;
   transition: var(--transition-smooth);
 }
 
 .input-glass:focus {
   outline: none;
-  border-color: var(--primary-cyan);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+  border-color: #0066ff;
+  background: rgba(3, 7, 18, 0.85);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15), 0 0 20px rgba(0, 102, 255, 0.15);
 }
 
 .input-glass::placeholder {
-  color: var(--text-muted);
+  color: #64748b;
 }
 
-/* Select items styling */
+/* Select */
 .select-glass {
   appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%23f3f4f6' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%230066ff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 40px !important;
+  color: #f0f4ff;
 }
 
 .select-glass option {
-  background-color: #0b0c10;
-  color: var(--text-primary);
+  background-color: #0b1329;
+  color: #f0f4ff;
 }
 
-/* Form Groups */
+/* ========================================================
+   Form Groups
+   ======================================================== */
 .form-group {
   margin-bottom: 20px;
   display: flex;
@@ -327,27 +315,31 @@ body::after {
 
 .form-group label {
   font-family: var(--font-title);
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-/* Page titles */
+/* Title gradient */
 .title-gradient {
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #fe398a 0%, #ff76b0 50%, #c026d3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: var(--font-title);
   font-weight: 800;
 }
 
-/* Table Design */
+/* ========================================================
+   Tables
+   ======================================================== */
 .glass-table-container {
   overflow-x: auto;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
 }
 
 .glass-table {
@@ -357,21 +349,21 @@ body::after {
 }
 
 .glass-table th {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(254, 57, 138, 0.08);
   padding: 16px 20px;
   font-family: var(--font-title);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.82rem;
   text-transform: uppercase;
-  color: var(--text-secondary);
-  letter-spacing: 0.05em;
+  color: var(--primary-blue-light);
+  letter-spacing: 0.06em;
   border-bottom: 1px solid var(--panel-border);
 }
 
 .glass-table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-  color: var(--text-primary);
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(254, 57, 138, 0.07);
+  color: #f0f4ff;
   font-size: 0.95rem;
   transition: var(--transition-smooth);
 }
@@ -381,29 +373,50 @@ body::after {
 }
 
 .glass-table tr:hover td {
-  background: rgba(0, 242, 254, 0.02);
+  background: rgba(59, 130, 246, 0.06);
 }
 
-/* Neon Glow Animations */
+/* ========================================================
+   Pulse Animation
+   ======================================================== */
 @keyframes pulseGlow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
   }
   50% {
-    box-shadow: 0 0 25px rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 30px rgba(254, 57, 138, 0.4), 0 0 15px rgba(59, 130, 246, 0.3);
   }
 }
 
 .pulse-glow {
-  animation: pulseGlow 4s infinite;
+  animation: pulseGlow 4s ease-in-out infinite;
 }
 
-/* Tab Buttons */
+/* Status Dot Pulse (sidebar) */
+.status-dot-pulse {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  animation: statusPulse 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusPulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* ========================================================
+   Tab Buttons
+   ======================================================== */
 .tab-btn {
   padding: 10px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text-secondary);
+  border: 1px solid var(--panel-border);
+  background: rgba(22, 23, 30, 0.5);
+  color: #cbd5e1;
   font-family: var(--font-title);
   font-weight: 600;
   font-size: 0.9rem;
@@ -417,25 +430,27 @@ body::after {
 }
 
 .tab-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
+  background: rgba(254, 57, 138, 0.08);
+  border-color: rgba(254, 57, 138, 0.35);
+  color: var(--primary-blue-light);
 }
 
 .tab-btn.active {
-  background: rgba(0, 242, 254, 0.1) !important;
-  border-color: rgba(0, 242, 254, 0.35) !important;
-  color: var(--primary-cyan) !important;
-  box-shadow: 0 0 12px rgba(0, 242, 254, 0.15), inset 0 0 12px rgba(0, 242, 254, 0.05);
-  text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+  background: rgba(254, 57, 138, 0.15) !important;
+  border-color: rgba(254, 57, 138, 0.5) !important;
+  color: var(--primary-blue) !important;
+  box-shadow: 0 0 16px rgba(254, 57, 138, 0.2), inset 0 0 12px rgba(254, 57, 138, 0.06);
+  font-weight: 700;
 }
 
-/* Table action buttons */
+/* ========================================================
+   Table Action Buttons
+   ======================================================== */
 .table-edit-btn {
   padding: 6px 14px;
-  border: 1px solid rgba(0, 242, 254, 0.2);
-  background: rgba(0, 242, 254, 0.05);
-  color: #00f2fe;
+  border: 1px solid rgba(254, 57, 138, 0.25);
+  background: rgba(254, 57, 138, 0.08);
+  color: var(--primary-blue-light);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.82rem;
@@ -445,15 +460,15 @@ body::after {
 }
 
 .table-edit-btn:hover {
-  background: rgba(0, 242, 254, 0.15);
-  box-shadow: 0 0 8px rgba(0, 242, 254, 0.25);
+  background: rgba(254, 57, 138, 0.18);
+  box-shadow: 0 0 12px rgba(254, 57, 138, 0.25);
 }
 
 .table-delete-btn {
   padding: 6px 14px;
   border: 1px solid rgba(239, 68, 68, 0.2);
-  background: rgba(239, 68, 68, 0.05);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.06);
+  color: #f87171;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.82rem;
@@ -464,96 +479,111 @@ body::after {
 
 .table-delete-btn:hover {
   background: rgba(239, 68, 68, 0.15);
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
 }
 
-/* Loader glow */
+/* ========================================================
+   Loader
+   ======================================================== */
 .loader-glow {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(0, 242, 254, 0.1);
-  border-top-color: var(--primary-cyan);
+  border: 3px solid rgba(254, 57, 138, 0.12);
+  border-top-color: #fe398a;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 12px rgba(254, 57, 138, 0.3);
 }
 
-/* Scroll glass */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================================
+   Scrollbar
+   ======================================================== */
 .scroll-glass {
   overflow-y: auto;
   padding-right: 4px;
 }
 
 .scroll-glass::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 
 .scroll-glass::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scroll-glass::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(59, 130, 246, 0.04);
   border-radius: 4px;
 }
 
-/* Custom Login specific styling */
+.scroll-glass::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+}
+
+.scroll-glass::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+/* ========================================================
+   LOGIN PAGE — Split layout with illustration
+   ======================================================== */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  background-image: url('/bg_login.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Right panel — central area */
+.login-right-panel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: transparent;
 }
 
 .login-card {
   width: 100%;
-  max-width: 480px;
-  padding: 40px;
+  max-width: 420px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  padding: 44px 40px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 102, 255, 0.08);
+  backdrop-filter: blur(20px);
 }
 
 .login-logo-container {
   display: flex;
   justify-content: center;
-  align-items: baseline;
-  margin-bottom: 12px;
-  font-size: 2.2rem;
-  font-family: var(--font-title);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.login-logo-up {
-  color: var(--primary-cyan);
-  text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
-}
-
-.login-logo-chat {
-  color: #fff;
-}
-
-.login-logo-sub {
-  color: var(--primary-purple);
-  font-size: 1.2rem;
-  margin-left: 2px;
-  font-weight: 600;
-  text-shadow: 0 0 10px rgba(157, 78, 221, 0.4);
+  margin-bottom: 4px;
 }
 
 .login-title {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-family: var(--font-title);
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 8px;
+  font-weight: 700;
+  color: #f0f4ff;
+  margin-bottom: 4px;
 }
 
 .login-subtitle {
   font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
+  color: #94a3b8;
+  line-height: 1.5;
 }
 
 .login-input-wrapper {
@@ -565,18 +595,15 @@ body::after {
 
 .login-domain-suffix {
   position: absolute;
-  right: 16px;
-  color: #6b7280;
-  font-size: 0.85rem;
+  right: 14px;
+  color: #60a5fa;
+  font-size: 0.82rem;
   font-family: var(--font-title);
+  font-weight: 600;
   pointer-events: none;
-}
-
-.login-tip {
-  font-size: 0.75rem;
-  color: var(--primary-cyan);
-  margin-top: 2px;
-  opacity: 0.85;
+  background: rgba(59, 130, 246, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
 .login-error-alert {
@@ -584,9 +611,9 @@ body::after {
   gap: 12px;
   align-items: center;
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   padding: 12px 16px;
-  borderRadius: 10px;
+  border-radius: 12px;
 }
 
 .login-error-text {
@@ -596,20 +623,36 @@ body::after {
   text-align: left;
 }
 
+/* Login divider */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(59, 130, 246, 0.12);
+}
+
 /* ========================================================
-   Responsive & Mobile Custom overrides
+   Responsive
    ======================================================== */
 @media (max-width: 640px) {
   .login-card {
     padding: 28px 20px !important;
-    max-width: 100% !important;
+    border-radius: 18px !important;
   }
 }
 
 /* ========================================================
-   Campaign Dialer CSS styles
+   Campaign Dialer
    ======================================================== */
-
 .dialer-layout-container {
   display: flex;
   gap: 24px;
@@ -662,14 +705,13 @@ body::after {
   text-align: left;
 }
 
-/* File Upload styling */
 .dialer-file-input-wrapper {
   position: relative;
   width: 100%;
   height: 100px;
-  border: 2px dashed rgba(255, 42, 133, 0.25);
+  border: 2px dashed rgba(37, 99, 235, 0.25);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(59, 130, 246, 0.02);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,9 +720,9 @@ body::after {
 }
 
 .dialer-file-input-wrapper:hover {
-  border-color: var(--primary-cyan);
-  background: rgba(255, 42, 133, 0.04);
-  box-shadow: 0 0 15px rgba(255, 42, 133, 0.1);
+  border-color: var(--primary-blue);
+  background: rgba(37, 99, 235, 0.05);
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.08);
 }
 
 .dialer-file-input {
@@ -698,7 +740,7 @@ body::after {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -706,7 +748,6 @@ body::after {
   font-size: 2rem;
 }
 
-/* Form Grid */
 .dialer-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -726,12 +767,11 @@ body::after {
   }
 }
 
-/* Queue preview and agents */
 .dialer-queue-preview {
   margin-top: 12px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(59, 130, 246, 0.03);
+  border: 1px solid rgba(59, 130, 246, 0.1);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -764,24 +804,23 @@ body::after {
 }
 
 .dialer-agent-badge.free {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #059669;
 }
 
 .dialer-agent-badge.busy {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #dc2626;
 }
 
 .dialer-agent-badge.offline {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #9ca3af;
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
 }
 
-/* Stats Cards Grid */
 .dialer-stats-grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -803,8 +842,8 @@ body::after {
 }
 
 .dialer-stat-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 10, 66, 0.65);
+  border: 1px solid rgba(59, 130, 246, 0.15);
   border-radius: 16px;
   padding: 16px;
   text-align: center;
@@ -814,69 +853,78 @@ body::after {
   align-items: center;
   gap: 6px;
   transition: var(--transition-smooth);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 .dialer-stat-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.12);
 }
 
 .dialer-stat-label {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  font-size: 0.75rem;
+  color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   font-family: var(--font-title);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .dialer-stat-value {
   font-size: 1.8rem;
   font-weight: 800;
   font-family: var(--font-title);
-  color: #fff;
+  color: #f0f4ff;
 }
 
-/* Stat card specific coloring */
 .dialer-stat-card.total {
-  border-color: rgba(0, 242, 254, 0.15);
-  background: rgba(0, 242, 254, 0.01);
+  border-color: rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, rgba(0, 10, 66, 0.7) 0%, rgba(37, 99, 235, 0.12) 100%);
 }
 .dialer-stat-card.total .dialer-stat-value {
-  color: var(--primary-cyan);
-  text-shadow: 0 0 10px rgba(255, 42, 133, 0.2);
+  color: #60a5fa;
 }
 
+.dialer-stat-card.pending {
+  border-color: rgba(100, 116, 139, 0.2);
+}
 .dialer-stat-card.pending .dialer-stat-value {
-  color: #9ca3af;
+  color: #94a3b8;
 }
 
 .dialer-stat-card.calling {
-  border-color: rgba(157, 78, 221, 0.15);
-  background: rgba(157, 78, 221, 0.01);
+  border-color: rgba(99, 102, 241, 0.25);
+  background: linear-gradient(135deg, rgba(0, 10, 66, 0.7) 0%, rgba(99, 102, 241, 0.12) 100%);
 }
 .dialer-stat-card.calling .dialer-stat-value {
-  color: var(--primary-purple);
-  text-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
+  color: #818cf8;
 }
 
 .dialer-stat-card.answered {
-  border-color: rgba(16, 185, 129, 0.15);
-  background: rgba(16, 185, 129, 0.01);
+  border-color: rgba(16, 185, 129, 0.25);
+  background: linear-gradient(135deg, rgba(0, 10, 66, 0.7) 0%, rgba(16, 185, 129, 0.1) 100%);
+}
+.dialer-stat-card.answered .dialer-stat-value {
+  color: #10b981;
 }
 
 .dialer-stat-card.voicemail {
-  border-color: rgba(234, 179, 8, 0.15);
-  background: rgba(234, 179, 8, 0.01);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.dialer-stat-card.voicemail .dialer-stat-value {
+  color: #f59e0b;
 }
 
 .dialer-stat-card.failed {
-  border-color: rgba(239, 68, 68, 0.15);
-  background: rgba(239, 68, 68, 0.01);
+  border-color: rgba(239, 68, 68, 0.2);
+  background: linear-gradient(135deg, rgba(0, 10, 66, 0.7) 0%, rgba(239, 68, 68, 0.07) 100%);
+}
+.dialer-stat-card.failed .dialer-stat-value {
+  color: #f87171;
 }
 
-/* Dialer Contacts List and Filters */
 .dialer-list-header {
   display: flex;
   justify-content: space-between;
@@ -891,7 +939,7 @@ body::after {
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 1.1rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .dialer-list-controls {
@@ -901,24 +949,241 @@ body::after {
   flex-wrap: wrap;
 }
 
-/* Campaign items scroll styled */
 .campaign-item-card {
-  border-left: 3px solid transparent !important;
+  border-left: 3px solid rgba(59, 130, 246, 0.2) !important;
+  background: rgba(0, 10, 66, 0.6) !important;
+  backdrop-filter: blur(12px);
+  transition: var(--transition-smooth);
 }
 
 .campaign-item-card:hover {
-  background: rgba(255, 42, 133, 0.03) !important;
-  border-color: rgba(255, 42, 133, 0.2) !important;
+  background: rgba(0, 10, 80, 0.75) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
 }
 
 .campaign-item-card.running {
-  border-left-color: var(--primary-cyan) !important;
+  border-left-color: #3b82f6 !important;
+  box-shadow: inset 3px 0 12px rgba(59, 130, 246, 0.1);
 }
 
 .campaign-item-card.completed {
-  border-left-color: var(--success-color) !important;
+  border-left-color: #10b981 !important;
+  box-shadow: inset 3px 0 12px rgba(16, 185, 129, 0.08);
 }
 
 .campaign-item-card.paused {
-  border-left-color: #f39c12 !important;
+  border-left-color: #f59e0b !important;
+  box-shadow: inset 3px 0 12px rgba(245, 158, 11, 0.08);
+}
+
+/* ========================================================
+   Premium Chart Tooltips
+   ======================================================== */
+.chart-column-group .chart-tooltip-panel {
+  display: none !important;
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-column-group:hover .chart-tooltip-panel {
+  display: flex !important;
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+/* ========================================================
+   Utility — Badge & Status chips
+   ======================================================== */
+.status-badge-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-badge-offline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+/* ========================================================
+   Campaign Dialer — Status Badges
+   ======================================================== */
+.dialer-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.dialer-status-badge.running,
+.dialer-status-badge.calling {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  animation: dialerPulse 2s infinite;
+}
+
+@keyframes dialerPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 6px 2px rgba(59, 130, 246, 0.15); }
+}
+
+.dialer-status-badge.paused {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.dialer-status-badge.completed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.dialer-status-badge.stopped,
+.dialer-status-badge.failed {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.dialer-status-badge.pending {
+  background: rgba(100, 116, 139, 0.12);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+.dialer-status-badge.answered {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.dialer-status-badge.no_answer {
+  background: rgba(107, 114, 128, 0.12);
+  color: #9ca3af;
+  border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.dialer-status-badge.abandoned {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.dialer-status-badge.voicemail {
+  background: rgba(234, 179, 8, 0.12);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+/* ========================================================
+   Campaign Dialer — Active Panel Title
+   ======================================================== */
+.dialer-active-title {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.3rem;
+  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #fe398a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+/* ========================================================
+   Campaign Dialer — Scroll Table Container
+   ======================================================== */
+.dialer-scroll-table {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  background: rgba(0, 10, 50, 0.4);
+  backdrop-filter: blur(8px);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.dialer-scroll-table::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.dialer-scroll-table::-webkit-scrollbar-track {
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.dialer-scroll-table::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 4px;
+}
+
+/* ========================================================
+   Campaign Dialer — API Panel
+   ======================================================== */
+.dialer-api-panel {
+  max-width: 900px;
+}
+
+.dialer-api-panel code {
+  font-family: 'Courier New', Courier, monospace;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+.dialer-api-panel pre {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  background: rgba(0, 5, 20, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+/* ========================================================
+   Dialer Agent Badges — Improved Contrast
+   ======================================================== */
+.dialer-agent-badge.free {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+.dialer-agent-badge.busy {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.dialer-agent-badge.offline {
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  color: #64748b;
 }

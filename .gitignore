@@ -51,6 +51,7 @@ cookies.json
 # Screenshot / error captures (debug only)
 # ============================================
 *.png
+!frontend/public/*.png
 *.html
 error_*.html
 error_*.png
@@ -73,3 +74,33 @@ Thumbs.db
 # ============================================
 logs/
 *.log
+
+# ============================================
+# Debug/test scripts que contêm dados sensíveis
+# ============================================
+test-*.js
+test-*.mjs
+dump-*.js
+dump-*.mjs
+
+# ============================================
+# Arquivos JSON de debug e dados temporários
+# ============================================
+*_debug.json
+*_debug.html
+configedit_debug.*
+customdests_debug.*
+trunks_debug.*
+trunk_form_debug.json
+trunks_cache.json
+cookies.json
+extension_metadata.json
+advanced_fields.json
+extension_5002_*.json
+did_goto_options.json
+
+# ============================================
+# Uploads
+# ============================================
+backend/uploads/
+

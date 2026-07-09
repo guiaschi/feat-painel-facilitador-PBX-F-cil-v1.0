@@ -6,6 +6,7 @@ import QueueModal from './components/QueueModal';
 import CSVImportModal from './components/CSVImportModal';
 import { API_URL } from './config';
 import CustomDestModal from './components/CustomDestModal';
+import TrunkModal from './components/TrunkModal';
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem('pbx_token') || '');
@@ -15,12 +16,18 @@ export default function App() {
   const [queues, setQueues] = useState([]);
   const [dids, setDids] = useState([]);
   const [customDestinations, setCustomDestinations] = useState([]);
+  const [trunks, setTrunks] = useState([]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
   const [isCSVModalOpen, setIsCSVModalOpen] = useState(false);
   const [isCustomDestModalOpen, setIsCustomDestModalOpen] = useState(false);
   const [activeEditCustomDestData, setActiveEditCustomDestData] = useState(null);
+  
+  // Trunk Modal States
+  const [isTrunkModalOpen, setIsTrunkModalOpen] = useState(false);
+  const [activeEditTrunkData, setActiveEditTrunkData] = useState(null);
+
   const [isOperationLoading, setIsOperationLoading] = useState(false);
   const [operationText, setOperationText] = useState('');
   const [error, setError] = useState('');
@@ -31,6 +38,7 @@ export default function App() {
       loadQueues();
       loadDids();
       loadCustomDestinations();
+      loadTrunks();
     }
   }, [token]);
 
@@ -120,6 +128,25 @@ export default function App() {
       }
     } catch (err) {
       console.error('Error loading custom destinations:', err);
+    }
+  };
+
+  const loadTrunks = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/trunks`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setTrunks(data.trunks || []);
+      }
+    } catch (err) {
+      console.error('Error loading trunks:', err);
     }
   };
 
@@ -475,8 +502,34 @@ export default function App() {
     }
   };
 
+  const handleDeleteTrunk = async (trunkId) => {
+    setIsOperationLoading(true);
+    setOperationText(`Removendo tronco ${trunkId}... Salvando no PBX.`);
+    try {
+      const response = await fetch(`${API_URL}/api/trunks/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id: trunkId })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erro ao excluir tronco.');
+      }
+      await loadTrunks();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Falha ao excluir tronco do PBX.');
+    } finally {
+      setIsOperationLoading(false);
+      setOperationText('');
+    }
+  };
+
   const handleRefreshAll = async () => {
-    await Promise.all([loadExtensions(), loadQueues(), loadDids(), loadCustomDestinations()]);
+    await Promise.all([loadExtensions(), loadQueues(), loadDids(), loadCustomDestinations(), loadTrunks()]);
   };
 
   if (!token) {
@@ -490,6 +543,7 @@ export default function App() {
         queues={queues}
         dids={dids}
         customDestinations={customDestinations}
+        trunks={trunks}
         instance={instance}
         user={user}
         onLogout={handleLogout}
@@ -506,6 +560,9 @@ export default function App() {
         onCreateCustomDest={() => { setActiveEditCustomDestData(null); setIsCustomDestModalOpen(true); }}
         onEditCustomDest={(cd) => { setActiveEditCustomDestData(cd); setIsCustomDestModalOpen(true); }}
         onDeleteCustomDest={handleDeleteCustomDest}
+        onDeleteTrunk={handleDeleteTrunk}
+        onCreateTrunk={() => { setActiveEditTrunkData(null); setIsTrunkModalOpen(true); }}
+        onEditTrunk={(t) => { setActiveEditTrunkData(t); setIsTrunkModalOpen(true); }}
         isOperationLoading={isOperationLoading}
         currentOperationText={operationText}
         onRefresh={handleRefreshAll}
@@ -537,6 +594,13 @@ export default function App() {
         onClose={() => { setIsCustomDestModalOpen(false); setActiveEditCustomDestData(null); }}
         onSave={loadCustomDestinations}
         editData={activeEditCustomDestData}
+        token={token}
+      />
+      <TrunkModal
+        isOpen={isTrunkModalOpen}
+        onClose={() => { setIsTrunkModalOpen(false); setActiveEditTrunkData(null); }}
+        onSave={loadTrunks}
+        editData={activeEditTrunkData}
         token={token}
       />
     </>

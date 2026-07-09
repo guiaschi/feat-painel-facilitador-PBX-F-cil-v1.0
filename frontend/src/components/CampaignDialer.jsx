@@ -3,6 +3,7 @@ import { API_URL } from '../config';
 
 export default function CampaignDialer({ queues = [], extensions = [], customDestinations = [], token, pbxIP, realtimeQueues = [] }) {
   const [file, setFile] = useState(null);
+  const [campaignName, setCampaignName] = useState('');
   const [queueId, setQueueId] = useState('');
   const [targetType, setTargetType] = useState('Extensions'); // Extensions, Queues, Custom_Destinations
   const [targetVal, setTargetVal] = useState('');
@@ -103,7 +104,7 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
       });
       const data = await res.json();
       if (data.success) {
-        alert(data.message || 'Usuário ARI disparoupchat configurado com sucesso!');
+        alert(data.message || 'Usuário ARI configurado com sucesso!');
       } else {
         alert(data.error || 'Falha ao configurar ARI.');
       }
@@ -260,12 +261,14 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    if (!campaignName.trim()) return alert('Por favor, informe o Nome da Campanha.');
     if (!file) return alert('Selecione um arquivo CSV.');
     if (!queueId) return alert('Selecione uma Fila para monitorar.');
     if (!targetVal) return alert('Selecione o destino das chamadas.');
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('campaignName', campaignName.trim());
     formData.append('queueId', queueId);
     formData.append('targetType', targetType);
     formData.append('targetDestination', targetVal);
@@ -284,6 +287,7 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
       const data = await res.json();
       if (data.success) {
         setCampaign(data.campaign);
+        setCampaignName(''); // clear name field
         loadCampaigns(data.campaign); // refresh list to include new campaign
       } else {
         alert(data.error);
@@ -391,20 +395,8 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
   };
 
   const getAgentStats = () => {
-    const instance = campaign?.config?.instance || 'speedfibra';
-    const defaultAgents = instance === 'speedfibra' 
-      ? [
-          { extension: '5000', name: 'Guilherme', loginTime: '5h 42m' },
-          { extension: '1001', name: 'Rafaela Vitalino', loginTime: '4h 15m' },
-          { extension: '1002', name: 'Naiane Rodrigues', loginTime: '3h 30m' },
-          { extension: '1003', name: 'Paulina Cunha', loginTime: '2h 10m' }
-        ]
-      : [
-          { extension: '2001', name: 'Naiane Rodrigues', loginTime: '6h 10m' },
-          { extension: '2002', name: 'Paulina Cunha', loginTime: '5h 20m' },
-          { extension: '2003', name: 'Romine Oliveira', loginTime: '4h 45m' },
-          { extension: '2004', name: 'Fabricio', loginTime: '3h 15m' }
-        ];
+    // Agent list is resolved dynamically from the campaign/instance configuration
+    const defaultAgents = campaign?.agents || [];
 
     const agentMap = {};
     defaultAgents.forEach(a => {
@@ -576,7 +568,10 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                       )}
                     </div>
                   </div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: '600', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    🎯 {c.name || `Campanha ${c.id.substring(0, 8)}`}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '2px' }}>
                     Fila {c.config?.queueId} ➔ {c.config?.targetDestination}
                   </div>
                   {c.config?.enableAmd === true && (
@@ -708,6 +703,18 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
             </div>
 
             <form onSubmit={handleUpload} className="dialer-form-wrapper">
+              <div className="form-group">
+                <label>Nome da Campanha (Obrigatorio):</label>
+                <input 
+                  type="text" 
+                  value={campaignName} 
+                  onChange={e => setCampaignName(e.target.value)} 
+                  className="input-glass" 
+                  placeholder="Ex: Campanha Especial de Cobrança" 
+                  required
+                />
+              </div>
+
               <div className="form-group">
                 <label>Arquivo CSV (Coluna "phone" ou "telefone"):</label>
                 <div className="dialer-file-input-wrapper">
@@ -878,43 +885,7 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
               )}
             </div>
 
-            {/* Tab selector for Active Campaign Details */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px' }}>
-              <button
-                onClick={() => setDetailsTab('general')}
-                style={{
-                  background: detailsTab === 'general' ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
-                  border: 'none',
-                  color: '#fff',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  boxShadow: detailsTab === 'general' ? '0 0 10px rgba(255, 0, 127, 0.3)' : 'none'
-                }}
-              >
-                🏠 Painel de Controle
-              </button>
-              <button
-                onClick={() => setDetailsTab('analytics')}
-                style={{
-                  background: detailsTab === 'analytics' ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.02)',
-                  border: 'none',
-                  color: '#fff',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  boxShadow: detailsTab === 'analytics' ? '0 0 10px rgba(255, 0, 127, 0.3)' : 'none'
-                }}
-              >
-                📊 Gráficos & Relatórios
-              </button>
-            </div>
 
-            {detailsTab === 'general' && (
               <>
                 <div className="dialer-stats-grid">
                   <div 
@@ -1013,194 +984,6 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                   </button>
                 </div>
               </>
-            )}
-
-            {detailsTab === 'analytics' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginTop: '10px' }}>
-                {/* Analytics Quick Metric Summary Banner */}
-                <div style={{ display: 'flex', gap: '15px', background: 'rgba(255,255,255,0.01)', padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.04)', flexWrap: 'wrap' }}>
-                  <div style={{ flex: 1, minWidth: '100px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Média TMA</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#00f2fe', marginTop: '4px' }}>
-                      {(() => {
-                        const ans = campaign.contacts?.filter(c => c.status === 'answered') || [];
-                        const totalDur = ans.reduce((acc, c) => acc + (c.duration || 0), 0);
-                        return ans.length > 0 ? `${Math.round(totalDur / ans.length)}s` : '0s';
-                      })()}
-                    </div>
-                  </div>
-                  <div style={{ width: '1px', background: 'rgba(255,255,255,0.08)' }} />
-                  <div style={{ flex: 1, minWidth: '100px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Aproveitamento</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
-                      {campaign.stats.total > 0 
-                        ? `${(campaign.stats.answered / campaign.stats.total * 100).toFixed(1)}%` 
-                        : '0%'}
-                    </div>
-                  </div>
-                  <div style={{ width: '1px', background: 'rgba(255,255,255,0.08)' }} />
-                  <div style={{ flex: 1, minWidth: '100px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Taxa de Abandono</div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#f59e0b', marginTop: '4px' }}>
-                      {campaign.stats.total > 0 
-                        ? `${((campaign.stats.abandoned || 0) / campaign.stats.total * 100).toFixed(1)}%` 
-                        : '0%'}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hourly Volume Chart */}
-                <div className="glass-panel" style={{ padding: '20px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <h4 style={{ margin: '0 0 15px 0', fontSize: '0.9rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    📊 Distribuição de Chamadas por Horário
-                  </h4>
-                  
-                  {(() => {
-                    const hourlyData = getHourlyStats();
-                    const maxVal = Math.max(...hourlyData.map(d => d.answered + d.no_answer + d.abandoned), 5);
-                    
-                    return (
-                      <div>
-                        {/* Bar Grid */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: '140px', padding: '0 10px', borderBottom: '1px solid rgba(255,255,255,0.1)', position: 'relative' }}>
-                          
-                          {/* Grid Background lines */}
-                          <div style={{ position: 'absolute', left: 0, right: 0, top: '25%', borderTop: '1px dashed rgba(255,255,255,0.03)', height: 0 }} />
-                          <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', borderTop: '1px dashed rgba(255,255,255,0.03)', height: 0 }} />
-                          <div style={{ position: 'absolute', left: 0, right: 0, top: '75%', borderTop: '1px dashed rgba(255,255,255,0.03)', height: 0 }} />
-
-                          {hourlyData.map((d, i) => {
-                            const total = d.answered + d.no_answer + d.abandoned;
-                            const ansPct = (d.answered / maxVal) * 100;
-                            const noPct = (d.no_answer / maxVal) * 100;
-                            const abPct = (d.abandoned / maxVal) * 100;
-
-                            return (
-                              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: '24px' }} title={`Total: ${total} | Atendidas: ${d.answered} | Não Atendidas: ${d.no_answer} | Abandonadas: ${d.abandoned}`}>
-                                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '110px', width: '100%', justifyContent: 'center' }}>
-                                  
-                                  {/* Answered Bar */}
-                                  {d.answered > 0 && (
-                                    <div style={{ width: '4px', height: `${ansPct}%`, background: '#10b981', borderRadius: '2px 2px 0 0', boxShadow: '0 0 5px rgba(16, 185, 129, 0.4)' }} />
-                                  )}
-                                  
-                                  {/* Abandoned Bar */}
-                                  {d.abandoned > 0 && (
-                                    <div style={{ width: '4px', height: `${abPct}%`, background: '#f59e0b', borderRadius: '2px 2px 0 0', boxShadow: '0 0 5px rgba(245, 158, 11, 0.4)' }} />
-                                  )}
-
-                                  {/* No Answer Bar */}
-                                  {d.no_answer > 0 && (
-                                    <div style={{ width: '4px', height: `${noPct}%`, background: '#6b7280', borderRadius: '2px 2px 0 0' }} />
-                                  )}
-
-                                </div>
-                                <span style={{ fontSize: '9px', color: '#9ca3af', marginTop: '6px' }}>{d.hour.split(':')[0]}h</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        
-                        {/* Legend */}
-                        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '12px', fontSize: '10px' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#10b981' }}>
-                            <span style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%' }} /> Atendidas
-                          </span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f59e0b' }}>
-                            <span style={{ width: '8px', height: '8px', background: '#f59e0b', borderRadius: '50%' }} /> Abandonadas
-                          </span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9ca3af' }}>
-                            <span style={{ width: '8px', height: '8px', background: '#6b7280', borderRadius: '50%' }} /> Não Atendidas
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })()}
-                </div>
-
-                {/* Extensions Leaderboard (Agent performance) */}
-                <div className="glass-panel" style={{ padding: '20px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <h4 style={{ margin: '0 0 15px 0', fontSize: '0.9rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    👑 Desempenho por Ramal / Agente
-                  </h4>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-                      <thead>
-                        <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500' }}>Pos</th>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500' }}>Ramal / Agente</th>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>Atendidas</th>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>TMA</th>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>Tempo Fila</th>
-                          <th style={{ padding: '10px 12px', color: '#aaa', fontWeight: '500', textAlign: 'right' }}>Ação</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(() => {
-                          const agentStats = getAgentStats();
-                          return agentStats.map((a, idx) => {
-                            const isTop3 = idx < 3;
-                            const badge = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}º`;
-                            const highlightStyle = idx === 0 
-                              ? { borderLeft: '3px solid #ffd700', background: 'rgba(255, 215, 0, 0.04)' }
-                              : idx === 1 
-                              ? { borderLeft: '3px solid #c0c0c0', background: 'rgba(192, 192, 192, 0.04)' }
-                              : idx === 2 
-                              ? { borderLeft: '3px solid #cd7f32', background: 'rgba(205, 127, 50, 0.04)' }
-                              : {};
-
-                            return (
-                              <tr key={a.extension} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)', ...highlightStyle }}>
-                                <td style={{ padding: '10px 12px', fontWeight: isTop3 ? 'bold' : 'normal', fontSize: isTop3 ? '16px' : '12px' }}>
-                                  {badge}
-                                </td>
-                                <td style={{ padding: '10px 12px' }}>
-                                  <div style={{ fontWeight: '600', color: '#fff' }}>{a.extension}</div>
-                                  <div style={{ fontSize: '11px', color: '#9ca3af' }}>{a.name}</div>
-                                </td>
-                                <td style={{ padding: '10px 12px', textAlign: 'center', fontWeight: 'bold', color: '#10b981' }}>
-                                  {a.answeredCount}
-                                </td>
-                                <td style={{ padding: '10px 12px', textAlign: 'center', color: '#00f2fe' }}>
-                                  {a.avgTalkTime}
-                                </td>
-                                <td style={{ padding: '10px 12px', textAlign: 'center', color: '#ccc' }}>
-                                  {a.loginTime}
-                                </td>
-                                <td style={{ padding: '10px 12px', textAlign: 'right' }}>
-                                  <button
-                                    onClick={() => {
-                                      if (agentFilter === a.extension) {
-                                        setAgentFilter('all');
-                                      } else {
-                                        setAgentFilter(a.extension);
-                                        setStatusFilter('all');
-                                      }
-                                    }}
-                                    style={{
-                                      padding: '4px 8px',
-                                      background: agentFilter === a.extension ? 'var(--primary-gradient)' : 'rgba(255,255,255,0.05)',
-                                      border: 'none',
-                                      color: '#fff',
-                                      borderRadius: '4px',
-                                      fontSize: '11px',
-                                      cursor: 'pointer',
-                                      fontWeight: '600'
-                                    }}
-                                  >
-                                    {agentFilter === a.extension ? 'Filtrado ✓' : 'Filtrar'}
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          });
-                        })()}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {campaign.contacts && campaign.contacts.length > 0 && (
               <div style={{ marginTop: '30px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
@@ -1265,32 +1048,47 @@ export default function CampaignDialer({ queues = [], extensions = [], customDes
                       <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                         <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500' }}>Telefone</th>
                         <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500' }}>Nome</th>
+                        <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>Data/Hora</th>
+                        <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>Duração</th>
+                        <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500', textAlign: 'center' }}>Atendido por</th>
                         <th style={{ padding: '12px 16px', color: '#aaa', fontWeight: '500', textAlign: 'right' }}>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredContacts.length === 0 ? (
                         <tr>
-                          <td colSpan="3" style={{ padding: '20px', textAlign: 'center', color: '#777' }}>Nenhum contato encontrado.</td>
+                          <td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#777' }}>Nenhum contato encontrado.</td>
                         </tr>
                       ) : (
-                        filteredContacts.map((contact, idx) => (
-                          <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
-                            <td style={{ padding: '10px 16px', fontWeight: '500', color: '#f3f4f6' }}>{contact.phone}</td>
-                            <td style={{ padding: '10px 16px', color: '#ccc' }}>{contact.name || '-'}</td>
-                            <td style={{ padding: '10px 16px', textAlign: 'right' }}>
-                              <span className={`dialer-status-badge ${contact.status}`}>
-                                {contact.status === 'pending' && '⏳ Pendente'}
-                                {contact.status === 'calling' && '📞 Discando...'}
-                                {contact.status === 'answered' && '✅ Atendido'}
-                                {contact.status === 'no_answer' && '📭 Não Atendido'}
-                                {contact.status === 'abandoned' && '⚠️ Abandonado'}
-                                {contact.status === 'voicemail' && '🛡️ Caixa Postal'}
-                                {contact.status === 'failed' && '❌ Falhou'}
-                              </span>
-                            </td>
-                          </tr>
-                        ))
+                        filteredContacts.map((contact, idx) => {
+                          const formattedDate = contact.completedAt 
+                            ? new Date(contact.completedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                            : '-';
+                          return (
+                            <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
+                              <td style={{ padding: '10px 16px', fontWeight: '500', color: '#f3f4f6' }}>{contact.phone}</td>
+                              <td style={{ padding: '10px 16px', color: '#ccc' }}>{contact.name || '-'}</td>
+                              <td style={{ padding: '10px 16px', textAlign: 'center', color: '#9ca3af' }}>{formattedDate}</td>
+                              <td style={{ padding: '10px 16px', textAlign: 'center', color: '#00f2fe' }}>
+                                {contact.duration ? `${contact.duration}s` : '-'}
+                              </td>
+                              <td style={{ padding: '10px 16px', textAlign: 'center', color: '#ccc' }}>
+                                {contact.agent ? `${contact.agentName || `Ramal ${contact.agent}`} (${contact.agent})` : '-'}
+                              </td>
+                              <td style={{ padding: '10px 16px', textAlign: 'right' }}>
+                                <span className={`dialer-status-badge ${contact.status}`}>
+                                  {contact.status === 'pending' && '⏳ Pendente'}
+                                  {contact.status === 'calling' && '📞 Discando...'}
+                                  {contact.status === 'answered' && '✅ Atendido'}
+                                  {contact.status === 'no_answer' && '📭 Não Atendido'}
+                                  {contact.status === 'abandoned' && '⚠️ Abandonado'}
+                                  {contact.status === 'voicemail' && '🛡️ Caixa Postal'}
+                                  {contact.status === 'failed' && '❌ Falhou'}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>

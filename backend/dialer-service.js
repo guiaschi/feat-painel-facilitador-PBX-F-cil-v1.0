@@ -194,10 +194,10 @@ function logDebug(msg) {
   console.log(msg);
 }
 
-// Default fallback configuration using HTTPS and IP resolving pattern
-const ARI_URL = process.env.ARI_URL || 'https://smart.pbxfacil.com.br:2087';
-const ARI_USER = process.env.ARI_USER || 'disparoupchat';
-const ARI_PASS = process.env.ARI_PASS || 'disparou123';
+// Default fallback configuration — configure via environment variables
+const ARI_URL = process.env.ARI_URL || '';
+const ARI_USER = process.env.ARI_USER || 'ari_user';
+const ARI_PASS = process.env.ARI_PASS || 'ari_pass';
 const APP_NAME = 'dialer_app';
 
 /**
@@ -208,6 +208,11 @@ export async function connectARI(ipOrUrl) {
     ? (ipOrUrl.startsWith('http') ? ipOrUrl : `https://${ipOrUrl}:2087`)
     : ARI_URL;
 
+  if (!targetUrl) {
+    console.error('[Dialer] No ARI URL configured. Set instanceIP in campaign config or ARI_URL in .env');
+    return null;
+  }
+
   if (ariConnections.has(targetUrl)) {
     return ariConnections.get(targetUrl);
   }
@@ -215,6 +220,21 @@ export async function connectARI(ipOrUrl) {
   try {
     console.log(`[Dialer] Connecting to ARI at ${targetUrl} with user ${ARI_USER}...`);
     const conn = await client.connect(targetUrl, ARI_USER, ARI_PASS);
+    
+    // Auto-clear cache on WebSocket drop so the next cycle reconnects
+    try {
+      const wsObj = conn.ws || (conn._ari && conn._ari.ws) || null;
+      if (wsObj) {
+        wsObj.on('close', () => {
+          console.log(`[Dialer] ARI WebSocket closed for ${targetUrl}. Will reconnect on next dial cycle.`);
+          ariConnections.delete(targetUrl);
+        });
+        wsObj.on('error', (err) => {
+          console.error(`[Dialer] ARI WebSocket error for ${targetUrl}: ${err.message}`);
+          ariConnections.delete(targetUrl);
+        });
+      }
+    } catch (_) {}
     
     conn.on('StasisStart', async (event, channel) => {
       logDebug(`[StasisStart] Channel ${channel.id} (${channel.name}) entered StasisApp. It was answered!`);
@@ -574,6 +594,7 @@ export async function createCampaign(filePath, config) {
         const campaignId = crypto.randomUUID();
         const campaign = {
           id: campaignId,
+          name: config.campaignName || `Campanha - ${new Date().toLocaleDateString('pt-BR')}`,
           status: 'stopped',
           createdAt: new Date().toISOString(),
           config: {
@@ -668,38 +689,13 @@ async function getAvailableAgents(campaign, ari) {
 }
 
 function getAgentInfoByExtension(instance, ext) {
-  const speedfibraAgents = [
-    { extension: '5000', name: 'Guilherme' },
-    { extension: '1001', name: 'Rafaela Vitalino' },
-    { extension: '1002', name: 'Naiane Rodrigues' },
-    { extension: '1003', name: 'Paulina Cunha' }
-  ];
-  const smartAgents = [
-    { extension: '2001', name: 'Naiane Rodrigues' },
-    { extension: '2002', name: 'Paulina Cunha' },
-    { extension: '2003', name: 'Romine Oliveira' },
-    { extension: '2004', name: 'Fabricio' }
-  ];
-  const list = instance === 'speedfibra' ? speedfibraAgents : smartAgents;
-  const found = list.find(a => a.extension === String(ext));
-  return found || { extension: ext, name: `Ramal ${ext}` };
+  // Agent lists should be configured per instance; returning generic label as default
+  return { extension: ext, name: `Ramal ${ext}` };
 }
 
 function getRandomAgentInfo(instance) {
-  const speedfibraAgents = [
-    { extension: '5000', name: 'Guilherme' },
-    { extension: '1001', name: 'Rafaela Vitalino' },
-    { extension: '1002', name: 'Naiane Rodrigues' },
-    { extension: '1003', name: 'Paulina Cunha' }
-  ];
-  const smartAgents = [
-    { extension: '2001', name: 'Naiane Rodrigues' },
-    { extension: '2002', name: 'Paulina Cunha' },
-    { extension: '2003', name: 'Romine Oliveira' },
-    { extension: '2004', name: 'Fabricio' }
-  ];
-  const list = instance === 'speedfibra' ? speedfibraAgents : smartAgents;
-  return list[Math.floor(Math.random() * list.length)];
+  // Agent selection should be configured per instance dynamically
+  return { extension: '100', name: 'Ramal 100' };
 }
 
 /**
@@ -871,6 +867,7 @@ export function getCampaignStatus(campaignId) {
   if (!campaign) throw new Error('Campaign not found');
   return {
     id: campaign.id,
+    name: campaign.name,
     status: campaign.status,
     config: campaign.config,
     stats: campaign.stats,
@@ -886,6 +883,7 @@ export function getAllCampaigns(instance) {
     .filter(c => c.config && c.config.instance === instance)
     .map(c => ({
       id: c.id,
+      name: c.name,
       status: c.status,
       stats: c.stats,
       config: c.config,

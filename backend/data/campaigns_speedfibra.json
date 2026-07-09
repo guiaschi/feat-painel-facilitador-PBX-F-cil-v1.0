@@ -1,1 +1,147 @@
-[]
+[
+  {
+    "id": "7af7ec3b-7bc4-456f-8889-7ffa014061ad",
+    "status": "completed",
+    "createdAt": "2026-07-06T20:44:46.464Z",
+    "config": {
+      "queueId": "900",
+      "targetDestination": "900",
+      "targetType": "Queues",
+      "outboundRoute": "from-internal",
+      "callsPerAgent": 1,
+      "instanceIP": "163.176.229.169",
+      "instance": "speedfibra",
+      "cookies": [
+        {
+          "name": "PHPSESSID",
+          "value": "jonv499oh2ot5ecda0q1plp1n3",
+          "domain": "speedfibra.pbxfacil.com.br",
+          "path": "/",
+          "expires": 1785958955.41068,
+          "size": 35,
+          "httpOnly": false,
+          "secure": false,
+          "session": false,
+          "priority": "Medium",
+          "sameParty": false,
+          "sourceScheme": "Secure"
+        },
+        {
+          "name": "lang",
+          "value": "en_US",
+          "domain": "speedfibra.pbxfacil.com.br",
+          "path": "/admin",
+          "expires": -1,
+          "size": 9,
+          "httpOnly": false,
+          "secure": false,
+          "session": true,
+          "priority": "Medium",
+          "sameParty": false,
+          "sourceScheme": "Secure"
+        }
+      ],
+      "enableAmd": true
+    },
+    "contacts": [
+      {
+        "phone": "51995739787",
+        "name": "Guilherme",
+        "status": "no_answer",
+        "completedAt": "2026-07-06T20:45:15.456Z"
+      },
+      {
+        "phone": "51996809759",
+        "name": "Fabricio",
+        "status": "answered",
+        "completedAt": "2026-07-06T20:45:34.951Z",
+        "agent": "5000",
+        "agentName": "Guilherme",
+        "duration": 24
+      }
+    ],
+    "stats": {
+      "total": 2,
+      "pending": 0,
+      "calling": 0,
+      "answered": 1,
+      "no_answer": 1,
+      "abandoned": 0,
+      "voicemail": 0,
+      "failed": 0
+    }
+  },
+  {
+    "id": "c4e9a117-21b3-4f77-bc98-f0e1b01093c1",
+    "name": "Teste5",
+    "status": "completed",
+    "createdAt": "2026-07-09T17:24:36.543Z",
+    "config": {
+      "queueId": "900",
+      "targetDestination": "900",
+      "targetType": "Queues",
+      "outboundRoute": "from-internal",
+      "callsPerAgent": 1,
+      "instanceIP": "163.176.229.169",
+      "instance": "speedfibra",
+      "cookies": [
+        {
+          "name": "PHPSESSID",
+          "value": "ki0cftovd7g3fptrkk782ol1b0",
+          "domain": "speedfibra.pbxfacil.com.br",
+          "path": "/",
+          "expires": 1786209208.755661,
+          "size": 35,
+          "httpOnly": false,
+          "secure": false,
+          "session": false,
+          "priority": "Medium",
+          "sameParty": false,
+          "sourceScheme": "Secure"
+        },
+        {
+          "name": "lang",
+          "value": "en_US",
+          "domain": "speedfibra.pbxfacil.com.br",
+          "path": "/admin",
+          "expires": -1,
+          "size": 9,
+          "httpOnly": false,
+          "secure": false,
+          "session": true,
+          "priority": "Medium",
+          "sameParty": false,
+          "sourceScheme": "Secure"
+        }
+      ],
+      "enableAmd": false
+    },
+    "contacts": [
+      {
+        "phone": "51995739787",
+        "name": "Guilherme",
+        "status": "answered",
+        "completedAt": "2026-07-09T17:27:14.519Z",
+        "agent": "5000",
+        "agentName": "Ramal 5000",
+        "duration": 2
+      },
+      {
+        "phone": "41998484262",
+        "name": "Jeferson",
+        "status": "no_answer",
+        "completedAt": "2026-07-09T17:27:47.221Z"
+      }
+    ],
+    "stats": {
+      "total": 2,
+      "pending": 0,
+      "calling": 0,
+      "answered": 1,
+      "no_answer": 1,
+      "abandoned": 0,
+      "voicemail": 0,
+      "failed": 0
+    }
+  }
+]

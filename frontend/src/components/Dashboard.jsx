@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DidModal from './DidModal';
 import CampaignDialer from './CampaignDialer';
+import CampaignReports from './CampaignReports';
 import { API_URL } from '../config';
 
 export default function Dashboard({ 
@@ -8,6 +9,7 @@ export default function Dashboard({
   queues = [], 
   dids = [],
   customDestinations = [],
+  trunks = [],
   instance, 
   user, 
   onLogout, 
@@ -24,6 +26,9 @@ export default function Dashboard({
   onCreateCustomDest,
   onEditCustomDest,
   onDeleteCustomDest,
+  onDeleteTrunk,
+  onCreateTrunk,
+  onEditTrunk,
   isOperationLoading, 
   currentOperationText, 
   onRefresh 
@@ -33,6 +38,7 @@ export default function Dashboard({
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [confirmDeleteQueueId, setConfirmDeleteQueueId] = useState(null);
   const [confirmDeleteCustomDestId, setConfirmDeleteCustomDestId] = useState(null);
+  const [confirmDeleteTrunkId, setConfirmDeleteTrunkId] = useState(null);
 
   // Real-time monitor states
   const [realtimeData, setRealtimeData] = useState({ extensions: [], queues: [], trunks: [], pbxIP: '' });
@@ -172,6 +178,16 @@ export default function Dashboard({
     );
   });
 
+  const filteredTrunks = (trunks || []).filter(t => {
+    if (!t) return false;
+    const term = searchTerm.toLowerCase();
+    return (
+      (t.name || '').toLowerCase().includes(term) ||
+      (t.tech || '').toLowerCase().includes(term) ||
+      (t.callerid || '').toLowerCase().includes(term)
+    );
+  });
+
   // Filter and sort realtime elements
   const filteredRealtimeExtensions = (realtimeData.extensions || [])
     .filter(peer => {
@@ -233,100 +249,149 @@ export default function Dashboard({
 
   return (
     <div className="dashboard-container" style={styles.container}>
-      {/* Header bar */}
-      <header className="glass-panel navbar-inner" style={styles.navbar}>
+      {/* Sidebar on the Left */}
+      <aside className="glass-panel" style={styles.sidebar}>
+        {/* Brand / Logo */}
         <div style={styles.logo}>
-          <span style={styles.logoIcon}>🚀</span>
+          <img src="/upchat_logo.png" alt="Logo" style={{ height: '36px', objectFit: 'contain', marginBottom: '4px' }} />
           <div>
-            <h1 style={styles.logoTitle}>PBX Fácil</h1>
-            <span style={styles.logoSubtitle}>Gestão Simplificada Asterisk</span>
-          </div>
-        </div>
-        
-        <div className="session-info-bar" style={styles.sessionInfo}>
-          <div style={styles.statusContainer}>
-            <div className="status-dot-pulse"></div>
-            <span style={styles.statusText}>
-              Conectado: <strong>{instance}</strong>
-              {realtimeData.pbxIP && (
-                <span style={{ marginLeft: '10px', color: '#00f2fe' }} title="IP do Servidor PABX (NAT Public IP / External Address)">
-                  ({realtimeData.pbxIP})
-                </span>
-              )}
-            </span>
-          </div>
-          <span className="navbar-divider" style={styles.divider}>|</span>
-          <span style={styles.userText}>Usuário: <strong>{user}</strong></span>
-          
-          <button className="btn-neon-secondary" style={styles.logoutBtn} onClick={onLogout}>
-            Desconectar
-          </button>
-        </div>
-      </header>
-
-      {/* Main Console Content */}
-      <main style={styles.mainContent}>
-        {/* Quick Stats Panel */}
-        <div className="stats-grid" style={styles.statsContainer}>
-          <div className="glass-panel" style={styles.statCard}>
-            <div style={styles.statIcon}>📊</div>
-            <div style={styles.statInfo}>
-              <span style={styles.statLabel}>Total de Ramais</span>
-              <span style={styles.statNumber}>{extensions.length}</span>
-            </div>
-          </div>
-          
-          <div className="glass-panel" style={styles.statCard}>
-            <div style={styles.statIcon}>👥</div>
-            <div style={styles.statInfo}>
-              <span style={styles.statLabel}>Filas de Atendimento</span>
-              <span style={styles.statNumber}>{queues.length}</span>
-            </div>
+            <h1 style={styles.logoTitle}>PABX 2.0</h1>
+            <span style={styles.logoSubtitle}>Gestão de Telecom</span>
           </div>
         </div>
 
-        {/* Tab Selector */}
-        <div className="tab-container" style={styles.tabContainer}>
+        {/* Navigation Menu (Vertical) */}
+        <nav style={styles.tabContainer}>
           <button
             className={`tab-btn ${activeTab === 'extensions' ? 'active' : ''}`}
             onClick={() => { setActiveTab('extensions'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
           >
             📞 Ramais ({extensions.length})
           </button>
           <button
             className={`tab-btn ${activeTab === 'queues' ? 'active' : ''}`}
             onClick={() => { setActiveTab('queues'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
           >
-            👥 Filas (Queues) ({queues.length})
+            👥 Filas ({queues.length})
           </button>
           <button
             className={`tab-btn ${activeTab === 'dids' ? 'active' : ''}`}
             onClick={() => { setActiveTab('dids'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
           >
-            📞 Entrada de Ligações (DIDs) ({dids.length})
+            📞 Rotas DIDs ({dids.length})
           </button>
           <button
             className={`tab-btn ${activeTab === 'customdests' ? 'active' : ''}`}
             onClick={() => { setActiveTab('customdests'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
           >
-            ⚙️ Destinos Custom ({customDestinations.length})
+            ⚙️ Destinos ({customDestinations.length})
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'trunks' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('trunks'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
+          >
+            🔌 Troncos ({trunks.length})
           </button>
           <button
             className={`tab-btn ${activeTab === 'dialer' ? 'active' : ''}`}
             onClick={() => { setActiveTab('dialer'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
           >
-            🚀 Disparador (Campanhas)
+            🚀 Disparador
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'campaign_reports' ? 'active' : ''}`}
+            onClick={() => { setActiveTab('campaign_reports'); setSearchTerm(''); }}
+            style={styles.sidebarTabBtn}
+          >
+            📈 Dash & Relatórios
           </button>
           <button
             className={`tab-btn ${activeTab === 'realtime' ? 'active' : ''}`}
             onClick={() => { setActiveTab('realtime'); setRealtimeSearch(''); }}
+            style={styles.sidebarTabBtn}
           >
-            🖥️ Monitoramento (Realtime)
+            🖥️ Realtime Monitor
+          </button>
+        </nav>
+
+        {/* Sidebar Footer (Session info & Logout) */}
+        <div style={styles.sidebarFooter}>
+          <div style={styles.statusContainer}>
+            <div className="status-dot-pulse"></div>
+            <span style={styles.statusText}>
+              Conectado: <strong style={{ color: '#60a5fa' }}>{instance}</strong>
+            </span>
+          </div>
+          <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Usuário: <strong style={{ color: '#f0f4ff' }}>{user}</strong></span>
+          <button className="btn-neon-secondary" style={{ ...styles.logoutBtn, width: '100%', marginTop: '5px' }} onClick={onLogout}>
+            Desconectar
           </button>
         </div>
+      </aside>
+
+      {/* Main Console Content on the Right */}
+      <main style={styles.mainContent}>
+        {/* Top Header Row */}
+        <div style={styles.mainHeaderRow}>
+          <div>
+            <h2 style={styles.pageTitle}>
+              {activeTab === 'extensions' && '📞 Gerenciamento de Ramais'}
+              {activeTab === 'queues' && '👥 Filas de Atendimento (Queues)'}
+              {activeTab === 'dids' && '📞 Entrada de Ligações (DIDs)'}
+              {activeTab === 'customdests' && '⚙️ Destinos Customizados'}
+              {activeTab === 'trunks' && '🔌 Gerenciamento de Troncos'}
+              {activeTab === 'dialer' && '🚀 Disparador (Campanhas)'}
+              {activeTab === 'campaign_reports' && '📈 Dash & Relatórios de Campanhas'}
+              {activeTab === 'realtime' && '🖥️ Monitoramento em Tempo Real'}
+            </h2>
+            {realtimeData.pbxIP && (
+              <span style={{ fontSize: '0.82rem', color: '#64748b', display: 'block', marginTop: '4px' }}>
+                IP do Servidor PABX: <code style={{ color: '#60a5fa', background: 'rgba(59, 130, 246, 0.12)', padding: '1px 6px', borderRadius: '4px', fontFamily: 'Courier New, monospace' }}>{realtimeData.pbxIP}</code>
+              </span>
+            )}
+          </div>
+
+          {/* Offline trunks warning banner */}
+          {hasOfflineTrunks && (
+            <div className="pulse-glow" style={{ ...styles.statusContainer, background: 'rgba(239, 68, 68, 0.1)', padding: '6px 14px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+              <span style={{ color: '#fca5a5', fontSize: '0.8rem', fontWeight: 'bold' }}>⚠️ Troncais Offline ({offlineTrunks.length})</span>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Stats Panel */}
+        {activeTab !== 'realtime' && activeTab !== 'campaign_reports' && (
+          <>
+
+          <div className="stats-grid" style={styles.statsContainer}>
+            <div className="glass-panel" style={styles.statCard}>
+              <div style={styles.statIcon}>📊</div>
+              <div style={styles.statInfo}>
+                <span style={styles.statLabel}>Total de Ramais</span>
+                <span style={styles.statNumber}>{extensions.length}</span>
+              </div>
+            </div>
+            
+            <div className="glass-panel" style={styles.statCard}>
+              <div style={styles.statIcon}>👥</div>
+              <div style={styles.statInfo}>
+                <span style={styles.statLabel}>Filas de Atendimento</span>
+                <span style={styles.statNumber}>{queues.length}</span>
+              </div>
+            </div>
+          </div>
+          </>
+        )}
+
 
         {/* Search & Actions Bar */}
-        {activeTab !== 'dialer' && (
+        {activeTab !== 'dialer' && activeTab !== 'campaign_reports' && (
           <div className="actions-bar" style={styles.actionsBar}>
             {activeTab !== 'realtime' ? (
             <>
@@ -341,7 +406,9 @@ export default function Dashboard({
                         ? 'Buscar fila por número ou nome...' 
                         : activeTab === 'dids'
                           ? 'Buscar DID por número, descrição ou destino...'
-                          : 'Buscar destino por dial string ou descrição...'
+                          : activeTab === 'trunks'
+                            ? 'Buscar tronco por nome, tecnologia ou callerid...'
+                            : 'Buscar destino por dial string ou descrição...'
                   }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -382,6 +449,11 @@ export default function Dashboard({
                 {activeTab === 'customdests' && (
                   <button className="btn-neon-primary" onClick={onCreateCustomDest} disabled={isOperationLoading}>
                     ➕ Novo Destino Custom
+                  </button>
+                )}
+                {activeTab === 'trunks' && (
+                  <button className="btn-neon-primary" onClick={onCreateTrunk} disabled={isOperationLoading}>
+                    ➕ Novo Tronco
                   </button>
                 )}
               </div>
@@ -466,6 +538,11 @@ export default function Dashboard({
             customDestinations={customDestinations}
             token={localStorage.getItem('pbx_token')} 
             pbxIP={realtimeData.pbxIP} 
+          />
+        ) : activeTab === 'campaign_reports' ? (
+          <CampaignReports 
+            token={localStorage.getItem('pbx_token')} 
+            extensions={extensions}
           />
         ) : activeTab !== 'realtime' ? (
           <div className="glass-panel" style={styles.tablePanel}>
@@ -752,6 +829,90 @@ export default function Dashboard({
                 </div>
               )
             )}
+            {activeTab === 'trunks' && (
+              filteredTrunks.length === 0 ? (
+                <div style={styles.emptyState}>
+                  <span style={styles.emptyIcon}>🔌</span>
+                  <h3>Nenhum tronco configurado</h3>
+                  <p>Seus troncos no Asterisk aparecerão aqui.</p>
+                </div>
+              ) : (
+                <div className="glass-table-container">
+                  <table className="glass-table">
+                    <thead>
+                      <tr>
+                        <th style={{ paddingLeft: '15px' }}>Nome do Tronco</th>
+                        <th>Tecnologia</th>
+                        <th>CallerID de Saída</th>
+                        <th>Status</th>
+                        <th style={{ textAlign: 'right', paddingRight: '15px' }}>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredTrunks.map((t) => (
+                        <tr key={t.id}>
+                          <td style={styles.extensionNumber}>{t.name}</td>
+                          <td>
+                            <span style={t.tech.toLowerCase().includes('pjsip') ? styles.badgeWeb : styles.badgeSip}>
+                              {t.tech.toUpperCase()}
+                            </span>
+                          </td>
+                          <td>{t.callerid || 'Nenhum'}</td>
+                          <td>
+                            <span style={{
+                              color: t.disabled ? '#ef4444' : '#10b981',
+                              fontWeight: 'bold',
+                              fontSize: '0.85rem'
+                            }}>
+                              {t.disabled ? 'Desabilitado' : 'Habilitado'}
+                            </span>
+                          </td>
+                          <td style={styles.actionsCol}>
+                            {confirmDeleteTrunkId === t.id ? (
+                              <div style={styles.confirmDeleteGroup}>
+                                <span style={styles.confirmText}>Excluir?</span>
+                                <button
+                                  style={{ ...styles.confirmYes, marginRight: '8px' }}
+                                  onClick={() => { onDeleteTrunk(t.id); setConfirmDeleteTrunkId(null); }}
+                                  disabled={isOperationLoading}
+                                >
+                                  Sim
+                                </button>
+                                <button
+                                  style={styles.confirmNo}
+                                  onClick={() => setConfirmDeleteTrunkId(null)}
+                                  disabled={isOperationLoading}
+                                >
+                                  Não
+                                </button>
+                              </div>
+                            ) : (
+                              <div style={styles.actionsGroup}>
+                                <button
+                                  className="table-edit-btn"
+                                  onClick={() => onEditTrunk(t)}
+                                  disabled={isOperationLoading}
+                                  style={{ marginRight: '8px' }}
+                                >
+                                  ✏️ Editar
+                                </button>
+                                <button
+                                  className="table-delete-btn"
+                                  onClick={() => setConfirmDeleteTrunkId(t.id)}
+                                  disabled={isOperationLoading}
+                                >
+                                  🗑️ Excluir
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )
+            )}
           </div>
         ) : (
           /* REALTIME MONITOR WALLBOARD */
@@ -1006,13 +1167,61 @@ export default function Dashboard({
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     minHeight: '100vh',
-    padding: '24px',
-    maxWidth: '1200px',
-    margin: '0 auto',
     width: '100%',
-    gap: '24px',
+    maxWidth: '100%',
+    margin: 0,
+    padding: 0,
+    background: 'transparent',
+    position: 'relative',
+    zIndex: 1,
+  },
+  sidebar: {
+    width: '280px',
+    background: 'rgba(0, 8, 50, 0.8)',
+    backdropFilter: 'blur(24px)',
+    borderRight: '1px solid rgba(59, 130, 246, 0.15)',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '30px 24px',
+    gap: '30px',
+    flexShrink: 0,
+    height: '100vh',
+    position: 'sticky',
+    top: 0,
+    boxSizing: 'border-box',
+    boxShadow: '2px 0 24px rgba(0, 0, 0, 0.3)',
+  },
+  sidebarTabBtn: {
+    width: '100%',
+    textAlign: 'left',
+    justifyContent: 'flex-start',
+    padding: '12px 16px',
+    borderRadius: '10px',
+    fontSize: '0.88rem',
+  },
+  sidebarFooter: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    borderTop: '1px solid rgba(59, 130, 246, 0.12)',
+    paddingTop: '20px',
+    marginTop: 'auto',
+  },
+  mainHeaderRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottom: '1px solid rgba(59, 130, 246, 0.1)',
+    paddingBottom: '20px',
+  },
+  pageTitle: {
+    fontSize: '1.4rem',
+    fontWeight: '700',
+    color: '#f0f4ff',
+    margin: 0,
+    fontFamily: 'Outfit, sans-serif',
   },
   navbar: {
     display: 'flex',
@@ -1036,13 +1245,13 @@ const styles = {
     fontSize: '1.4rem',
     fontFamily: 'Outfit, sans-serif',
     fontWeight: '700',
-    color: '#fff',
+    color: '#f0f4ff',
     margin: 0,
     lineHeight: '1.1',
   },
   logoSubtitle: {
     fontSize: '0.75rem',
-    color: '#00f2fe',
+    color: '#60a5fa',
     fontWeight: '600',
     letterSpacing: '1px',
     textTransform: 'uppercase',
@@ -1067,23 +1276,27 @@ const styles = {
   },
   statusText: {
     fontSize: '0.85rem',
-    color: '#e5e7eb',
+    color: '#94a3b8',
   },
   divider: {
-    color: 'rgba(255, 255, 255, 0.1)',
+    color: 'rgba(59, 130, 246, 0.2)',
   },
   userText: {
     fontSize: '0.85rem',
-    color: '#e5e7eb',
+    color: '#94a3b8',
   },
   logoutBtn: {
     padding: '8px 16px',
     fontSize: '0.85rem',
   },
   mainContent: {
+    flexGrow: 1,
+    padding: '30px 40px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '24px',
+    overflowY: 'auto',
+    boxSizing: 'border-box',
   },
   statsContainer: {
     display: 'flex',
@@ -1110,20 +1323,21 @@ const styles = {
   },
   statLabel: {
     fontSize: '0.85rem',
-    color: '#9ca3af',
+    color: '#94a3b8',
     fontWeight: '500',
   },
   statNumber: {
     fontSize: '1.8rem',
     fontWeight: '700',
-    color: '#fff',
+    color: '#f0f4ff',
     lineHeight: '1.1',
     fontFamily: 'Outfit, sans-serif',
   },
   tabContainer: {
     display: 'flex',
-    gap: '12px',
-    marginTop: '5px',
+    flexDirection: 'column',
+    gap: '8px',
+    flexGrow: 1,
   },
   actionsBar: {
     display: 'flex',
@@ -1166,15 +1380,15 @@ const styles = {
   },
   extensionNumber: {
     fontSize: '1rem',
-    fontWeight: '600',
-    color: '#00f2fe',
+    fontWeight: '700',
+    color: '#60a5fa',
     fontFamily: 'Courier New, monospace',
     textAlign: 'left',
     paddingLeft: '15px',
   },
   extensionName: {
     fontWeight: '500',
-    color: '#fff',
+    color: '#f0f4ff',
     textAlign: 'left',
   },
   badgeSip: {
@@ -1258,8 +1472,8 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(5, 6, 10, 0.85)',
-    backdropFilter: 'blur(10px)',
+    backgroundColor: 'rgba(0, 5, 30, 0.85)',
+    backdropFilter: 'blur(16px)',
     zIndex: 2000,
     display: 'flex',
     justifyContent: 'center',
@@ -1275,23 +1489,28 @@ const styles = {
     alignItems: 'center',
     gap: '16px',
     textAlign: 'center',
+    background: 'rgba(0, 10, 66, 0.9)',
+    borderRadius: '20px',
+    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.1)',
+    border: '1px solid rgba(59, 130, 246, 0.2)',
+    backdropFilter: 'blur(20px)',
   },
   loadingTitle: {
     fontSize: '1.25rem',
-    color: '#fff',
+    color: '#f0f4ff',
     fontWeight: '600',
     fontFamily: 'Outfit, sans-serif',
     margin: 0,
   },
   loadingText: {
     fontSize: '0.9rem',
-    color: '#00f2fe',
+    color: '#60a5fa',
     fontWeight: '500',
     margin: 0,
   },
   loadingNote: {
     fontSize: '0.75rem',
-    color: '#9ca3af',
+    color: '#64748b',
     lineHeight: '1.4',
   },
 
@@ -1341,7 +1560,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    color: '#00f2fe',
+    color: '#60a5fa',
     fontSize: '0.8rem',
   },
   noTrunksText: {
@@ -1355,18 +1574,19 @@ const styles = {
     gap: '10px',
   },
   trunkCardOnline: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(16, 185, 129, 0.15)',
+    background: 'rgba(0, 10, 60, 0.7)',
+    border: '1px solid rgba(16, 185, 129, 0.2)',
     borderRadius: '10px',
     padding: '10px 14px',
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
     minWidth: '150px',
+    backdropFilter: 'blur(8px)',
   },
   trunkCardOffline: {
-    background: 'rgba(239, 68, 68, 0.03)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
+    background: 'rgba(60, 0, 0, 0.4)',
+    border: '1px solid rgba(239, 68, 68, 0.35)',
     borderRadius: '10px',
     padding: '10px 14px',
     display: 'flex',
@@ -1382,7 +1602,8 @@ const styles = {
   },
   trunkName: {
     fontSize: '0.85rem',
-    color: '#fff',
+    color: '#f0f4ff',
+    fontWeight: '600',
   },
   trunkMetaRow: {
     display: 'flex',
@@ -1393,8 +1614,8 @@ const styles = {
   },
   trunkTypeTag: {
     fontSize: '0.7rem',
-    color: '#9ca3af',
-    background: 'rgba(255, 255, 255, 0.05)',
+    color: '#94a3b8',
+    background: 'rgba(59, 130, 246, 0.1)',
     padding: '1px 5px',
     borderRadius: '3px',
     fontWeight: '600',
@@ -1425,8 +1646,8 @@ const styles = {
   },
   pillGroup: {
     display: 'flex',
-    background: 'rgba(5, 6, 10, 0.4)',
-    border: '1px solid rgba(255, 255, 255, 0.08)',
+    background: 'rgba(0, 10, 66, 0.5)',
+    border: '1px solid rgba(59, 130, 246, 0.15)',
     borderRadius: '10px',
     padding: '3px',
     gap: '4px',
@@ -1445,13 +1666,13 @@ const styles = {
   },
   switchInput: {
     cursor: 'pointer',
-    accentColor: '#00f2fe',
+    accentColor: '#3b82f6',
     width: '15px',
     height: '15px',
   },
   switchText: {
     fontSize: '0.85rem',
-    color: '#e5e7eb',
+    color: '#94a3b8',
     fontWeight: '500',
   },
   realtimeRefreshBtn: {
@@ -1486,10 +1707,10 @@ const styles = {
   },
   panelTitle: {
     fontSize: '1.1rem',
-    color: '#fff',
+    color: '#f0f4ff',
     margin: '0 0 16px 0',
     fontFamily: 'Outfit, sans-serif',
-    fontWeight: '600',
+    fontWeight: '700',
     textAlign: 'left',
     display: 'flex',
     alignItems: 'center',
@@ -1502,7 +1723,7 @@ const styles = {
     justifyContent: 'center',
     gap: '12px',
     flexGrow: 1,
-    color: '#00f2fe',
+    color: '#60a5fa',
     fontSize: '0.85rem',
     fontWeight: '500',
   },
@@ -1525,8 +1746,8 @@ const styles = {
     paddingRight: '4px',
   },
   peerCard: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
+    background: 'rgba(0, 10, 60, 0.7)',
+    border: '1px solid rgba(59, 130, 246, 0.15)',
     borderRadius: '12px',
     padding: '12px',
     display: 'flex',
@@ -1534,6 +1755,7 @@ const styles = {
     gap: '4px',
     textAlign: 'left',
     transition: 'all 0.2s',
+    backdropFilter: 'blur(8px)',
   },
   peerHeader: {
     display: 'flex',
@@ -1548,7 +1770,7 @@ const styles = {
   peerNumber: {
     fontSize: '0.9rem',
     fontWeight: '700',
-    color: '#fff',
+    color: '#f0f4ff',
     fontFamily: 'Courier New, monospace',
   },
   peerLatency: {
@@ -1558,7 +1780,7 @@ const styles = {
   },
   peerName: {
     fontSize: '0.78rem',
-    color: '#9ca3af',
+    color: '#94a3b8',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -1607,14 +1829,15 @@ const styles = {
     paddingRight: '4px',
   },
   queueMonitorCard: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
+    background: 'rgba(0, 10, 60, 0.7)',
+    border: '1px solid rgba(59, 130, 246, 0.15)',
     borderRadius: '14px',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
     textAlign: 'left',
+    backdropFilter: 'blur(8px)',
   },
   queueCardHeader: {
     display: 'flex',
@@ -1623,22 +1846,22 @@ const styles = {
   },
   queueMonitorName: {
     fontSize: '1rem',
-    color: '#fff',
-    fontWeight: '600',
+    color: '#f0f4ff',
+    fontWeight: '700',
     margin: 0,
     fontFamily: 'Outfit, sans-serif',
   },
   queueMonitorStrategy: {
     fontSize: '0.75rem',
-    color: '#9ca3af',
+    color: '#94a3b8',
   },
   waitingBadgeNormal: {
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    background: 'rgba(59, 130, 246, 0.08)',
+    border: '1px solid rgba(59, 130, 246, 0.15)',
     padding: '4px 10px',
     borderRadius: '6px',
     fontSize: '0.8rem',
-    color: '#e5e7eb',
+    color: '#f0f4ff',
   },
   waitingBadgeGlow: {
     background: 'rgba(239, 68, 68, 0.15)',
@@ -1654,8 +1877,8 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '8px',
-    background: 'rgba(5, 6, 10, 0.3)',
-    border: '1px solid rgba(255, 255, 255, 0.04)',
+    background: 'rgba(0, 10, 60, 0.4)',
+    border: '1px solid rgba(59, 130, 246, 0.1)',
     borderRadius: '10px',
     padding: '8px',
   },
@@ -1668,11 +1891,11 @@ const styles = {
   queueStatVal: {
     fontSize: '1rem',
     fontWeight: '700',
-    color: '#00f2fe',
+    color: '#60a5fa',
   },
   queueStatLabel: {
     fontSize: '0.7rem',
-    color: '#9ca3af',
+    color: '#94a3b8',
   },
   queueMembersArea: {
     display: 'flex',
@@ -1698,8 +1921,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
-    background: 'rgba(255, 255, 255, 0.01)',
-    border: '1px solid rgba(255, 255, 255, 0.03)',
+    background: 'rgba(59, 130, 246, 0.07)',
+    border: '1px solid rgba(59, 130, 246, 0.12)',
     borderRadius: '6px',
     padding: '4px 8px',
   },
@@ -1711,7 +1934,7 @@ const styles = {
   },
   memberName: {
     fontSize: '0.75rem',
-    color: '#e5e7eb',
+    color: '#f0f4ff',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -1770,9 +1993,9 @@ if (typeof document !== 'undefined') {
     
     .pill-btn {
       padding: 6px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(255, 255, 255, 0.02);
-      color: #9ca3af;
+      border: 1px solid rgba(59, 130, 246, 0.12);
+      background: rgba(59, 130, 246, 0.04);
+      color: #64748b;
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
@@ -1780,16 +2003,16 @@ if (typeof document !== 'undefined') {
       transition: all 0.25s ease;
     }
     .pill-btn.active {
-      background: rgba(0, 242, 254, 0.15) !important;
-      border-color: rgba(0, 242, 254, 0.3) !important;
-      color: #00f2fe !important;
-      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-      text-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+      background: rgba(37, 99, 235, 0.12) !important;
+      border-color: rgba(37, 99, 235, 0.35) !important;
+      color: #2563eb !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+      font-weight: 700;
     }
     .pill-btn:hover:not(.active) {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
+      color: #2563eb;
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.2);
     }
   `;
   document.head.appendChild(style);

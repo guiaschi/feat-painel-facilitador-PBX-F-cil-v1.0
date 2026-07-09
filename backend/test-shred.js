@@ -87,15 +87,20 @@ const Shred = swagger.ShredHttpClient;
 console.log('[TEST-SHRED] Initializing Shred client...');
 const client = new Shred();
 
+const ARI_HOST = process.env.ARI_HOST || 'SEU_HOST_ARI';
+const ARI_PORT = process.env.ARI_PORT || '2087';
+const ARI_USER = process.env.ARI_USER || '';
+const ARI_PASS = process.env.ARI_PASS || '';
+
 console.log('[TEST-SHRED] Executing request...');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const obj = {
-  url: 'https://137.131.139.175:2087/ari/api-docs/resources.json',
+  url: `https://${ARI_HOST}:${ARI_PORT}/ari/api-docs/resources.json`,
   method: 'get',
   headers: {
     'accept': 'application/json',
-    'Authorization': 'Basic ' + Buffer.from('disparoupchat:disparou123').toString('base64')
+    'Authorization': 'Basic ' + Buffer.from(`${ARI_USER}:${ARI_PASS}`).toString('base64')
   },
   on: {
     error: function(err) {

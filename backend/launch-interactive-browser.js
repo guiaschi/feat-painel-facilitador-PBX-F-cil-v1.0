@@ -1,11 +1,13 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 
+const INSTANCE = process.env.PBX_INSTANCE || 'minhainstancia';
+
 async function run() {
   console.log('Launching interactive browser (headless: false)...');
   const browser = await puppeteer.launch({
     headless: false,
-    defaultViewport: null, // fits screen
+    defaultViewport: null,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -15,7 +17,6 @@ async function run() {
 
   const page = await browser.newPage();
 
-  // Inject mock jQuery cookie methods to prevent page crashes
   await page.evaluateOnNewDocument(() => {
     let jq;
     const patchJQuery = (val) => {
@@ -37,10 +38,9 @@ async function run() {
     });
   });
 
-  console.log('Navigating to smart instance...');
-  
-  // Use domcontentloaded to prevent long-polling hang
-  await page.goto('https://smart.pbxfacil.com.br/admin/config.php', { waitUntil: 'domcontentloaded' });
+  console.log(`Navigating to ${INSTANCE} instance...`);
+
+  await page.goto(`https://${INSTANCE}.pbxfacil.com.br/admin/config.php`, { waitUntil: 'domcontentloaded' });
 
   console.log('==================================================================');
   console.log('O NAVEGADOR ESTÁ ABERTO NA SUA TELA!');
@@ -48,19 +48,16 @@ async function run() {
   console.log('Vou aguardar 5 minutos (300 segundos) para você fazer isso. Não feche o navegador...');
   console.log('==================================================================');
 
-  // Wait 300 seconds (5 minutes)
   await new Promise(resolve => setTimeout(resolve, 300000));
 
   console.log('Tempo esgotado! Capturando o estado atual do navegador...');
   const currentUrl = page.url();
   console.log(`URL Atual: ${currentUrl}`);
 
-  // Retrieve cookies and save them to a file
   const cookies = await page.cookies();
-  fs.writeFileSync('c:/Users/GuiAschi/Desktop/Pabx2.0/cookies.json', JSON.stringify(cookies, null, 2), 'utf-8');
-  console.log('Cookies salvos em: c:/Users/GuiAschi/Desktop/Pabx2.0/cookies.json');
+  fs.writeFileSync('cookies.json', JSON.stringify(cookies, null, 2), 'utf-8');
+  console.log('Cookies salvos em: cookies.json');
 
-  // Capture DOM structural selectors of tables and forms on the final page
   const domDetails = await page.evaluate(() => {
     const tables = Array.from(document.querySelectorAll('table')).map(t => ({
       id: t.id,
@@ -75,9 +72,8 @@ async function run() {
 
   console.log('Estrutura de tabelas encontradas:', JSON.stringify(domDetails, null, 2));
 
-  // Save screenshot
-  await page.screenshot({ path: 'c:/Users/GuiAschi/Desktop/Pabx2.0/interactive_state.png' });
-  console.log('Print da tela salvo em: c:/Users/GuiAschi/Desktop/Pabx2.0/interactive_state.png');
+  await page.screenshot({ path: 'interactive_state.png' });
+  console.log('Print da tela salvo em: interactive_state.png');
 
   await browser.close();
   console.log('Navegador fechado.');

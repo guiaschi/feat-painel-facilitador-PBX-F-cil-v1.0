@@ -8,10 +8,30 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
   const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
+  // WhatsApp template states
+  const [isWhatsApp, setIsWhatsApp] = useState(false);
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [identification, setIdentification] = useState('');
+
   useEffect(() => {
     if (isOpen) {
       if (editData) {
         setIsEditMode(true);
+        
+        // Parse if it looks like a WhatsApp custom destination
+        const isWA = !!(editData.id && editData.id.startsWith('from-internal,') && editData.description && editData.description.startsWith('WhatsApp - '));
+        setIsWhatsApp(isWA);
+        
+        if (isWA) {
+          const number = editData.id.split(',')[1] || '';
+          const idLabel = editData.description.replace('WhatsApp - ', '');
+          setWhatsappNumber(number);
+          setIdentification(idLabel);
+        } else {
+          setWhatsappNumber('');
+          setIdentification('');
+        }
+
         setTarget(editData.id || '');
         setDescription(editData.description || '');
         setNotes(editData.notes || '');
@@ -22,6 +42,9 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
         }
       } else {
         setIsEditMode(false);
+        setIsWhatsApp(false);
+        setWhatsappNumber('');
+        setIdentification('');
         setTarget('');
         setDescription('');
         setNotes('');
@@ -37,6 +60,15 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
       });
       const resData = await res.json();
       if (resData.success && resData.data) {
+        const isWA = !!(id.startsWith('from-internal,') && resData.data.description && resData.data.description.startsWith('WhatsApp - '));
+        setIsWhatsApp(isWA);
+        
+        if (isWA) {
+          const number = id.split(',')[1] || '';
+          const idLabel = resData.data.description.replace('WhatsApp - ', '');
+          setWhatsappNumber(number);
+          setIdentification(idLabel);
+        }
         setDescription(resData.data.description || '');
         setNotes(resData.data.notes || '');
       }
@@ -49,13 +81,26 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!target) return alert('Por favor, informe o destino (dial string).');
-    if (!description) return alert('Por favor, informe uma descrição.');
+    
+    let finalTarget = target;
+    let finalDescription = description;
+    let finalNotes = notes;
+
+    if (isWhatsApp) {
+      if (!whatsappNumber) return alert('Por favor, informe o número do WhatsApp.');
+      if (!identification) return alert('Por favor, informe a identificação.');
+      finalTarget = `from-internal,${whatsappNumber.trim()},1`;
+      finalDescription = `WhatsApp - ${identification.trim()}`;
+      finalNotes = 'Conta WhatsApp';
+    } else {
+      if (!finalTarget) return alert('Por favor, informe o destino (dial string).');
+      if (!finalDescription) return alert('Por favor, informe uma descrição.');
+    }
 
     setLoading(true);
     try {
       const url = isEditMode 
-        ? `${API_URL}/api/custom-destinations/${encodeURIComponent(target)}`
+        ? `${API_URL}/api/custom-destinations/${encodeURIComponent(finalTarget)}`
         : `${API_URL}/api/custom-destinations`;
       
       const method = isEditMode ? 'PUT' : 'POST';
@@ -67,9 +112,9 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          id: target,
-          description,
-          notes
+          id: finalTarget,
+          description: finalDescription,
+          notes: finalNotes
         })
       });
 
@@ -102,50 +147,103 @@ export default function CustomDestModal({ isOpen, onClose, onSave, editData, tok
         </div>
 
         <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Destino de Discagem (Dial String):</label>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.04)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', marginBottom: '10px' }}>
             <input
-              type="text"
-              className="input-glass"
-              placeholder="Ex: custom-upchat,s,1"
-              value={target}
-              onChange={(e) => setTarget(e.target.value)}
+              type="checkbox"
+              id="isWhatsApp"
+              checked={isWhatsApp}
+              onChange={(e) => setIsWhatsApp(e.target.checked)}
               disabled={isEditMode || loading}
-              style={{ ...styles.input, opacity: isEditMode ? 0.6 : 1 }}
-              required
+              style={{ width: '16px', height: '16px', cursor: 'pointer' }}
             />
-            {!isEditMode && (
-              <span style={styles.helpText}>
-                O dial string de destino que o Asterisk usará (contexto,extensão,prioridade).
-              </span>
-            )}
+            <label htmlFor="isWhatsApp" style={{ cursor: 'pointer', margin: 0, fontSize: '0.85rem', color: '#10b981', fontWeight: 'bold' }}>
+              🟢 Configurar como Conta de WhatsApp
+            </label>
           </div>
 
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Descrição (Nome de Exibição):</label>
-            <input
-              type="text"
-              className="input-glass"
-              placeholder="Ex: Enviar para Upchat"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              disabled={loading}
-              style={styles.input}
-              required
-            />
-          </div>
+          {isWhatsApp ? (
+            <>
+              <div style={styles.fieldGroup}>
+                <label style={styles.label}>Número do WhatsApp:</label>
+                <input
+                  type="text"
+                  className="input-glass"
+                  placeholder="Ex: 553125760101"
+                  value={whatsappNumber}
+                  onChange={(e) => setWhatsappNumber(e.target.value.replace(/\D/g, ''))}
+                  disabled={isEditMode || loading}
+                  style={{ ...styles.input, opacity: isEditMode ? 0.6 : 1 }}
+                  required
+                />
+                {!isEditMode && (
+                  <span style={styles.helpText}>
+                    Digite apenas os números, incluindo código do país e DDD (ex: 553125760101).
+                  </span>
+                )}
+              </div>
 
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Notas / Observações:</label>
-            <textarea
-              className="input-glass"
-              placeholder="Notas detalhadas sobre este destino personalizado..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              disabled={loading}
-              style={{ ...styles.input, minHeight: '80px', resize: 'vertical' }}
-            />
-          </div>
+              <div style={styles.fieldGroup}>
+                <label style={styles.label}>Identificação da Conta (Setor/Nome):</label>
+                <input
+                  type="text"
+                  className="input-glass"
+                  placeholder="Ex: Suporte, Vendas"
+                  value={identification}
+                  onChange={(e) => setIdentification(e.target.value)}
+                  disabled={loading}
+                  style={styles.input}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={styles.fieldGroup}>
+                <label style={styles.label}>Destino de Discagem (Dial String):</label>
+                <input
+                  type="text"
+                  className="input-glass"
+                  placeholder="Ex: custom-upchat,s,1"
+                  value={target}
+                  onChange={(e) => setTarget(e.target.value)}
+                  disabled={isEditMode || loading}
+                  style={{ ...styles.input, opacity: isEditMode ? 0.6 : 1 }}
+                  required
+                />
+                {!isEditMode && (
+                  <span style={styles.helpText}>
+                    O dial string de destino que o Asterisk usará (contexto,extensão,prioridade).
+                  </span>
+                )}
+              </div>
+
+              <div style={styles.fieldGroup}>
+                <label style={styles.label}>Descrição (Nome de Exibição):</label>
+                <input
+                  type="text"
+                  className="input-glass"
+                  placeholder="Ex: Enviar para Upchat"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  disabled={loading}
+                  style={styles.input}
+                  required
+                />
+              </div>
+
+              <div style={styles.fieldGroup}>
+                <label style={styles.label}>Notas / Observações:</label>
+                <textarea
+                  className="input-glass"
+                  placeholder="Notas detalhadas sobre este destino personalizado..."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  disabled={loading}
+                  style={{ ...styles.input, minHeight: '80px', resize: 'vertical' }}
+                />
+              </div>
+            </>
+          )}
 
           <div style={styles.actions}>
             <button

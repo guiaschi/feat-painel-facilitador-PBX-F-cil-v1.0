@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 
@@ -31,15 +31,14 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('[Server] Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-import { loginToPBX, getExtensions, createExtension, editExtension, deleteExtension, inspectExtension, getQueues, updateExtensionQueues, inspectExtensionQueues, syncAllExtensionsMetadata, createQueue, editQueue, deleteQueue, inspectQueueDetail, getRealtimeStatus, getPBXExternalIP, getInboundRoutes, createInboundRoute, editInboundRoute, deleteInboundRoute, setupARIUser, setupAMDDialplan, getCustomDestinations, createCustomDestination, editCustomDestination, deleteCustomDestination, inspectCustomDestination, dumpCustomDestsHTML, restoreOriginalDialplan } from './puppeteer-service.js';
+import { loginToPBX, getExtensions, createExtension, editExtension, deleteExtension, inspectExtension, getQueues, updateExtensionQueues, inspectExtensionQueues, syncAllExtensionsMetadata, createQueue, editQueue, deleteQueue, inspectQueueDetail, getRealtimeStatus, getPBXExternalIP, getInboundRoutes, createInboundRoute, editInboundRoute, deleteInboundRoute, setupARIUser, setupAMDDialplan, getCustomDestinations, createCustomDestination, editCustomDestination, deleteCustomDestination, inspectCustomDestination, dumpCustomDestsHTML, restoreOriginalDialplan, getTrunks, deleteTrunk, inspectTrunk, createTrunk, editTrunk } from './puppeteer-service.js';
 import { getExtensionMetadata, updateExtensionMetadata } from './metadata-service.js';
 import multer from 'multer';
 import { createCampaign, startCampaign, pauseCampaign, getCampaignStatus, getAllCampaigns, addContactsToCampaign, deleteCampaign } from './dialer-service.js';
 
 const upload = multer({ dest: 'uploads/' });
 
-dotenv.config();
-
+// Force nodemon restart to reload updated environment variables from .env
 const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'upchat_pbx_secret_key_12345';
@@ -60,6 +59,12 @@ let mockQueues = [
 let mockDids = [
   { id: '1130030033', did: '1130030033', description: 'Entrada Principal', destination: 'Extensions: 1000' },
   { id: '1130030034', did: '1130030034', description: 'Suporte N1', destination: 'Queues: 100' }
+];
+
+let mockTrunks = [
+  { id: 'OUT_1', name: 'Trunk_Vivo_SIP', tech: 'pjsip', callerid: '558539246886', disabled: false },
+  { id: 'OUT_2', name: 'Trunk_Claro_PJSIP', tech: 'pjsip', callerid: '', disabled: false },
+  { id: 'OUT_3', name: 'Trunk_Failover_Mock', tech: 'sip', callerid: '558539246882', disabled: true }
 ];
 
 app.use(cors({
@@ -245,7 +250,7 @@ app.post('/api/extensions/delete', requireAuth, async (req, res) => {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'PBX Fácil smart proxy is running.' });
+  res.json({ status: 'OK', message: 'PBX Fácil API is running.' });
 });
 
 // GET /api/queues
@@ -481,6 +486,105 @@ app.delete('/api/custom-destinations/:id', requireAuth, async (req, res) => {
     return res.json(result);
   } catch (error) {
     console.error('[API] Delete custom destination error:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+
+// GET /api/trunks
+app.get('/api/trunks', requireAuth, async (req, res) => {
+  try {
+    console.log(`[API] Listing trunks for instance: ${req.instance}`);
+    if (req.instance.toLowerCase() === 'mock') {
+      return res.json({ success: true, trunks: mockTrunks });
+    }
+    const trunks = await getTrunks(req.instance, req.cookies);
+    return res.json({ success: true, trunks });
+  } catch (error) {
+    console.error('[API] Get trunks error:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /api/trunks/delete
+app.post('/api/trunks/delete', requireAuth, async (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).json({ error: 'ID do tronco é obrigatório.' });
+
+  try {
+    console.log(`[API] Deleting trunk ${id} on instance: ${req.instance}`);
+    if (req.instance.toLowerCase() === 'mock') {
+      mockTrunks = mockTrunks.filter(t => t.id !== id);
+      return res.json({ success: true, message: 'Tronco excluído com sucesso (Mock).' });
+    }
+    const result = await deleteTrunk(req.instance, req.cookies, id);
+    return res.json(result);
+  } catch (error) {
+    console.error('[API] Delete trunk error:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/trunks/detail/:id
+app.get('/api/trunks/detail/:id', requireAuth, async (req, res) => {
+  try {
+    console.log(`[API] Inspecting trunk ${req.params.id} on instance: ${req.instance}`);
+    const details = await inspectTrunk(req.instance, req.cookies, req.params.id);
+    return res.json({ success: true, trunk: details });
+  } catch (error) {
+    console.error('[API] Inspect trunk error:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /api/trunks/create
+app.post('/api/trunks/create', requireAuth, async (req, res) => {
+  const { name, tech, callerid, username, secret, sip_server, sip_server_port } = req.body;
+  if (!name) return res.status(400).json({ error: 'Nome do tronco é obrigatório.' });
+
+  try {
+    console.log(`[API] Creating trunk ${name} on instance: ${req.instance}`);
+    if (req.instance.toLowerCase() === 'mock') {
+      const newTrunk = {
+        id: `OUT_${mockTrunks.length + 1}`,
+        name,
+        tech: tech || 'pjsip',
+        callerid: callerid || '',
+        disabled: false
+      };
+      mockTrunks.push(newTrunk);
+      return res.json({ success: true, message: 'Tronco criado com sucesso (Mock).' });
+    }
+    const result = await createTrunk(req.instance, req.cookies, req.body);
+    return res.json(result);
+  } catch (error) {
+    console.error('[API] Create trunk error:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /api/trunks/edit
+app.post('/api/trunks/edit', requireAuth, async (req, res) => {
+  const { id, name, callerid, username, secret, sip_server, sip_server_port } = req.body;
+  if (!id || !name) return res.status(400).json({ error: 'ID e Nome do tronco são obrigatórios.' });
+
+  try {
+    console.log(`[API] Editing trunk ${id} on instance: ${req.instance}`);
+    if (req.instance.toLowerCase() === 'mock') {
+      const idx = mockTrunks.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        mockTrunks[idx] = {
+          ...mockTrunks[idx],
+          name,
+          callerid: callerid || ''
+        };
+      }
+      return res.json({ success: true, message: 'Tronco editado com sucesso (Mock).' });
+    }
+    const result = await editTrunk(req.instance, req.cookies, id, req.body);
+    return res.json(result);
+  } catch (error) {
+    console.error('[API] Edit trunk error:', error.message);
     return res.status(500).json({ error: error.message });
   }
 });
@@ -954,25 +1058,4 @@ app.post('/api/pbx/restore-original-dialplan', requireAuth, async (req, res) => 
 
 app.listen(PORT, () => {
   console.log(`[Server] PBX Fácil API listening on port ${PORT}`);
-
-  // Autostart test using the user's provided credentials
-  setTimeout(async () => {
-    console.log('[AUTO-TEST] Starting autostart login test...');
-    try {
-      const result = await loginToPBX('smart', 'parceiro', 'L6asVa5$tVZTT87M');
-      console.log('[AUTO-TEST] LOGIN SUCCESSFUL! User:', result.user);
-      
-      console.log('[AUTO-TEST] Retrieving extensions list...');
-      const extensions = await getExtensions('smart', result.cookies);
-      console.log('[AUTO-TEST] EXTENSIONS RETRIEVED SUCCESSFULLY! Count:', extensions.length);
-      console.log(JSON.stringify(extensions.slice(0, 3), null, 2)); // log first 3
-
-      // Trigger background extensions sync
-      syncAllExtensionsMetadata('smart', result.cookies).catch(e => {
-        console.error('[Background Sync] Failed during autostart trigger:', e.message);
-      });
-    } catch (e) {
-      console.error('[AUTO-TEST] FAILED:', e);
-    }
-  }, 2000);
 });

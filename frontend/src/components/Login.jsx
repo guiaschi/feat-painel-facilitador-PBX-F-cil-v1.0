@@ -43,100 +43,143 @@ export default function Login({ onLoginSuccess }) {
   };
   return (
     <div className="login-container">
-      <div className="glass-panel pulse-glow login-card">
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-            <img 
-              src="/upchat_logo.png" 
-              alt="Upchat Logo" 
-              style={{ height: '48px', objectFit: 'contain' }} 
-            />
+      {/* Centralized login card panel */}
+      <div className="login-right-panel">
+        <div className="login-card animate-fade-in">
+          {/* Logo */}
+          <div style={{ textAlign: 'center' }}>
+            <div className="login-logo-container">
+              <img
+                src="/upchat_logo.png"
+                alt="Logo"
+                style={{ height: '44px', objectFit: 'contain' }}
+              />
+            </div>
+            <h1 className="login-title" style={{ marginTop: '16px' }}>PABX 2.0</h1>
+            <p className="login-subtitle">Gerencie ramais de forma simples e automatizada</p>
           </div>
-          <h1 className="login-title">Painel PBX Fácil</h1>
-          <p className="login-subtitle">Gerencie ramais de forma simples e automatizada</p>
-        </div>
 
-        {error && (
-          <div className="login-error-alert">
-            <span>⚠️</span>
-            <p className="login-error-text">{error}</p>
-          </div>
-        )}
+          {error && (
+            <div className="login-error-alert">
+              <span>⚠️</span>
+              <p className="login-error-text">{error}</p>
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div className="form-group">
-            <label htmlFor="instance">Instância</label>
-            <div className="login-input-wrapper">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="form-group">
+              <label htmlFor="instance">Instância</label>
+              <div className="login-input-wrapper">
+                <input
+                  id="instance"
+                  type="text"
+                  className="input-glass"
+                  placeholder="minhainstancia"
+                  value={instance}
+                  onChange={(e) => setInstance(e.target.value)}
+                  disabled={isLoading}
+                  style={{ paddingRight: '150px' }}
+                />
+                <span className="login-domain-suffix">.pbxfacil.com.br</span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="username">Usuário</label>
               <input
-                id="instance"
+                id="username"
                 type="text"
                 className="input-glass"
-                placeholder="Ex: minhainstancia"
-                value={instance}
-                onChange={(e) => setInstance(e.target.value)}
+                placeholder="Digite o usuário administrador"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
               />
-              <span className="login-domain-suffix">.pbxfacil.com.br</span>
             </div>
-            <span className="login-tip">Dica: Digite 'mock' para testar localmente</span>
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="username">Usuário</label>
-            <input
-              id="username"
-              type="text"
-              className="input-glass"
-              placeholder="Digite o usuário administrador"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+            <div className="form-group">
+              <label htmlFor="password">Senha</label>
+              <input
+                id="password"
+                type="password"
+                className="input-glass"
+                placeholder="Digite a senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn-neon-primary"
+              style={{ marginTop: '8px', width: '100%', height: '50px', fontSize: '1rem', letterSpacing: '0.02em' }}
               disabled={isLoading}
-            />
+            >
+              {isLoading ? (
+                <>
+                  <div className="spinner" style={{
+                    width: '18px',
+                    height: '18px',
+                    border: '2px solid rgba(255, 255, 255, 0.35)',
+                    borderTop: '2px solid #fff',
+                    borderRadius: '50%',
+                    animation: 'spin 0.8s linear infinite',
+                    marginRight: '8px'
+                  }}></div>
+                  Autenticando no PBX...
+                </>
+              ) : (
+                '🔐  Conectar ao Painel'
+              )}
+            </button>
+          </form>
+
+          {/* Instagram link below login */}
+          <div style={{ textAlign: 'center', marginTop: '14px', marginBottom: '6px' }}>
+            <a 
+              href="https://www.instagram.com/upchat.bot/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                color: '#fe398a',
+                fontSize: '0.82rem',
+                textDecoration: 'none',
+                fontWeight: '500',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>@upchat.bot</span>
+            </a>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              type="password"
-              className="input-glass"
-              placeholder="Digite a senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="btn-neon-primary"
-            style={{ marginTop: '12px', width: '100%', height: '48px' }}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <div className="spinner" style={{
-                  width: '18px',
-                  height: '18px',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
-                  borderTop: '2px solid #fff',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite',
-                  marginRight: '8px'
-                }}></div>
-                Autenticando no PBX...
-              </>
-            ) : (
-              'Conectar ao Painel'
-            )}
-          </button>
-        </form>
+          <p style={{
+            textAlign: 'center',
+            fontSize: '0.78rem',
+            color: '#94a3b8',
+            margin: '0',
+            lineHeight: 1.5
+          }}>
+            PABX 2.0 · Acesso seguro por JWT
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
-// Inline animations keyframe injection
+// Inline animations
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.innerHTML = `
@@ -147,4 +190,3 @@ if (typeof document !== 'undefined') {
   `;
   document.head.appendChild(style);
 }
-
